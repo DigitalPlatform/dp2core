@@ -4,4 +4,13 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DigitalPlatform.rms.db\DigitalPlatform.rms.db.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.rms\DigitalPlatform.rms.csproj" />
+  </ItemGroup>
+
 </Project>

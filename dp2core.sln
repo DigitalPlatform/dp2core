@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalPlatform.Range", "Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalPlatform.ResultSet", "DigitalPlatform.ResultSet\DigitalPlatform.ResultSet.csproj", "{8D24ECBF-C8F4-4A14-860B-D287CE00FC86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestKernelServiceDesktop", "TestKernelServiceDesktop\TestKernelServiceDesktop.csproj", "{A12F0279-5C5D-4B92-BF8C-BF1B5EBE5A45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{8D24ECBF-C8F4-4A14-860B-D287CE00FC86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D24ECBF-C8F4-4A14-860B-D287CE00FC86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D24ECBF-C8F4-4A14-860B-D287CE00FC86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A12F0279-5C5D-4B92-BF8C-BF1B5EBE5A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A12F0279-5C5D-4B92-BF8C-BF1B5EBE5A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A12F0279-5C5D-4B92-BF8C-BF1B5EBE5A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A12F0279-5C5D-4B92-BF8C-BF1B5EBE5A45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

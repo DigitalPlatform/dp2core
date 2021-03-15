@@ -3761,7 +3761,7 @@ handle.CancelTokenSource.Token).Result;
                     || reader.HasRows == false)
                     return 0;
 
-                CancellationToken token;
+                CancellationToken token = default;
                 /*
                 if (handle != null && handle.CancelTokenSource != null)
                     token = handle.CancelTokenSource.Token;
