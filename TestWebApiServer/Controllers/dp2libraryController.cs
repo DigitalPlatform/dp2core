@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TestWebApiServer.Controllers
@@ -20,7 +22,7 @@ namespace TestWebApiServer.Controllers
             _logger = logger;
         }
 
-        [Route("Login")]
+        [Route("{instance}/Login")]
         [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(LoginResponseExamples))]
         [HttpPost]
         [HttpGet]
@@ -37,6 +39,20 @@ namespace TestWebApiServer.Controllers
             strRights = "";
             strLibraryCode = "";
             */
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
+            SessionInfo info = (SessionInfo)HttpContext.Session.Get<SessionInfo>("session");
+            if (info == null)
+            {
+                info = new SessionInfo
+                {
+                    UserName = strUserName,
+                    Password = strPassword
+                };
+                HttpContext.Session.Set<SessionInfo>("session", info);
+            }
+
+            // 获得实例名
+            var instance = (string)HttpContext.Request.RouteValues["instance"];
 
             return new LoginResponse
             {
@@ -114,4 +130,26 @@ public class LibraryServerResultExamples : IExamplesProvider<LibraryServerResult
     }
 }
 */
+    public class SessionInfo
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public bool HasLogin { get; set; }
+
+    }
+
+    public static class SessionExtensions
+    {
+        public static void Set<T>(this ISession session, string key, T value)
+        {
+            session.SetString(key, JsonSerializer.Serialize(value));
+        }
+
+        public static T Get<T>(this ISession session, string key)
+        {
+            var value = session.GetString(key);
+            return value == null ? default : JsonSerializer.Deserialize<T>(value);
+        }
+    }
+
 }

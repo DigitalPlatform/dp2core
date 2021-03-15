@@ -29,6 +29,17 @@ namespace TestWebApiServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // session support
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+
             services.AddControllers()
                 // https://stackoverflow.com/questions/36452468/swagger-ui-web-api-documentation-present-enums-as-strings
                 .AddJsonOptions(x =>
@@ -80,6 +91,9 @@ namespace TestWebApiServer
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // session support
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
