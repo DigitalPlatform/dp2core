@@ -78,6 +78,11 @@ namespace DigitalPlatform.rms
 
         private KernelApplication app = null;
 
+        public SessionInfo(KernelApplication app)
+        {
+            this.app = app;
+        }
+
         // 初始化用户对象
         // parameters:
         //      strError    out参数，返回出错信息

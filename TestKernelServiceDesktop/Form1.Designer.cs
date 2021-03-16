@@ -38,6 +38,7 @@ namespace TestKernelServiceDesktop
             this.button_test_login = new System.Windows.Forms.Button();
             this.button_initialApplication = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button_test_search = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage_test.SuspendLayout();
@@ -92,6 +93,7 @@ namespace TestKernelServiceDesktop
             // tabPage_test
             // 
             this.tabPage_test.AutoScroll = true;
+            this.tabPage_test.Controls.Add(this.button_test_search);
             this.tabPage_test.Controls.Add(this.button_test_login);
             this.tabPage_test.Controls.Add(this.button_initialApplication);
             this.tabPage_test.Location = new System.Drawing.Point(4, 37);
@@ -132,6 +134,16 @@ namespace TestKernelServiceDesktop
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // button_test_search
+            // 
+            this.button_test_search.Location = new System.Drawing.Point(20, 139);
+            this.button_test_search.Name = "button_test_search";
+            this.button_test_search.Size = new System.Drawing.Size(306, 46);
+            this.button_test_search.TabIndex = 2;
+            this.button_test_search.Text = "Search()";
+            this.button_test_search.UseVisualStyleBackColor = true;
+            this.button_test_search.Click += new System.EventHandler(this.button_test_search_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 28F);
@@ -167,6 +179,7 @@ namespace TestKernelServiceDesktop
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button button_initialApplication;
         private System.Windows.Forms.Button button_test_login;
+        private System.Windows.Forms.Button button_test_search;
     }
 }
 

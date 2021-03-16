@@ -38,6 +38,8 @@ namespace dp2Kernel
             if (this.sessioninfo != null)
             {
                 this.sessioninfo.Close();
+                // 2021/3/17
+                this.sessioninfo = null;
             }
         }
 
