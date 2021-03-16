@@ -35,8 +35,9 @@ namespace TestKernelServiceDesktop
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_test = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button_test_login = new System.Windows.Forms.Button();
             this.button_initialApplication = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage_test.SuspendLayout();
@@ -91,6 +92,7 @@ namespace TestKernelServiceDesktop
             // tabPage_test
             // 
             this.tabPage_test.AutoScroll = true;
+            this.tabPage_test.Controls.Add(this.button_test_login);
             this.tabPage_test.Controls.Add(this.button_initialApplication);
             this.tabPage_test.Location = new System.Drawing.Point(4, 37);
             this.tabPage_test.Name = "tabPage_test";
@@ -100,15 +102,15 @@ namespace TestKernelServiceDesktop
             this.tabPage_test.Text = "Test";
             this.tabPage_test.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // button_test_login
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 37);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 323);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.button_test_login.Location = new System.Drawing.Point(20, 87);
+            this.button_test_login.Name = "button_test_login";
+            this.button_test_login.Size = new System.Drawing.Size(306, 46);
+            this.button_test_login.TabIndex = 1;
+            this.button_test_login.Text = "Login()";
+            this.button_test_login.UseVisualStyleBackColor = true;
+            this.button_test_login.Click += new System.EventHandler(this.button_test_login_Click);
             // 
             // button_initialApplication
             // 
@@ -119,6 +121,16 @@ namespace TestKernelServiceDesktop
             this.button_initialApplication.Text = "Initial Application";
             this.button_initialApplication.UseVisualStyleBackColor = true;
             this.button_initialApplication.Click += new System.EventHandler(this.button_initialApplication_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 37);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(792, 323);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -132,6 +144,9 @@ namespace TestKernelServiceDesktop
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "TestKernelServiceDesktop";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -151,6 +166,7 @@ namespace TestKernelServiceDesktop
         private System.Windows.Forms.TabPage tabPage_test;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button button_initialApplication;
+        private System.Windows.Forms.Button button_test_login;
     }
 }
 

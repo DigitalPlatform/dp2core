@@ -1374,7 +1374,11 @@ out strError);
             if (strUserName == "")
                 return 0;
 
-            UserCollection users = this.app.Users;
+            // 2021/3/18
+            if (this.app == null)
+                return 0;
+
+            UserCollection users = this.app?.Users;
             if (users == null)
             {
                 strError = "SessionInfo.Close()发现globalInfo.Users为null，异常";
@@ -1391,47 +1395,6 @@ out strError);
             if (nRet == -1)
                 return -1;
             return 0;
-
-            /*
-            User user = null;
-            // return:
-            //      -1  出错
-            //      0   未找到
-            //      1   找到
-            // 线：安全
-            int nRet = users.GetUser(strUserName,???? relese
-                out user,
-                out strError);
-            if (nRet == -1)
-                return -1;
-
-            if (nRet == 0)
-            {
-                strError = "Session_End，未找到名为'" + this.UserName + "'的User对象。";
-                return -1;
-            }
-
-            if (user == null)
-            {
-                strError = "Session_End，此时User对象不应为null。";
-                return -1;
-            }
-
-            // 减少帐户的一次使用率
-            user.MinusOneUse();
-
-            // 当该用户的使用数量变为0且用户集合超过超出范围时才删除用户
-            if (user.UseCount == 0)
-            {
-                users.ActivateWorker(); // 可有可无
-                
-                //nRet = users.RemoveUserIfOutOfRange(user,
-                //    out strError);
-                //if (nRet == -1)
-                //    return -1;
-                //
-            }
-            */
         }
     }
 

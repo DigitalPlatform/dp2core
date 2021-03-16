@@ -26,12 +26,70 @@ namespace dp2Kernel
 
         User user = null;
 
+        public KernelService(KernelApplication app,
+            SessionInfo sessioninfo)
+        {
+            this.app = app;
+            this.sessioninfo = sessioninfo;
+        }
+
         public void Dispose()
         {
             if (this.sessioninfo != null)
             {
                 this.sessioninfo.Close();
             }
+        }
+
+        public static KernelApplication NewApplication(
+            string strDataDir)
+        {
+            string strBinDir = System.Reflection.Assembly.GetExecutingAssembly().Location;   //  Environment.CurrentDirectory;
+            strBinDir = PathUtil.PathPart(strBinDir);
+
+            // 兼容以前的习惯。从执行文件目录中取得start.xml
+            if (String.IsNullOrEmpty(strDataDir) == true)
+            {
+                // 从start.xml文件查找数据目录
+                string strStartFileName = PathUtil.MergePath(strBinDir, "start.xml");
+
+                XmlDocument dom = new XmlDocument();
+                try
+                {
+                    dom.Load(strStartFileName);
+                }
+                catch (FileNotFoundException)
+                {
+                    // 文件没有找到。把执行目录的下级data目录当作数据目录
+                    strDataDir = PathUtil.MergePath(strBinDir, "data");
+                    goto START;
+                }
+                catch (Exception ex)
+                {
+                    string error = "文件 '" + strStartFileName + "' 装载到XMLDOM时出错, 原因：" + ex.Message;
+                    throw new Exception(error);
+                }
+                strDataDir = dom.DocumentElement.GetAttribute("datadir");
+            }
+
+        START:
+            var app = new KernelApplication();
+            // parameter:
+            //		strDataDir	data目录
+            //		strError	out参数，返回出错信息
+            // return:
+            //		-1	出错
+            //		0	成功
+            // 线: 安全的
+            int nRet = app.Initial(strDataDir,
+                        strBinDir, //  + "\\bin",
+                        out string strError);
+            if (nRet == -1)
+                throw new Exception(strError);
+
+            Debug.Assert(app.Dbs != null, "");
+            Debug.Assert(app.Users != null, "");
+            return app;
         }
 
         #region 基础函数
@@ -214,12 +272,13 @@ namespace dp2Kernel
             string strError = "";
             int nRet = 0;
 
-            HostInfo info = hostinfo;
-            if (info == null)
-                throw new ArgumentException("hostinfo 不应为 null", "this.hostinfo");
 
             if (this.app == null)
             {
+                HostInfo info = hostinfo;
+                if (info == null)
+                    throw new ArgumentException("hostinfo 不应为 null", "this.hostinfo");
+
                 nRet = InitialApplication(info, out strError);
                 if (nRet == -1)
                 {

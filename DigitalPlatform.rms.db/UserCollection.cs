@@ -195,7 +195,7 @@ namespace DigitalPlatform.rms
             //		-1	出错
             //		0	未找到帐户
             //		1	找到了
-            nRet = this.Dbs.ShearchUserSafety(strName,
+            nRet = this.Dbs.SearchUserSafety(strName,
                 out user,
                 out strError);
             if (nRet == -1)

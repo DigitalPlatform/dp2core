@@ -6561,7 +6561,7 @@ namespace DigitalPlatform.rms
         //		0	未找到帐户
         //		1	找到了
         // 线：安全
-        internal int ShearchUserSafety(string strUserName,
+        internal int SearchUserSafety(string strUserName,
             out User user,
             out string strError)
         {

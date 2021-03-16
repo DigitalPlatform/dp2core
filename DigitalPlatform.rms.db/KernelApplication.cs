@@ -824,6 +824,11 @@ namespace DigitalPlatform.rms
             this.ErrorString = strError;
             this.Value = nValue;
         }
+
+        public override string ToString()
+        {
+            return $"Value={Value},ErrorString={ErrorString},ErrorCode={ErrorCode}";
+        }
     }
 
     [DataContract(Namespace = "http://dp2003.com/dp2kernel/")]
