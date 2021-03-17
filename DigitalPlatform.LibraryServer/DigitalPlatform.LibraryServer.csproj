@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ionic.Zip-1.9.1.8" Version="1.9.1.8" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DigitalPlatform.Core\DigitalPlatform.Core.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Interfaces\DigitalPlatform.Interfaces.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.IO\DigitalPlatform.IO.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.LibraryServer.Common\DigitalPlatform.LibraryServer.Common.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.MarcDom\DigitalPlatform.MarcDom.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.MarcKernel\DigitalPlatform.MarcKernel.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.MarcQuery\DigitalPlatform.MarcQuery.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Message\DigitalPlatform.Message.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Script\DigitalPlatform.Script.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Text\DigitalPlatform.Text.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Xml\DigitalPlatform.Xml.csproj" />
+    <ProjectReference Include="..\DigitalPlatform\DigitalPlatform.csproj" />
+    <ProjectReference Include="..\dp2.KernelService\dp2.KernelService.csproj" />
+  </ItemGroup>
+
+</Project>

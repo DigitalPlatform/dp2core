@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DigitalPlatform.IO\DigitalPlatform.IO.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Text\DigitalPlatform.Text.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Xml\DigitalPlatform.Xml.csproj" />
+    <ProjectReference Include="..\dp2.KernelService\dp2.KernelService.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DigitalPlatform.Core\DigitalPlatform.Core.csproj" />
     <ProjectReference Include="..\DigitalPlatform.IO\DigitalPlatform.IO.csproj" />
-    <ProjectReference Include="..\DigitalPlatform.Range\DigitalPlatform.Range.csproj" />
     <ProjectReference Include="..\DigitalPlatform.ResultSet\DigitalPlatform.ResultSet.csproj" />
     <ProjectReference Include="..\DigitalPlatform.rms\DigitalPlatform.rms.csproj" />
     <ProjectReference Include="..\DigitalPlatform.Text\DigitalPlatform.Text.csproj" />
