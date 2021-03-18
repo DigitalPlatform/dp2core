@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DigitalPlatform.Core\DigitalPlatform.Core.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.LibraryServer\DigitalPlatform.LibraryServer.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.Text\DigitalPlatform.Text.csproj" />
+  </ItemGroup>
+
+</Project>

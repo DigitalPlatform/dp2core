@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Swashbuckle.AspNetCore.Filters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DigitalPlatform.LibraryServer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace TestWebApiServer.Controllers
 {
@@ -34,11 +35,18 @@ namespace TestWebApiServer.Controllers
     out string strRights,
     out string strLibraryCode*/)
         {
+            // ;
             /*
             strOutputUserName = "";
             strRights = "";
             strLibraryCode = "";
             */
+
+            // 获得实例名
+            var instance = (string)HttpContext.Request.RouteValues["instance"];
+
+            var service = ServiceStore.GetService(instance, HttpContext.Session.Id);
+            /*
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
             SessionInfo info = (SessionInfo)HttpContext.Session.Get<SessionInfo>("session");
             if (info == null)
@@ -50,10 +58,19 @@ namespace TestWebApiServer.Controllers
                 };
                 HttpContext.Session.Set<SessionInfo>("session", info);
             }
-
-            // 获得实例名
-            var instance = (string)HttpContext.Request.RouteValues["instance"];
-
+            */
+            var result = service.Login(strUserName, strPassword, strParameters,
+                out string strOutputUserName,
+                out string strRights,
+                out string strLibraryCode);
+            return new LoginResponse
+            {
+                LoginResult = result,
+                strOutputUserName = strOutputUserName,
+                strRights = strRights,
+                strLibraryCode = strLibraryCode
+            };
+            /*
             return new LoginResponse
             {
                 LoginResult = new LibraryServerResult
@@ -66,6 +83,7 @@ namespace TestWebApiServer.Controllers
                 strRights = "rights",
                 strLibraryCode = "libraryCode"
             };
+            */
         }
 
         [Route("/Enum")]
@@ -130,6 +148,8 @@ public class LibraryServerResultExamples : IExamplesProvider<LibraryServerResult
     }
 }
 */
+
+    /*
     public class SessionInfo
     {
         public string UserName { get; set; }
@@ -151,5 +171,5 @@ public class LibraryServerResultExamples : IExamplesProvider<LibraryServerResult
             return value == null ? default : JsonSerializer.Deserialize<T>(value);
         }
     }
-
+    */
 }

@@ -502,7 +502,7 @@ namespace DigitalPlatform.LibraryServer
     nPerCount,
     strColumnStyle,
     "zh",
-    null,
+    default,
     out searchresults,
     out strError);
                 if (lRet == -1)
@@ -1895,7 +1895,7 @@ namespace DigitalPlatform.LibraryServer
     nPerCount,
     strColumnStyle,
     strLang,
-    null,
+    default,
     out searchresults,
     out strError);
                 if (lRet == -1)

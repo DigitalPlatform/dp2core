@@ -14,6 +14,7 @@ using DigitalPlatform.IO;
 using DigitalPlatform.Text;
 using DigitalPlatform.LibraryServer.Common;
 using dp2.KernelService;
+using DigitalPlatform.rms;
 // using DigitalPlatform.rms.Client.rmsws_localhost;
 
 namespace DigitalPlatform.LibraryServer
@@ -168,7 +169,7 @@ namespace DigitalPlatform.LibraryServer
             try
             {
                 DirLoader loader = new DirLoader(channel,
-                    null,
+                    default,
                     strDbName + "/cfgs");
                 foreach (ResInfoItem item in loader)
                 {
@@ -185,7 +186,7 @@ namespace DigitalPlatform.LibraryServer
                         long lRet = channel.GetRes(
                             strPath,    // item.Name,
                             exist_stream,
-                            null,	// stop,
+                            default,	// stop,
                             strStyle,
                             null,	// byte [] input_timestamp,
                             out strMetaData,
@@ -8726,7 +8727,7 @@ out strError);
                         long lRet = channel.GetRes(
                             strPath,
                             exist_stream,
-                            null,	// stop,
+                            default,	// stop,
                             strStyle,
                             null,	// byte [] input_timestamp,
                             out strMetaData,

@@ -35,13 +35,15 @@ namespace TestKernelServiceDesktop
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_test = new System.Windows.Forms.TabPage();
+            this.button_test_search = new System.Windows.Forms.Button();
             this.button_test_login = new System.Windows.Forms.Button();
             this.button_initialApplication = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.button_test_search = new System.Windows.Forms.Button();
+            this.tabPage_compile = new System.Windows.Forms.TabPage();
+            this.button_test_compile = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage_test.SuspendLayout();
+            this.tabPage_compile.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -82,7 +84,7 @@ namespace TestKernelServiceDesktop
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage_test);
-            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage_compile);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 49);
             this.tabControl1.Name = "tabControl1";
@@ -104,6 +106,16 @@ namespace TestKernelServiceDesktop
             this.tabPage_test.Text = "Test";
             this.tabPage_test.UseVisualStyleBackColor = true;
             // 
+            // button_test_search
+            // 
+            this.button_test_search.Location = new System.Drawing.Point(20, 139);
+            this.button_test_search.Name = "button_test_search";
+            this.button_test_search.Size = new System.Drawing.Size(306, 46);
+            this.button_test_search.TabIndex = 2;
+            this.button_test_search.Text = "Search()";
+            this.button_test_search.UseVisualStyleBackColor = true;
+            this.button_test_search.Click += new System.EventHandler(this.button_test_search_Click);
+            // 
             // button_test_login
             // 
             this.button_test_login.Location = new System.Drawing.Point(20, 87);
@@ -124,25 +136,26 @@ namespace TestKernelServiceDesktop
             this.button_initialApplication.UseVisualStyleBackColor = true;
             this.button_initialApplication.Click += new System.EventHandler(this.button_initialApplication_Click);
             // 
-            // tabPage2
+            // tabPage_compile
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 37);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 323);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage_compile.Controls.Add(this.button_test_compile);
+            this.tabPage_compile.Location = new System.Drawing.Point(4, 37);
+            this.tabPage_compile.Name = "tabPage_compile";
+            this.tabPage_compile.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_compile.Size = new System.Drawing.Size(792, 323);
+            this.tabPage_compile.TabIndex = 1;
+            this.tabPage_compile.Text = "Compile";
+            this.tabPage_compile.UseVisualStyleBackColor = true;
             // 
-            // button_test_search
+            // button_test_compile
             // 
-            this.button_test_search.Location = new System.Drawing.Point(20, 139);
-            this.button_test_search.Name = "button_test_search";
-            this.button_test_search.Size = new System.Drawing.Size(306, 46);
-            this.button_test_search.TabIndex = 2;
-            this.button_test_search.Text = "Search()";
-            this.button_test_search.UseVisualStyleBackColor = true;
-            this.button_test_search.Click += new System.EventHandler(this.button_test_search_Click);
+            this.button_test_compile.Location = new System.Drawing.Point(25, 59);
+            this.button_test_compile.Name = "button_test_compile";
+            this.button_test_compile.Size = new System.Drawing.Size(309, 54);
+            this.button_test_compile.TabIndex = 0;
+            this.button_test_compile.Text = "Test Compile";
+            this.button_test_compile.UseVisualStyleBackColor = true;
+            this.button_test_compile.Click += new System.EventHandler(this.button_test_compile_Click);
             // 
             // Form1
             // 
@@ -163,6 +176,7 @@ namespace TestKernelServiceDesktop
             this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage_test.ResumeLayout(false);
+            this.tabPage_compile.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -176,10 +190,11 @@ namespace TestKernelServiceDesktop
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage_test;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage_compile;
         private System.Windows.Forms.Button button_initialApplication;
         private System.Windows.Forms.Button button_test_login;
         private System.Windows.Forms.Button button_test_search;
+        private System.Windows.Forms.Button button_test_compile;
     }
 }
 

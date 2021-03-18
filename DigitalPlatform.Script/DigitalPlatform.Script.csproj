@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DigitalPlatform.Core\DigitalPlatform.Core.csproj" />
     <ProjectReference Include="..\DigitalPlatform.IO\DigitalPlatform.IO.csproj" />
     <ProjectReference Include="..\DigitalPlatform.MarcQuery\DigitalPlatform.MarcQuery.csproj" />

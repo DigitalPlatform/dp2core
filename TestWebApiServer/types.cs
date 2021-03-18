@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace TestWebApiServer
 {
+#if REMOVED
     // API函数结果
     public class LibraryServerResult
     {
@@ -122,4 +123,6 @@ namespace TestWebApiServer
         NotFoundObjectFile = 115, // 2019/10/7
     }
 
+
+#endif
 }

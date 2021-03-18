@@ -23,6 +23,7 @@ using DigitalPlatform.Message;
 // using DigitalPlatform.rms.Client.rmsws_localhost;
 using DigitalPlatform.Core;
 using dp2.KernelService;
+using DigitalPlatform.rms;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -1568,7 +1569,7 @@ namespace DigitalPlatform.LibraryServer
             long lRet = channel.DoGetKeys(strRecPath,
                 strXml,
                 string.IsNullOrEmpty(sessioninfo.Lang) == true ? "zh" : sessioninfo.Lang,
-                null,
+                default,
                 out keys,
                 out strError);
             if (lRet == -1)

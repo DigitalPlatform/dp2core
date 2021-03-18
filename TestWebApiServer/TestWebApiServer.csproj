@@ -9,4 +9,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\dp2.LibraryService\dp2.LibraryService.csproj" />
+  </ItemGroup>
+
 </Project>

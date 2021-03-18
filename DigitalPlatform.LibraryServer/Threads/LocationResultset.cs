@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 
 using DigitalPlatform.ResultSet;
+using DigitalPlatform.rms;
 //using DigitalPlatform.rms.Client;
 //using DigitalPlatform.rms.Client.rmsws_localhost;
 using DigitalPlatform.Text;
@@ -173,7 +174,7 @@ namespace DigitalPlatform.LibraryServer
                     0,
                     "id",
                     "zh",
-                    null,
+                    default,
                     out Record[] searchresults,
                     out strError);
                 if (lHitCount == -1)
@@ -313,7 +314,7 @@ namespace DigitalPlatform.LibraryServer
             // 结果集为空，也要在 dp2kernel 端创建一个结果集对象
             if (resultset.Count == 0)
             {
-                long lRet = channel.DoWriteRecords(null,
+                long lRet = channel.DoWriteRecords(default,
 records.ToArray(),
 "createResultset,name:#" + strResultsetName + ",clear,permanent",
 out RecordBody[] results,
@@ -362,7 +363,7 @@ out strError);
                     this.WriteErrorLog("一批 " + records.Count);
 #endif
                     RecordBody[] results = null;
-                    long lRet = channel.DoWriteRecords(null,
+                    long lRet = channel.DoWriteRecords(default,
     records.ToArray(),
     "createResultset,name:#~" + strResultsetName + (bFirst ? ",clear" : ""),
     out results,
@@ -376,7 +377,7 @@ out strError);
 
             // 最后一次执行改名、排序
             {
-                long lRet = channel.DoWriteRecords(null,
+                long lRet = channel.DoWriteRecords(default,
 null,
 "renameResultset,oldname:#~" + strResultsetName + ",newname:#" + strResultsetName + ",permanent,sort",
 out RecordBody[] results,
@@ -466,7 +467,7 @@ out strError);
             string strFormat = "id,cols,format:@coldef://parent"; // "id,xml";
 
             SearchResultLoader loader = new SearchResultLoader(channel,
-                null,
+                default,
                 strResultsetName,
                 strFormat);
             loader.ElementType = "Record";
@@ -843,7 +844,7 @@ out strQueryXml,
                         // 没有命中任何记录，也要继续后面的处理
 
                         // 结果集为空，也要在 dp2kernel 端创建一个结果集对象
-                        long lRet = channel.DoWriteRecords(null,
+                        long lRet = channel.DoWriteRecords(default,
         new RecordBody[0],
         "createResultset,name:#" + strResultsetName + ",clear,permanent",
         out RecordBody[] results,
@@ -857,7 +858,7 @@ out strQueryXml,
 
                     // 最后一次执行改名、排序
                     {
-                        long lRet = channel.DoWriteRecords(null,
+                        long lRet = channel.DoWriteRecords(default,
         null,
         "renameResultset,oldname:#~" + strResultsetName + ",newname:#" + strResultsetName + ",permanent,sort",
         out RecordBody[] results,

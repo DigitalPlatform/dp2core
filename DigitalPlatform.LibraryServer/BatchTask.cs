@@ -52,7 +52,7 @@ namespace DigitalPlatform.LibraryServer
         public string ErrorInfo { get; set; }   // 线程结束的出错原因。如果为空，表示线程正常结束
 
         internal LibraryApplication App = null;
-        internal RmsChannelCollection RmsChannels = new RmsChannelCollection();
+        internal RmsChannelCollection RmsChannels = null;   // new RmsChannelCollection();
 
         internal ReaderWriterLock m_lock = new ReaderWriterLock();
         internal static int m_nLockTimeout = 5000;	// 5000=5秒
@@ -86,7 +86,7 @@ namespace DigitalPlatform.LibraryServer
         {
             this.Close();
 
-            RmsChannels.Dispose();
+            RmsChannels?.Dispose();
 
             DisposeEvents();
         }
@@ -124,6 +124,8 @@ namespace DigitalPlatform.LibraryServer
             {
                 this.m_bClosed = value;
 
+                // TODO: 可能需要一个 CancellationToken
+                /*
                 if (_stop != null)
                 {
                     if (value == true)
@@ -131,6 +133,7 @@ namespace DigitalPlatform.LibraryServer
                     else
                         _stop.Continue();
                 }
+                */
             }
         }
 
@@ -323,6 +326,7 @@ namespace DigitalPlatform.LibraryServer
                 this.Name = strName;
 
             this.App = app;
+            this.RmsChannels = new RmsChannelCollection(app.KernelApplication);
             this.RmsChannels.GUI = false;
 
             this.RmsChannels.AskAccountInfo -= new AskAccountInfoEventHandle(RmsChannels_AskAccountInfo);
@@ -389,7 +393,7 @@ namespace DigitalPlatform.LibraryServer
 
         void RmsChannels_AskAccountInfo(object sender, AskAccountInfoEventArgs e)
         {
-            e.Owner = null;
+            // e.Owner = null;
 
             ///
             e.UserName = this.Dp2UserName;

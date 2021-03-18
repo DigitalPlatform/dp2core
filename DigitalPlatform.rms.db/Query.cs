@@ -467,7 +467,7 @@ namespace DigitalPlatform.rms
         //		-6	无足够的权限
         //		0	成功
         public int doItem(
-            SessionInfo sessioninfo,
+            KernelSessionInfo sessioninfo,
             string strOutputStyle,
             XmlElement nodeItem,
             ref DpResultSet resultSet,
@@ -725,7 +725,7 @@ namespace DigitalPlatform.rms
         //		-6	无权限
         //		0	成功
         public int DoQuery(
-            SessionInfo sessioninfo,
+            KernelSessionInfo sessioninfo,
             string strOutputStyle,
             XmlElement nodeRoot,
             ref DpResultSet resultSet,
@@ -871,7 +871,7 @@ namespace DigitalPlatform.rms
         //			9)最后结果集为空
         //		-6	无足够的权限
         public int ProceedRPN(
-            SessionInfo sessioninfo,
+            KernelSessionInfo sessioninfo,
             string strOutputStyle,
             ArrayList rpn,
             ref DpResultSet resultSet,

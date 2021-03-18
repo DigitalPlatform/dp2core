@@ -23,6 +23,7 @@ using DigitalPlatform.Interfaces;
 //using DigitalPlatform.rms.Client;
 using DigitalPlatform.Core;
 using DigitalPlatform.LibraryServer.Common;
+using dp2.KernelService;
 
 namespace DigitalPlatform.LibraryServer
 {

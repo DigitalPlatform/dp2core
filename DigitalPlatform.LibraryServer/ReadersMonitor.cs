@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Diagnostics;
 using System.Collections;
-using System.Messaging;
+using DigitalPlatform.Messaging;
 
 using DigitalPlatform.Xml;
 //using DigitalPlatform.rms.Client;
@@ -1037,6 +1037,8 @@ namespace DigitalPlatform.LibraryServer
             string strBody,
             out string strError)
         {
+            throw new NotImplementedException();
+#if REMOVED
             strError = "";
 
             if (myQueue == null)
@@ -1070,6 +1072,7 @@ namespace DigitalPlatform.LibraryServer
                 strError = "发送消息到 MQ 出现异常: " + ExceptionUtil.GetDebugText(ex);
                 return -1;
             }
+#endif
         }
 
         // 2016/12/27

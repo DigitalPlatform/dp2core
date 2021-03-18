@@ -84,7 +84,7 @@ namespace dp2.KernelService
                 return channel;
 
             // 创建
-            channel = new RmsChannel(_app, new SessionInfo(_app));
+            channel = new RmsChannel(_app, new KernelSessionInfo(_app));
             channel.Url = strUrl;
             channel.Container = this;
 
@@ -99,7 +99,7 @@ namespace dp2.KernelService
             string strRegularUrl = strUrl.ToUpper();
 
             // 创建
-            RmsChannel channel = new RmsChannel(_app, new SessionInfo(_app));
+            RmsChannel channel = new RmsChannel(_app, new KernelSessionInfo(_app));
             channel.Url = strUrl;
             channel.Container = this;
 
@@ -264,9 +264,12 @@ namespace dp2.KernelService
         public CookieContainer Cookies = new System.Net.CookieContainer();
         */
 
-        public RmsChannel(KernelApplication app, SessionInfo sessioninfo) : base(app, sessioninfo)
+        public RmsChannel(KernelApplication app, KernelSessionInfo sessioninfo) : base(app, sessioninfo)
         {
-
+            /*
+            this.app = app;
+            this.sessioninfo = sessioninfo;
+            */
         }
 
         public new void Dispose()

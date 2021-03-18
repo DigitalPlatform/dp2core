@@ -295,7 +295,7 @@ namespace DigitalPlatform.LibraryServer
                 lCount,
                 strBrowseStyle, // "id",
                 strLang,
-                null,
+                default,
                 out origin_searchresults,
                 out strError);
             if (lRet == -1)

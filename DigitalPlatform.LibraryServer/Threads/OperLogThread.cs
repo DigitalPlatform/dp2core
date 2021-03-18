@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using System.Messaging;
+using DigitalPlatform.Messaging;
 
 using DigitalPlatform.Xml;
 using DigitalPlatform.Text;
 //using DigitalPlatform.rms.Client;
 using DigitalPlatform.Message;
+using dp2.KernelService;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -34,7 +35,7 @@ namespace DigitalPlatform.LibraryServer
                 try
                 {
                     _queue = new MessageQueue(this.App.OutgoingQueue);
-                    _queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+                    // _queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
                 }
                 catch (Exception ex)
                 {
@@ -725,6 +726,8 @@ out string strReaderRefID)
         // parameters:
         public List<MessageData> GetMessage(int nMaxCount, TimeSpan timeout)
         {
+            throw new NotImplementedException();
+#if REMOVED
             List<MessageData> results = new List<MessageData>();
             if (nMaxCount == 0)
                 return results;
@@ -757,14 +760,16 @@ out string strReaderRefID)
             {
                 this.App.WriteErrorLog("GetMessage() 出现异常: " + ExceptionUtil.GetDebugText(ex));
             }
-
             return results;
+#endif
         }
 
         // 从 MSMQ 队列中移走若干消息
         // parameters:
         public void RemoveMessage(int nCount)
         {
+            throw new NotImplementedException();
+#if REMOVED
             if (nCount == 0)
                 return;
 
@@ -793,6 +798,7 @@ out string strReaderRefID)
             {
                 this.App.WriteErrorLog("RemoveMessage(" + nCount + ") 出现异常: " + ExceptionUtil.GetDebugText(ex));
             }
+#endif
         }
 
     }

@@ -70,7 +70,7 @@ namespace DigitalPlatform.LibraryServer
         public DupResultSet DupResultSet = null;
 
         public LibraryApplication App = null;
-        public RmsChannelCollection Channels = new RmsChannelCollection();
+        public RmsChannelCollection Channels = null;    // new RmsChannelCollection();
 
         private string m_strTempDir = "";	// 临时文件目录 2008/3/31
 
@@ -235,6 +235,8 @@ namespace DigitalPlatform.LibraryServer
             string strVia = ""*/)
         {
             this.App = app;
+
+            this.Channels = new RmsChannelCollection(app.KernelApplication);
             this.Channels.GUI = false;
 
             this.Channels.AskAccountInfo -= new AskAccountInfoEventHandle(Channels_AskAccountInfo);

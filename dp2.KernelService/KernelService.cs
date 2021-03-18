@@ -18,16 +18,16 @@ namespace dp2Kernel
 {
     public class KernelService : IKernelService, IDisposable
     {
-        KernelApplication app = null;
+        internal KernelApplication app = null;
 
-        // KernelService 对象使用前应由调主准备好 sessioninfo 和 hostinfo
-        SessionInfo sessioninfo = null;
-        HostInfo hostinfo = null;
+        // KernelService 对象使用前应由调主准备好 sessioninfo
+        internal KernelSessionInfo sessioninfo = null;
+        // HostInfo hostinfo = null;
 
         User user = null;
 
         public KernelService(KernelApplication app,
-            SessionInfo sessioninfo)
+            KernelSessionInfo sessioninfo)
         {
             this.app = app;
             this.sessioninfo = sessioninfo;
@@ -96,6 +96,7 @@ namespace dp2Kernel
 
         #region 基础函数
 
+#if REMOVED
         int InitialApplication(HostInfo info, out string strError)
         {
             strError = "";
@@ -208,7 +209,7 @@ namespace dp2Kernel
 
             return 0;
         }
-
+#endif
         public static void GetClientAddress(out string strIP, out string strVia)
         {
             strIP = "";
@@ -274,13 +275,17 @@ namespace dp2Kernel
             string strError = "";
             int nRet = 0;
 
+            Debug.Assert(this.app != null, "");
 
             if (this.app == null)
             {
+                /*
                 HostInfo info = hostinfo;
                 if (info == null)
                     throw new ArgumentException("hostinfo 不应为 null", "this.hostinfo");
+                */
 
+#if REMOVED
                 nRet = InitialApplication(info, out strError);
                 if (nRet == -1)
                 {
@@ -290,6 +295,7 @@ namespace dp2Kernel
                     return result;
                 }
                 Debug.Assert(this.app != null, "");
+#endif
             }
 
             // 2018/10/14
@@ -373,7 +379,7 @@ namespace dp2Kernel
             return user;
         }
 
-        #endregion
+#endregion
 
         // 2012/1/5
         // 获得版本号

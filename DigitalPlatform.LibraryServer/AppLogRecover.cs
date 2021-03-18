@@ -7551,7 +7551,7 @@ API: Settlement()
                     0,
                     1,
                     "zh",
-                    null,   // stop
+                    default,   // stop
                     out List<string> aPath,
                     out strError);
                 if (lRet == -1)
@@ -8179,7 +8179,7 @@ out string strError)
                     if (strAction == "createDatabase")
                     {
                         nRet = DatabaseUtility.CreateDatabases(
-    null,   // stop
+    default,   // stop
     channel,
     strTempFileName,
     strTempDir,
@@ -8222,7 +8222,7 @@ out string strError)
                         }
 
                         nRet = DeleteDatabases(
-                            null,
+                            default,
                             channel,
                             dbnames,
                             strStyle,

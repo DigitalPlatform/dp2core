@@ -626,7 +626,7 @@ namespace DigitalPlatform.LibraryServer
 
             LibraryApplication app = this;
 
-            kernel_errorcode = DigitalPlatform.rms.Client.rmsws_localhost.ErrorCodeValue.NoError;
+            kernel_errorcode = ErrorCodeValue.NoError;
 
             bool bForce = false;
             if (strAction == "forcenew"
@@ -2333,7 +2333,7 @@ root, strLibraryCode);
                     // 2008/5/29 
                     // 在强制修改模式下，时间戳不一致意义重大，直接返回出错，而不进行要害字段的比对判断
                     strError = "保存操作发生错误: 数据库中的原记录 (路径为'" + strRecPath + "') 在编辑期间原记录已发生过修改(保存时发现提交的时间戳和原记录不匹配)";
-                    errorcode = DigitalPlatform.rms.Client.rmsws_localhost.ErrorCodeValue.TimestampMismatch;
+                    errorcode = ErrorCodeValue.TimestampMismatch;
                     return -1;  // timestamp mismatch
                 }
 
@@ -2360,7 +2360,7 @@ root, strLibraryCode);
                     else
                         strError = "保存操作发生错误: 数据库中的原记录 (路径为'" + strRecPath + "') 在编辑期间原记录已发生过修改(保存时发现提交的时间戳和原记录不匹配)";
 
-                    errorcode = DigitalPlatform.rms.Client.rmsws_localhost.ErrorCodeValue.TimestampMismatch;
+                    errorcode = ErrorCodeValue.TimestampMismatch;
                     return -1;  // timestamp mismatch
                 }
 
@@ -2512,7 +2512,7 @@ root, strLibraryCode);
                 strNewRecord = domNewRec.OuterXml;  // strNewXml;
 
                 strError = "保存操作成功。NewTimeStamp中返回了新的时间戳，NewRecord中返回了实际保存的新记录(可能和提交的新记录稍有差异)。";
-                errorcode = DigitalPlatform.rms.Client.rmsws_localhost.ErrorCodeValue.NoError;
+                errorcode = ErrorCodeValue.NoError;
 
                 /// 
                 {
@@ -2569,7 +2569,7 @@ root, strLibraryCode);
 
             return 0;
         ERROR1:
-            errorcode = DigitalPlatform.rms.Client.rmsws_localhost.ErrorCodeValue.CommonError;
+            errorcode = ErrorCodeValue.CommonError;
             return -1;
         }
 

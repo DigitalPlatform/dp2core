@@ -143,7 +143,8 @@ namespace DigitalPlatform.LibraryServer
 
                 long lRet = channel.GetRes(strPath,
                     strLocalPath,
-                    (Stop)null,
+                    default,
+                    // (Stop)null,
                     out strMetaData,
                     out baOutputTimestamp,
                     out strOutputPath,

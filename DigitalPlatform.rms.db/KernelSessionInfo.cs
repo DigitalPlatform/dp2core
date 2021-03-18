@@ -14,7 +14,7 @@ using DigitalPlatform.Core;
 namespace DigitalPlatform.rms
 {
     // 存放会话信息
-    public class SessionInfo : IDisposable
+    public class KernelSessionInfo : IDisposable
     {
         public const int QUOTA_SIZE = (int)((double)(1024 * 1024) * (double)0.8);   // 经过试验 0.5 基本可行 因为字符数换算为 byte 数，中文的缘故
         public const int PACKAGE_UNIT_SIZE = 100;
@@ -78,7 +78,7 @@ namespace DigitalPlatform.rms
 
         private KernelApplication app = null;
 
-        public SessionInfo(KernelApplication app)
+        public KernelSessionInfo(KernelApplication app)
         {
             this.app = app;
         }
@@ -442,7 +442,7 @@ namespace DigitalPlatform.rms
             int nRet = ConvertUtil.GetRealLengthNew((int)lStart,    // 2017/9/3 从 GetRealLength() 改为 GetRealLengthNew()
                 (int)lLength,
                 (int)resultSet.Count,
-                SessionInfo.MaxRecordsCountPerApi,//nMaxCount,
+                KernelSessionInfo.MaxRecordsCountPerApi,//nMaxCount,
                 out lOutputLength,
                 out strError);
             if (nRet == -1)
@@ -1060,7 +1060,7 @@ out strError);
                     nCurCount++;
 
                     // 如果超出最大范围，则停止
-                    if (nCurCount >= SessionInfo.MaxRecordsCountPerApi)
+                    if (nCurCount >= KernelSessionInfo.MaxRecordsCountPerApi)
                         break;
                 }
             }

@@ -15,6 +15,7 @@ using DigitalPlatform.LibraryServer.Common;
 //using DigitalPlatform.rms.Client.rmsws_localhost;
 using DigitalPlatform.IO;
 using dp2.KernelService;
+using DigitalPlatform.rms;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -642,13 +643,13 @@ out strError);
             breakpoint = new BreakPointInfo();
             breakpoint.BackupFileName = strBackupFileName;
 
-            this._stop.BeginLoop();
+            // this._stop.BeginLoop();
             try
             {
                 ExportUtil export_util = new ExportUtil();
                 export_util.SafeMode = true;
                 export_util.TempDir = this.App.TempDir;
-                int nRet = export_util.Begin(null,
+                int nRet = export_util.Begin(// null,
     strBackupFileName,
     Encoding.UTF8,
     out strError);
@@ -723,7 +724,8 @@ out strError);
                                     // TODO: 检查 RecordBody 是否为 null
                                     nRet = export_util.ExportOneRecord(
         channel,
-        this._stop,
+        default,
+        // this._stop,
         this.App.WsUrl,
         record.Path,
         record.RecordBody.Xml,
@@ -782,7 +784,7 @@ out strError);
             }
             finally
             {
-                this._stop.EndLoop();
+                // this._stop.EndLoop();
             }
         }
 
@@ -1208,7 +1210,7 @@ out strError);
                             continue;
 
                         SearchResultLoader loader = new SearchResultLoader(channel,
-                        null,
+                        default,
                         "default",
                         "id");
                         loader.ElementType = "Record";

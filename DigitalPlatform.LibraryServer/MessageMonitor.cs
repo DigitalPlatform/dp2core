@@ -7,6 +7,7 @@ using System.Web;
 
 using DigitalPlatform.IO;
 using DigitalPlatform.Xml;
+using dp2.KernelService;
 //using DigitalPlatform.rms.Client;
 
 namespace DigitalPlatform.LibraryServer

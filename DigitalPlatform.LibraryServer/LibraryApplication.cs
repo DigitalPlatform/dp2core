@@ -10,7 +10,7 @@ using System.Collections;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Messaging;
+using DigitalPlatform.Messaging;
 using System.Security.Principal;
 using System.Reflection;
 
@@ -30,8 +30,8 @@ using DigitalPlatform.Message;
 using DigitalPlatform.LibraryServer.Common;
 using DigitalPlatform.Core;
 using DigitalPlatform.Marc;
-using dp2.KernelService;
 using DigitalPlatform.rms;
+using dp2.KernelService;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -71,6 +71,8 @@ namespace DigitalPlatform.LibraryServer
                 return version.ToString();
             }
         }
+
+        public KernelApplication KernelApplication { get; set; }
 
         public DailyItemCountTable DailyItemCountTable = new DailyItemCountTable();
 
@@ -1575,6 +1577,7 @@ namespace DigitalPlatform.LibraryServer
                             goto ERROR1;
                         }
 
+#if REMOVED
                         // 启动DkywReplication
                         // <dkyw>
                         node = this.LibraryCfgDom.DocumentElement.SelectSingleNode("dkyw") as XmlElement;
@@ -1637,7 +1640,10 @@ namespace DigitalPlatform.LibraryServer
                                 goto ERROR1;
                             }
                         }
+#endif
 
+
+#if REMOVED
                         // 启动PatronReplication
                         // <patronReplication>
                         // 读者库数据同步 批处理任务
@@ -1661,6 +1667,8 @@ namespace DigitalPlatform.LibraryServer
                                 goto ERROR1;
                             }
                         }
+#endif
+
 
 #if NO  // 暂时不允许使用这个验证性的功能 2017/6/8
                         // 启动 LibraryReplication
@@ -2359,6 +2367,7 @@ namespace DigitalPlatform.LibraryServer
         // 尝试初始化 MSMQ 环境
         public void InitialMsmq()
         {
+#if REMOVED
             if (MsmqInitialized == true)
                 return;
 
@@ -2375,38 +2384,10 @@ namespace DigitalPlatform.LibraryServer
 
             try
             {
-#if NO
-                            if (MessageQueue.Exists(this.OutgoingQueue))
-                            {
-                                MessageQueue.Delete(this.OutgoingQueue);
-                            }
-#endif
 
                 if (!MessageQueue.Exists(this.OutgoingQueue))
                 {
                     MessageQueue queue = MessageQueue.Create(this.OutgoingQueue);
-
-#if NO
-                                // Create an AccessControlList.
-                                AccessControlList list = new AccessControlList();
-
-                                // Create a new trustee to represent the "Everyone" user group.
-                                Trustee tr = new Trustee("Everyone");
-
-                                // Create an AccessControlEntry, granting the trustee read access to
-                                // the queue.
-                                AccessControlEntry entry = new AccessControlEntry(
-                                    tr, GenericAccessRights.Read,
-                         StandardAccessRights.Read,
-                                    AccessControlEntryType.Allow);
-
-                                // Add the AccessControlEntry to the AccessControlList.
-                                list.Add(entry);
-
-
-                                // Apply the AccessControlList to the queue.
-                                queue.SetPermissions(list);
-#endif
 
                     var wi = WindowsIdentity.GetCurrent();
                     if (wi.IsSystem == true)
@@ -2452,6 +2433,7 @@ namespace DigitalPlatform.LibraryServer
                     this.AddHangup("MessageQueueCreateFail");
                 }
             }
+#endif
         }
 
         public void LockForWrite()
@@ -3171,6 +3153,7 @@ namespace DigitalPlatform.LibraryServer
                 }
             }
 
+            /*
             // 2020/7/1
             if (StringUtil.IsInList("skipVirusCheck", this.Function) == false)
             {
@@ -3178,6 +3161,7 @@ namespace DigitalPlatform.LibraryServer
                 if (DetectVirus.DetectXXX() || DetectVirus.DetectGuanjia())
                     errors.Add("dp2library 被木马软件干扰，无法启动");
             }
+            */
 
             if (errors.Count > 0)
             {
@@ -5583,7 +5567,7 @@ namespace DigitalPlatform.LibraryServer
                 0,
                 1,
                 "zh",
-                null,
+                default,
                 out List<string> aPath,
                 out strError);
             if (lRet == -1)
@@ -5665,7 +5649,7 @@ namespace DigitalPlatform.LibraryServer
                 0,
                 Math.Min(nMax, lHitCount),
                 "zh",
-                null,
+                default,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -5799,7 +5783,7 @@ namespace DigitalPlatform.LibraryServer
                 0,
                 Math.Min(nMax, lHitCount),
                 "zh",
-                null,
+                default,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -6226,7 +6210,7 @@ out strError);
                     0,
                     Math.Min(nMax, lHitCount),
                     "zh",
-                    null,
+                    default,
                     out recpaths,
                     out strError);
                 if (lRet == -1)
@@ -6726,7 +6710,7 @@ out strError);
                     0,
                     Math.Min(nMax, lHitCount),
                     "zh",
-                    null,
+                    default,
                     out recpaths,
                     out strError);
                 if (lRet == -1)
@@ -6864,7 +6848,7 @@ out strError);
                 0,
                 nMax,
                 "zh",
-                null,
+                default,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -6969,7 +6953,7 @@ out strError);
                 0,
                 nMax,
                 "zh",
-                null,
+                default,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -7086,7 +7070,7 @@ out strError);
                     0,
                     nMax,
                     "zh",
-                    null,
+                    default,
                     out aPathOrBarcode,
                     out strError);
                 if (lRet == -1)
@@ -7101,7 +7085,7 @@ out strError);
                     0,
                     nMax,
                     "zh",
-                    null,
+                    default,
                     0,  // nColumn,
                     out aPathOrBarcode,
                     out strError);
@@ -8036,7 +8020,7 @@ out strError);
                     0,
                     Math.Min(nMax, lHitCount),
                     "zh",
-                    null,
+                    default,
                     out aPath,
                     out strError);
                 if (lRet == -1)
@@ -8683,7 +8667,7 @@ out strError);
                     lCount,
                     strStyle + ",id",    // "id,xml,timestamp",
                     "zh",
-                    null,
+                    default,
                     out records,
                     out strError);
                     if (lRet == -1)
@@ -8822,7 +8806,7 @@ out strError);
                 0,
                 1,
                 "zh",
-                null,
+                default,
                 out List<string> aPath,
                 out strError);
             if (lRet == -1)
@@ -8951,7 +8935,7 @@ out strError);
                 0,
                 nMax,
                 "zh",
-                null,
+                default,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -9051,7 +9035,7 @@ out strError);
                 0,
                 nMax,
                 "zh",
-                null,
+                default,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -9295,7 +9279,7 @@ out strError);
             try
             {
                 SearchResultLoader loader = new SearchResultLoader(channel,
-                null,
+                default,
                 "default",
                 strFormatList);
 
@@ -9573,7 +9557,7 @@ out strError);
                 0,
                 lHitCount,
                 "zh",
-                null,
+                default,
                 out List<string> aPath,
                 out strError);
             if (lRet == -1)
@@ -11069,7 +11053,7 @@ out strError);
                 out strError);
             */
             string strExistingXml = "";
-            DigitalPlatform.rms.Client.rmsws_localhost.ErrorCodeValue kernel_errorcode = ErrorCodeValue.NoError;
+            ErrorCodeValue kernel_errorcode = ErrorCodeValue.NoError;
             LibraryServerResult result = this.SetReaderInfo(sessioninfo,
                 "change",
                 sessioninfo.Account.ReaderDomPath,
@@ -11225,7 +11209,7 @@ out strError);
                 out strError);
              * */
             string strExistingXml = "";
-            DigitalPlatform.rms.Client.rmsws_localhost.ErrorCodeValue kernel_errorcode = ErrorCodeValue.NoError;
+            ErrorCodeValue kernel_errorcode = ErrorCodeValue.NoError;
             LibraryServerResult result = this.SetReaderInfo(sessioninfo,
                 "change",
                 sessioninfo.Account.ReaderDomPath,
@@ -11836,7 +11820,7 @@ out strError);
             return 0;
         }
 
-        #region 实用功能
+#region 实用功能
 
         // 通过册条码号得知从属的种记录路径
         // parameters:
@@ -12351,7 +12335,7 @@ out strError);
             return 1;
         }
 
-        #endregion
+#endregion
 
         // 包装版本
         // 检查路径中的库名，是不是实体库名
@@ -12428,7 +12412,7 @@ out strError);
             return 0;
         }
 
-        #region APIs
+#region APIs
 
 
 
@@ -12996,7 +12980,7 @@ strLibraryCode);    // 读者所在的馆代码
             return -1;
         }
 
-        #endregion
+#endregion
 
         // 展开权限字符串为原始权限定义形态
         public static string ExpandRightString(string strOriginRight)
@@ -15726,7 +15710,7 @@ strLibraryCode);    // 读者所在的馆代码
         private bool readerDomChanged = false;
         public bool ReaderDomChanged { get => readerDomChanged; set => readerDomChanged = value; }
 
-        #region 手机短信验证码
+#region 手机短信验证码
 
         // 竖线间隔的手机号码列表
         // return:
@@ -15859,7 +15843,7 @@ strLibraryCode);    // 读者所在的馆代码
             return true;
         }
 
-        #endregion
+#endregion
 
         public Account()
         {

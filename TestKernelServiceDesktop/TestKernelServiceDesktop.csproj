@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\dp2.KernelService\dp2.KernelService.csproj" />
   </ItemGroup>
 

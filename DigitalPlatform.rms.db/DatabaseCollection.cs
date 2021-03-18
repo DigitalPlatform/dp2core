@@ -2221,7 +2221,7 @@ namespace DigitalPlatform.rms
         //		0	成功
         // 线: 安全的
         public int API_Search(
-            SessionInfo sessioninfo,
+            KernelSessionInfo sessioninfo,
             string strQuery,
             ref DpResultSet resultSet,
             User oUser,
@@ -7135,6 +7135,17 @@ dp2LibraryXE 版本: dp2LibraryXE, Version=1.1.5939.41661, Culture=neutral, Publ
     [DataContract(Namespace = "http://dp2003.com/dp2kernel/")]
     public class ResInfoItem
     {
+        #region	资源类型。可作Icon下标用
+
+        public const int RESTYPE_SERVER = 2;
+        public const int RESTYPE_DB = 0;
+        public const int RESTYPE_FROM = 1;
+        public const int RESTYPE_LOADING = 3;
+        public const int RESTYPE_FOLDER = 4;
+        public const int RESTYPE_FILE = 5;
+
+        #endregion
+
         [DataMember]
         public int Type;	// 类型：0 库 / 1 途径 / 4 cfgs / 5 file
         [DataMember]

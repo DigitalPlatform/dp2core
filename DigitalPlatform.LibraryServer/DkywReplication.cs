@@ -18,6 +18,7 @@ using DigitalPlatform.IO;
 
 namespace DigitalPlatform.LibraryServer
 {
+#if REMOVED
     /// <summary>
     /// 迪科远望一卡通读者信息同步 批处理任务
     /// </summary>
@@ -2453,4 +2454,6 @@ namespace DigitalPlatform.LibraryServer
 
 
     }
+
+#endif
 }

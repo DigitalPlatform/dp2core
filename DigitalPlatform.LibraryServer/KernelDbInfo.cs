@@ -45,7 +45,7 @@ namespace DigitalPlatform.LibraryServer
             for (int i = 0; i < root_dir_results.Length; i++)
             {
                 ResInfoItem info = root_dir_results[i];
-                if (info.Type != ResTree.RESTYPE_DB)
+                if (info.Type != ResInfoItem.RESTYPE_DB)
                     continue;
 
                 ResInfoItem[] db_dir_result = null;
@@ -321,7 +321,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 ResInfoItem info = root_dir_results[i];
 
-                if (info.Type != ResTree.RESTYPE_DB)
+                if (info.Type != ResInfoItem.RESTYPE_DB)
                     continue;
 
                 if (info.Name == strDbName)
@@ -369,7 +369,7 @@ namespace DigitalPlatform.LibraryServer
             for (int i = 0; i < db_dir_result.Length; i++)
             {
                 ResInfoItem info = db_dir_result[i];
-                if (info.Type != ResTree.RESTYPE_FROM)
+                if (info.Type != ResInfoItem.RESTYPE_FROM)
                     continue;
 
                 From from = new From();

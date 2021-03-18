@@ -197,24 +197,20 @@ namespace DigitalPlatform.LibraryServer
                 }
                 else if (strName == "重建检索点")
                     task = new RebuildKeys(this, strName);
-                /*
-            else if (strName == "跟踪DTLP数据库")
-                task = new TraceDTLP(this, strName);
-                 * */
-                else if (strName == "正元一卡通读者信息同步")
-                    task = new ZhengyuanReplication(this, strName);
-                else if (strName == "迪科远望一卡通读者信息同步")
-                    task = new DkywReplication(this, strName);
-                else if (strName == "读者信息同步")
-                    task = new PatronReplication(this, strName);
+                //else if (strName == "正元一卡通读者信息同步")
+                //    task = new ZhengyuanReplication(this, strName);
+                //else if (strName == "迪科远望一卡通读者信息同步")
+                //    task = new DkywReplication(this, strName);
+                //else if (strName == "读者信息同步")
+                //    task = new PatronReplication(this, strName);
                 else if (strName == "超期通知")
                     task = new ReadersMonitor(this, strName);
                 else if (strName == "消息监控")
                     task = new MessageMonitor(this, strName);
                 else if (strName == "创建 MongoDB 日志库")
                     task = new BuildMongoOperDatabase(this, strName);
-                else if (strName == "服务器同步")
-                    task = new ServerReplication(this, strName);
+                //else if (strName == "服务器同步")
+                //    task = new ServerReplication(this, strName);
                 else if (strName == "大备份")
                     task = new BackupTask(this, strName);
                 else

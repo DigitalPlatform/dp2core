@@ -21,6 +21,7 @@ using DigitalPlatform.Marc;
 using DigitalPlatform.Message;
 //using DigitalPlatform.rms.Client.rmsws_localhost;
 using dp2.KernelService;
+using DigitalPlatform.rms;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -521,7 +522,8 @@ namespace DigitalPlatform.LibraryServer
                 0,
                 Math.Min(nMax, lHitCount),
                 "zh",
-                null,
+                default,
+                //null,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -627,7 +629,8 @@ namespace DigitalPlatform.LibraryServer
                 0,
                 nMax,
                 "zh",
-                null,
+                default,
+                // null,
                 out aPath,
                 out strError);
             if (lRet == -1)
@@ -2712,7 +2715,7 @@ out strError);
     nPerCount,
     strColumnStyle,
     strLang,
-    null,
+    default,
     out searchresults,
     out strError);
                 if (lRet == -1)
@@ -3015,7 +3018,7 @@ out strError);
     nPerCount,
     strColumnStyle,
     "zh",
-    null,
+    default,
     out searchresults,
     out strError);
                 if (lRet == -1)

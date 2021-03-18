@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Diagnostics;
-using System.Messaging;
+
+using DigitalPlatform.Messaging;
 
 using DigitalPlatform.Text;
 using DigitalPlatform.Xml;

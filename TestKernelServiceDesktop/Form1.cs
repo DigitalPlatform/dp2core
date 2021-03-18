@@ -10,6 +10,13 @@ using System.Windows.Forms;
 
 using dp2Kernel;
 using DigitalPlatform.rms;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Reflection;
+using Microsoft.CodeAnalysis;
+using System.IO;
+using Microsoft.CodeAnalysis.Emit;
+using System.Runtime.Loader;
+using DigitalPlatform.Text;
 
 namespace TestKernelServiceDesktop
 {
@@ -44,7 +51,7 @@ namespace TestKernelServiceDesktop
             string kernelDirectory = DataModel.GetKernelDataDirectory();
             _kernelApp = KernelService.NewApplication(kernelDirectory);
 
-            _service = new KernelService(_kernelApp, new SessionInfo(_kernelApp));
+            _service = new KernelService(_kernelApp, new KernelSessionInfo(_kernelApp));
         }
 
         private void button_test_login_Click(object sender, EventArgs e)
@@ -68,6 +75,68 @@ namespace TestKernelServiceDesktop
                 "default",
                 "");
             MessageBox.Show(this, result.ToString());
+        }
+
+        private void button_test_compile_Click(object sender, EventArgs e)
+        {
+            // https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/may/net-core-cross-platform-code-generation-with-roslyn-and-net-core
+            const string code = @"using System;
+using System.IO;
+namespace RoslynCore
+{
+...
+ public static class Helper
+ {
+  public static double CalculateCircleArea(double radius)
+  {
+    return radius * radius * Math.PI;
+  }
+  }
+}";
+            GenerateAssembly(code);
+        }
+
+        public void GenerateAssembly(string code)
+        {
+            List<string> errors = new List<string>();
+
+            var tree = SyntaxFactory.ParseSyntaxTree(code);
+            string fileName = "mylib.dll";
+            // Detect the file location for the library that defines the object type
+            var systemRefLocation = typeof(object).GetTypeInfo().Assembly.Location;
+            // Create a reference to the library
+            var systemReference = MetadataReference.CreateFromFile(systemRefLocation);
+            // A single, immutable invocation to the compiler
+            // to produce a library
+            var compilation = CSharpCompilation.Create(fileName)
+              .WithOptions(
+                new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+              .AddReferences(systemReference)
+              .AddSyntaxTrees(tree);
+            string path = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            EmitResult compilationResult = compilation.Emit(path);
+            if (compilationResult.Success)
+            {
+                // Load the assembly
+                Assembly asm =
+                  AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+                // Invoke the RoslynCore.Helper.CalculateCircleArea method passing an argument
+                double radius = 10;
+                object result =
+                  asm.GetType("RoslynCore.Helper").GetMethod("CalculateCircleArea").
+                  Invoke(null, new object[] { radius });
+                errors.Add($"Circle area with radius = {radius} is {result}");
+            }
+            else
+            {
+                foreach (Diagnostic codeIssue in compilationResult.Diagnostics)
+                {
+                    string issue = $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()},Location: { codeIssue.Location.GetLineSpan()},Severity: { codeIssue.Severity}";
+                    errors.Add(issue);
+                }
+            }
+
+            MessageBox.Show(this, StringUtil.MakePathList(errors, "\r\n"));
         }
     }
 }

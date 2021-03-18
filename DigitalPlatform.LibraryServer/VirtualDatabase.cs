@@ -308,7 +308,7 @@ namespace DigitalPlatform.LibraryServer
             for (int i = 0; i < fromitems.Length; i++)
             {
                 ResInfoItem item = fromitems[i];
-                if (item.Type != ResTree.RESTYPE_FROM)
+                if (item.Type != ResInfoItem.RESTYPE_FROM)
                     continue;
 
                 // 插入<from>元素
@@ -412,7 +412,7 @@ namespace DigitalPlatform.LibraryServer
                 return 0;
             for (int i = 0; i < infos.Length; i++)
             {
-                if (infos[i].Type != ResTree.RESTYPE_FROM)
+                if (infos[i].Type != ResInfoItem.RESTYPE_FROM)
                     continue;
                 if (StringUtil.IsInList(strFromStyle, infos[i].TypeString) == true)
                     return 1;
@@ -676,7 +676,7 @@ namespace DigitalPlatform.LibraryServer
             for (int i = 0; i < fromitems.Length; i++)
             {
                 ResInfoItem item = fromitems[i];
-                if (item.Type != ResTree.RESTYPE_FROM)
+                if (item.Type != ResInfoItem.RESTYPE_FROM)
                     continue;
 
                 // 插入<from>元素
@@ -843,7 +843,7 @@ namespace DigitalPlatform.LibraryServer
             for (int i = 0; i < root_dir_results.Length; i++)
             {
                 ResInfoItem info = root_dir_results[i];
-                if (info.Type != ResTree.RESTYPE_DB)
+                if (info.Type != ResInfoItem.RESTYPE_DB)
                     continue;
 
                 ResInfoItem[] db_dir_result = null;

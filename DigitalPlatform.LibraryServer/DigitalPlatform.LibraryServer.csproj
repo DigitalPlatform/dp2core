@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Version>3.49.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +19,7 @@
     <ProjectReference Include="..\DigitalPlatform.MarcDom\DigitalPlatform.MarcDom.csproj" />
     <ProjectReference Include="..\DigitalPlatform.MarcKernel\DigitalPlatform.MarcKernel.csproj" />
     <ProjectReference Include="..\DigitalPlatform.MarcQuery\DigitalPlatform.MarcQuery.csproj" />
+    <ProjectReference Include="..\DigitalPlatform.MessageQueue\DigitalPlatform.MessageQueue.csproj" />
     <ProjectReference Include="..\DigitalPlatform.Message\DigitalPlatform.Message.csproj" />
     <ProjectReference Include="..\DigitalPlatform.Script\DigitalPlatform.Script.csproj" />
     <ProjectReference Include="..\DigitalPlatform.Text\DigitalPlatform.Text.csproj" />

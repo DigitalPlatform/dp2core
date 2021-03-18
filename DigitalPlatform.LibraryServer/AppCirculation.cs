@@ -30,6 +30,7 @@ using DigitalPlatform.IO;
 using DigitalPlatform.Text;
 using DigitalPlatform.Marc;
 using dp2.KernelService;
+using DigitalPlatform.rms;
 // using DigitalPlatform.rms.Client.rmsws_localhost;
 
 namespace DigitalPlatform.LibraryServer
@@ -12196,7 +12197,7 @@ start_time_1,
             lRet = channel.DoGetSearchResult("amerced",
                 100,
                 "zh",
-                null,
+                default,
                 out List<string> aPath,
                 out strError);
             if (lRet == -1)
@@ -22283,7 +22284,7 @@ start_time_1,
                     lStart,
                     lPerCount,
                     "zh",
-                    null,   // stop
+                    default,   // stop
                     out aPath,
                     out strError);
                 if (lRet == -1)

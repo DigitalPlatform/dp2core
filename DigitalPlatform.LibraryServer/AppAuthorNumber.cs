@@ -16,13 +16,17 @@ using DigitalPlatform.Xml;
 namespace DigitalPlatform.LibraryServer
 {
 
-#if REMOVED
 
     /// <summary>
     /// 本部分是 GCAT 相关代码
     /// </summary>
     public partial class LibraryApplication
     {
+        public string PinyinDbName { get; set; }
+        public string GcatDbName { get; set; }
+        public string WordDbName { get; set; }
+
+#if REMOVED
         static string[] hanzi_number = new string[] { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二" };
         static string[] luoma_number_upper = new string[] { "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ", "Ⅺ", "Ⅻ" };
         static string[] luoma_number_lower = new string[] { "ⅰ", "ⅱ", "ⅲ", "ⅳ", "ⅴ", "ⅵ", "ⅶ", "ⅷ", "ⅸ", "ⅹ" };
@@ -41,9 +45,6 @@ namespace DigitalPlatform.LibraryServer
         static string[] fufen_10_shuang = new string[] { "A-E", "F-G", "H-J", "K-L", "M-P", "Q-R", "S-T", "W-X", "Y", "Z" };
         static string[] fufen_10_dan = new string[] { "a", "e", "g", "i", "m", "n", "o", "r", "u", "v" };
 
-        public string PinyinDbName { get; set; }
-        public string GcatDbName { get; set; }
-        public string WordDbName { get; set; }
 
         // 汉字名 锁。用于控制创建汉字条目的过程
         public RecordLockCollection hanzi_locks = new RecordLockCollection();
@@ -1695,7 +1696,7 @@ namespace DigitalPlatform.LibraryServer
             return 0;
         }
 
-#endregion
+        #endregion
 
         // return:
         //      -1  出错
@@ -1947,7 +1948,7 @@ out string strError)
             return 0;
         }
 
-#region 加拼音有关的下级函数
+        #region 加拼音有关的下级函数
 
         static string BuildHanzi(XmlNode nodeWord)
         {
@@ -2576,7 +2577,7 @@ out string strError)
             return results;
         }
 
-#endregion
+        #endregion
 
         public static Question GetQuestion(List<Question> questions, int index)
         {
@@ -2645,8 +2646,8 @@ out string strError)
             // 大在前
             return -1 * (int)(c1 - c2);
         }
+#endif
     }
 
 
-#endif
 }

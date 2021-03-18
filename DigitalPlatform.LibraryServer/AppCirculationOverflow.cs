@@ -10,6 +10,7 @@ using DigitalPlatform.IO;
 // using DigitalPlatform.rms.Client;
 using DigitalPlatform.Text;
 using DigitalPlatform.Xml;
+using dp2.KernelService;
 
 [assembly: InternalsVisibleTo("TestDp2Library")]
 namespace DigitalPlatform.LibraryServer

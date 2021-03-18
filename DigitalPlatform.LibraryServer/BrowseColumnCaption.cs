@@ -24,6 +24,7 @@ using DigitalPlatform.MarcDom;
 using DigitalPlatform.Marc;
 
 using DigitalPlatform.Message;
+using dp2.KernelService;
 //using DigitalPlatform.rms.Client.rmsws_localhost;
 
 namespace DigitalPlatform.LibraryServer

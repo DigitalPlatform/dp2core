@@ -2,6 +2,7 @@
 //using DigitalPlatform.rms.Client;
 using DigitalPlatform.Text;
 using DigitalPlatform.Xml;
+using dp2.KernelService;
 using System;
 using System.Collections.Generic;
 using System.IO;

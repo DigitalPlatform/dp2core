@@ -577,7 +577,7 @@ for (int i = 0; i < nodes.Count; i++)
                 lCount,
                 strBrowseStyle, // "id",
                 strLang,
-                null,
+                default,
                 out origin_searchresults,
                 out strError);
             if (lRet == -1)

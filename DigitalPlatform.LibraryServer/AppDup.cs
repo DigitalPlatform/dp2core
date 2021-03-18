@@ -596,7 +596,7 @@ namespace DigitalPlatform.LibraryServer
                     lStart,
                     lPerCount,
                     "zh",
-                    null,   // stop
+                    default,   // stop
                     out aPath,
                     out strError);
                 if (lRet == -1)
@@ -688,7 +688,7 @@ namespace DigitalPlatform.LibraryServer
                 strXml,
                 "zh",   // strLang
                         // "",	// strStyle
-                null,	// this.stop,
+                default,	// this.stop,
                 out aLine,
                 out strError);
             if (lRet == -1)
