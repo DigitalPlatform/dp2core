@@ -35,13 +35,13 @@ namespace TestWebApiServer.Controllers
     out string strRights,
     out string strLibraryCode*/)
         {
-            // ;
             /*
             strOutputUserName = "";
             strRights = "";
             strLibraryCode = "";
             */
 
+#if NO
             // 获得实例名
             var instance = (string)HttpContext.Request.RouteValues["instance"];
 
@@ -70,7 +70,7 @@ namespace TestWebApiServer.Controllers
                 strRights = strRights,
                 strLibraryCode = strLibraryCode
             };
-            /*
+#endif
             return new LoginResponse
             {
                 LoginResult = new LibraryServerResult
@@ -83,7 +83,6 @@ namespace TestWebApiServer.Controllers
                 strRights = "rights",
                 strLibraryCode = "libraryCode"
             };
-            */
         }
 
         [Route("/Enum")]

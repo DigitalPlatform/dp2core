@@ -17,6 +17,7 @@ using System.IO;
 using Microsoft.CodeAnalysis.Emit;
 using System.Runtime.Loader;
 using DigitalPlatform.Text;
+using System.Net.Http;
 
 namespace TestKernelServiceDesktop
 {
@@ -137,6 +138,15 @@ namespace RoslynCore
             }
 
             MessageBox.Show(this, StringUtil.MakePathList(errors, "\r\n"));
+        }
+
+        private async void button_test_callTestServer_Click(object sender, EventArgs e)
+        {
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("http://localhost:59483/");
+            TestWebApiServerClient client = new TestWebApiServerClient(httpClient);
+            var res = await client.LoginAsync("supervisor", "test", "parameters", "instance1");     //consume a webApi get action
+            MessageBox.Show(this, res.ToString());
         }
     }
 }

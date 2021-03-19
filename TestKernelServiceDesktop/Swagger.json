@@ -1,0 +1,405 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "TestWebApiServer",
+    "version": "v1"
+  },
+  "paths": {
+    "/dp2library/{instance}/Login": {
+      "post": {
+        "tags": [
+          "dp2library"
+        ],
+        "parameters": [
+          {
+            "name": "strUserName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "strPassword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "strParameters",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "instance",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "example": {
+  "loginResult": {},
+  "strOutputUserName": "outputUserName1",
+  "strRights": "rights1",
+  "strLibraryCode": "libraryCode1"
+}
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "example": {
+  "loginResult": {},
+  "strOutputUserName": "outputUserName1",
+  "strRights": "rights1",
+  "strLibraryCode": "libraryCode1"
+}
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "example": {
+  "loginResult": {},
+  "strOutputUserName": "outputUserName1",
+  "strRights": "rights1",
+  "strLibraryCode": "libraryCode1"
+}
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "dp2library"
+        ],
+        "parameters": [
+          {
+            "name": "strUserName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "strPassword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "strParameters",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "instance",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "example": {
+  "loginResult": {},
+  "strOutputUserName": "outputUserName1",
+  "strRights": "rights1",
+  "strLibraryCode": "libraryCode1"
+}
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "example": {
+  "loginResult": {},
+  "strOutputUserName": "outputUserName1",
+  "strRights": "rights1",
+  "strLibraryCode": "libraryCode1"
+}
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "example": {
+  "loginResult": {},
+  "strOutputUserName": "outputUserName1",
+  "strRights": "rights1",
+  "strLibraryCode": "libraryCode1"
+}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Enum": {
+      "post": {
+        "tags": [
+          "dp2library"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCode"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCode"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCode"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "dp2library"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCode"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCode"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorCode"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/WeatherForecast": {
+      "post": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorCode": {
+        "enum": [
+          "NoError",
+          "SystemError",
+          "NotFound",
+          "ReaderBarcodeNotFound",
+          "ItemBarcodeNotFound",
+          "Overdue",
+          "NotLogin",
+          "DupItemBarcode",
+          "InvalidParameter",
+          "ReturnReservation",
+          "BorrowReservationDenied",
+          "RenewReservationDenied",
+          "AccessDenied",
+          "ItemBarcodeDup",
+          "Hangup",
+          "ReaderBarcodeDup",
+          "HasCirculationInfo",
+          "SourceReaderBarcodeNotFound",
+          "TargetReaderBarcodeNotFound",
+          "FromNotFound",
+          "ItemDbNotDef",
+          "IdcardNumberDup",
+          "IdcardNumberNotFound",
+          "PartialDenied",
+          "ChannelReleased",
+          "OutofSession",
+          "InvalidReaderBarcode",
+          "InvalidItemBarcode",
+          "NeedSmsLogin",
+          "RetryLogin",
+          "TempCodeMismatch",
+          "BiblioDup",
+          "Borrowing",
+          "ClientVersionTooOld",
+          "NotBorrowed",
+          "NotChanged",
+          "ServerTimeout",
+          "AlreadyBorrowed",
+          "AlreadyBorrowedByOther",
+          "SyncDenied",
+          "AlreadyExist",
+          "AlreadyExistOtherType",
+          "ApplicationStartError",
+          "EmptyRecord",
+          "NotFoundSubRes",
+          "NotHasEnoughRights",
+          "OtherError",
+          "PartNotFound",
+          "RequestCanceled",
+          "RequestCanceledByEventClose",
+          "RequestError",
+          "RequestTimeOut",
+          "TimestampMismatch",
+          "Compressed",
+          "NotFoundObjectFile"
+        ],
+        "type": "string"
+      },
+      "LibraryServerResult": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "loginResult": {
+            "$ref": "#/components/schemas/LibraryServerResult"
+          },
+          "strOutputUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "strRights": {
+            "type": "string",
+            "nullable": true
+          },
+          "strLibraryCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeatherForecast": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

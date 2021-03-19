@@ -40,10 +40,13 @@ namespace TestKernelServiceDesktop
             this.button_initialApplication = new System.Windows.Forms.Button();
             this.tabPage_compile = new System.Windows.Forms.TabPage();
             this.button_test_compile = new System.Windows.Forms.Button();
+            this.tabPage_restClient = new System.Windows.Forms.TabPage();
+            this.button_test_callTestServer = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage_test.SuspendLayout();
             this.tabPage_compile.SuspendLayout();
+            this.tabPage_restClient.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -85,6 +88,7 @@ namespace TestKernelServiceDesktop
             // 
             this.tabControl1.Controls.Add(this.tabPage_test);
             this.tabControl1.Controls.Add(this.tabPage_compile);
+            this.tabControl1.Controls.Add(this.tabPage_restClient);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 49);
             this.tabControl1.Name = "tabControl1";
@@ -157,6 +161,26 @@ namespace TestKernelServiceDesktop
             this.button_test_compile.UseVisualStyleBackColor = true;
             this.button_test_compile.Click += new System.EventHandler(this.button_test_compile_Click);
             // 
+            // tabPage_restClient
+            // 
+            this.tabPage_restClient.Controls.Add(this.button_test_callTestServer);
+            this.tabPage_restClient.Location = new System.Drawing.Point(4, 37);
+            this.tabPage_restClient.Name = "tabPage_restClient";
+            this.tabPage_restClient.Size = new System.Drawing.Size(792, 323);
+            this.tabPage_restClient.TabIndex = 2;
+            this.tabPage_restClient.Text = "Rest Client";
+            this.tabPage_restClient.UseVisualStyleBackColor = true;
+            // 
+            // button_test_callTestServer
+            // 
+            this.button_test_callTestServer.Location = new System.Drawing.Point(18, 34);
+            this.button_test_callTestServer.Name = "button_test_callTestServer";
+            this.button_test_callTestServer.Size = new System.Drawing.Size(412, 60);
+            this.button_test_callTestServer.TabIndex = 0;
+            this.button_test_callTestServer.Text = "Call Test Server";
+            this.button_test_callTestServer.UseVisualStyleBackColor = true;
+            this.button_test_callTestServer.Click += new System.EventHandler(this.button_test_callTestServer_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 28F);
@@ -177,6 +201,7 @@ namespace TestKernelServiceDesktop
             this.tabControl1.ResumeLayout(false);
             this.tabPage_test.ResumeLayout(false);
             this.tabPage_compile.ResumeLayout(false);
+            this.tabPage_restClient.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -195,6 +220,8 @@ namespace TestKernelServiceDesktop
         private System.Windows.Forms.Button button_test_login;
         private System.Windows.Forms.Button button_test_search;
         private System.Windows.Forms.Button button_test_compile;
+        private System.Windows.Forms.TabPage tabPage_restClient;
+        private System.Windows.Forms.Button button_test_callTestServer;
     }
 }
 
