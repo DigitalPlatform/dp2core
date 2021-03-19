@@ -24,6 +24,10 @@ using DigitalPlatform.Interfaces;
 using DigitalPlatform.Core;
 using DigitalPlatform.LibraryServer.Common;
 using dp2.KernelService;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Emit;
+using System.Runtime.Loader;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -122,6 +126,11 @@ namespace DigitalPlatform.LibraryServer
                 }
 
                 return 1;
+            }
+            catch(Exception ex)
+            {
+                strError = $"初始化扩展消息接口时出现异常: {ex.Message}";
+                return -1;
             }
             finally
             {
@@ -358,6 +367,158 @@ namespace DigitalPlatform.LibraryServer
 
         }
 
+        // 采用 Roslyn 的新版本
+        // 创建Assembly
+        // parameters:
+        //		strCode:		脚本代码
+        //		refs:			连接的外部assembly
+        //		strLibPaths:	类库路径, 可以为""或者null,则此参数无效
+        //		strOutputFile:	输出文件名, 可以为""或者null,则此参数无效
+        //		strErrorInfo:	出错信息
+        //		strWarningInfo:	警告信息
+        // result:
+        //		-1  出错
+        //		0   成功
+        public static int CreateAssembly(string strCode,
+            string[] refs,
+            out Assembly assembly,
+            out string strError,
+            out string strWarning)
+        {
+            strError = "";
+            strWarning = "";
+            assembly = null;
+
+
+            // 2019/4/5
+            if (refs != null
+                && Array.IndexOf(refs, "netstandard.dll") == -1)
+            {
+                List<string> temp = new List<string>(refs);
+                temp.Add("netstandard.dll");
+                refs = temp.ToArray();
+            }
+
+            List<PortableExecutableReference> references = new List<PortableExecutableReference>();
+
+            // Detect the file location for the library that defines the object type
+            var systemRefLocation = typeof(Object).GetTypeInfo().Assembly.Location;
+            // Create a reference to the library
+            var systemReference = MetadataReference.CreateFromFile(systemRefLocation);
+
+            references.Add(systemReference);
+
+            references.Add(MetadataReference.CreateFromFile(typeof(XmlDocument).GetTypeInfo().Assembly.Location));
+
+            // https://www.damirscorner.com/blog/posts/20190802-CompilingAndExecutingCodeInACsApp.html
+            var dotNetCoreDir = Path.GetDirectoryName(typeof(object).GetTypeInfo().Assembly.Location);
+            references.Add(MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir, "System.Runtime.dll")));
+
+            foreach (var path in refs)
+            {
+                if (path.Contains("C:") == false)
+                    continue;
+                var reference = MetadataReference.CreateFromFile(path);
+                references.Add(reference);
+            }
+
+            try
+            {
+                var tree = SyntaxFactory.ParseSyntaxTree(strCode);
+                string fileName = "mylib.dll";
+
+                // A single, immutable invocation to the compiler
+                // to produce a library
+                var compilation = CSharpCompilation.Create(fileName)
+                  .WithOptions(
+                    new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+                  .AddReferences(references)
+                  .AddSyntaxTrees(tree);
+
+                string strBinDir = System.Reflection.Assembly.GetExecutingAssembly().Location;   //  Environment.CurrentDirectory;
+
+                string path = Path.Combine(strBinDir/*Directory.GetCurrentDirectory()*/, fileName);
+                EmitResult compilationResult = compilation.Emit(path);
+
+                List<string> errors = new List<string>();
+                List<string> warnings = new List<string>();
+
+                if (compilationResult.Success)
+                {
+                    // Load the assembly
+                    assembly =
+                      AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+                    /*
+                    // Invoke the RoslynCore.Helper.CalculateCircleArea method passing an argument
+                    double radius = 10;
+                    object result =
+                      asm.GetType("RoslynCore.Helper").GetMethod("CalculateCircleArea").
+                      Invoke(null, new object[] { radius });
+                    errors.Add($"Circle area with radius = {radius} is {result}");
+                    */
+                }
+                else
+                {
+                    foreach (Diagnostic codeIssue in compilationResult.Diagnostics)
+                    {
+                        if (codeIssue.Severity == DiagnosticSeverity.Error)
+                        {
+                            string issue = $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()},Location: { codeIssue.Location.GetLineSpan()},Severity: { codeIssue.Severity}";
+                            errors.Add(issue);
+                        }
+                        else
+                        {
+                            string issue = $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()},Location: { codeIssue.Location.GetLineSpan()},Severity: { codeIssue.Severity}";
+                            warnings.Add(issue);
+                        }
+                    }
+                }
+
+                if (errors.Count > 0)
+                {
+                    strError = StringUtil.MakePathList(errors, "\r\n");
+                    return -1;
+                }
+
+                strWarning = StringUtil.MakePathList(warnings, "\r\n");
+            }
+            catch (Exception ex)
+            {
+                strError = "CreateAssemblyFile() 出错 " + ExceptionUtil.GetDebugText(ex);
+                return -1;
+            }
+
+            /*
+            //return 0;  //测
+
+            int nErrorCount = 0;
+            if (results.Errors.Count != 0)
+            {
+                string strErrorString = "";
+                nErrorCount = getErrorInfo(results.Errors,
+                    out strErrorString);
+
+                strError = "信息条数:" + Convert.ToString(results.Errors.Count) + "\r\n";
+                strError += strErrorString;
+
+                if (nErrorCount == 0 && results.Errors.Count != 0)
+                {
+                    strWarning = strError;
+                    strError = "";
+                }
+            }
+            if (nErrorCount != 0)
+                return -1;
+
+
+            assembly = results.CompiledAssembly;// compilerParams.OutputAssembly;
+            */
+
+            return 0;
+        }
+
+#if REMOVED
+        // 采用 System.CodeDom 的旧版本
         // 创建Assembly
         // parameters:
         //		strCode:		脚本代码
@@ -447,6 +608,8 @@ namespace DigitalPlatform.LibraryServer
 
             return 0;
         }
+
+#endif
 
         // 构造出错信息字符串
         // parameter:

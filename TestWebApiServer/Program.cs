@@ -13,7 +13,7 @@ namespace TestWebApiServer
     {
         public static void Main(string[] args)
         {
-            // InstanceCollection.Initialize(@"c:\dp2core_data");
+            InstanceCollection.Initialize(@"c:\dp2core_data");
 
             CreateHostBuilder(args).Build().Run();
         }
