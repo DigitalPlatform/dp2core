@@ -20,6 +20,7 @@ using DigitalPlatform.rms;
 using DigitalPlatform.Text;
 using DigitalPlatform.Xml;
 using dp2.KernelService;
+using Microsoft.AspNetCore.Http;
 
 namespace dp2.LibraryService
 {
@@ -27,17 +28,18 @@ namespace dp2.LibraryService
     {
         LibraryApplication app = null;
         DigitalPlatform.LibraryServer.SessionInfo sessioninfo = null;
-        bool RestMode = false;
-
+        bool RestMode = true;
+        HttpContext HttpContext = null;
         int _nStop = 0;   // 0 没有中断 1 提出中断 2 已经进行了中断
 
         string _ip = "";    // 没有 sessioninfo 的通道，记载 ip，便于最后释放计数
 
         public LibraryService(LibraryApplication app,
-    SessionInfo sessioninfo)
+    HttpContext context)
         {
             this.app = app;
-            this.sessioninfo = sessioninfo;
+            // this.sessioninfo = sessioninfo;
+            this.HttpContext = context;
         }
 
         public void Dispose()
@@ -224,11 +226,11 @@ namespace dp2.LibraryService
         }
 #endif
 
-#if REMOVED
         public List<RemoteAddress> GetClientAddress()
         {
             List<RemoteAddress> results = new List<RemoteAddress>();
 
+            /*
             if (OperationContext.Current.IncomingMessageProperties.ContainsKey("httpRequest"))
             {
                 var headers = OperationContext.Current.IncomingMessageProperties["httpRequest"];
@@ -254,6 +256,7 @@ namespace dp2.LibraryService
                 }
 
             }
+            */
 
             results.Add(GetNearestClientAddress());
             return results;
@@ -261,6 +264,9 @@ namespace dp2.LibraryService
 
         public RemoteAddress GetNearestClientAddress()
         {
+            var remoteIpAddress = HttpContext.Connection.RemoteIpAddress;
+            return new RemoteAddress(remoteIpAddress.ToString(), "", "");
+            /*
             string strIP = "";
             MessageProperties prop = OperationContext.Current.IncomingMessageProperties;
 
@@ -297,9 +303,9 @@ namespace dp2.LibraryService
             }
 
             return new RemoteAddress(strIP, strVia, "");
+            */
         }
 
-#endif
 
         // return:
         //      -2  达到通道配额上限
@@ -309,13 +315,12 @@ namespace dp2.LibraryService
         {
             strError = "";
 
-#if REMOVED
             List<RemoteAddress> address_list = GetClientAddress();
             try
             {
                 // sessioninfo = new SessionInfo(app, GetClientAddress());
                 this.sessioninfo = this.app.SessionTable.PrepareSession(this.app,
-    OperationContext.Current.SessionId,
+    HttpContext.Session.Id,    // OperationContext.Current.SessionId,
     address_list);
             }
             catch (OutofSessionException ex)
@@ -329,6 +334,7 @@ namespace dp2.LibraryService
                     + "' 新分配通道的请求被拒绝:" + ex.Message);
                 // OperationContext.Current.InstanceContext.ReleaseServiceInstance();
 
+                /*
                 // 为了防止攻击，需要立即切断通道。否则 1000 个通道很快会被耗尽
                 try
                 {
@@ -338,6 +344,8 @@ namespace dp2.LibraryService
                 {
                     // TimeoutException
                 }
+                */
+
                 strError = "InitialSession() 出现异常: " + ex.Message;
                 return -2;
             }
@@ -346,7 +354,6 @@ namespace dp2.LibraryService
                 strError = ExceptionUtil.GetAutoText(ex);
                 return -1;
             }
-#endif
             return 0;
         }
 
@@ -371,7 +378,6 @@ namespace dp2.LibraryService
             string strError = "";
             int nRet = 0;
 
-#if REMOVED
             if (this.sessioninfo != null)
             {
                 // Session 如果曾经被释放过
@@ -381,14 +387,13 @@ namespace dp2.LibraryService
 
                     this._ip = "";
                     this.sessioninfo = null;
-                    OperationContext.Current.InstanceContext.ReleaseServiceInstance();
+                    // OperationContext.Current.InstanceContext.ReleaseServiceInstance();
                     result.Value = -1;
                     result.ErrorInfo = "通道先前已经被释放，本次操作失败。请重试操作";
                     result.ErrorCode = ErrorCode.ChannelReleased;
                     return result;
                 }
             }
-#endif
 
             Debug.Assert(this.app != null, "");
 #if REMOVED
@@ -406,93 +411,11 @@ namespace dp2.LibraryService
             }
 #endif
 
-#if REMOVED
             if (bPrepareSessionInfo == true
                 && this.sessioninfo == null)
             {
-                if (OperationContext.Current.SessionId == null)
-                {
-                    //OperationContext.Current.Channel.Closing += Channel_Closing;
-                    //OperationContext.Current.Channel.Closed += Channel_Closed;
+                Debug.Assert(string.IsNullOrEmpty(HttpContext.Session.Id) == false);
 
-                    this.RestMode = true;
-
-                    string strCookie = WebOperationContext.Current.IncomingRequest.Headers["Cookie"];
-                    Hashtable table = StringUtil.ParseParameters(strCookie, ';', '=');
-                    string strSessionID = (string)table["sessionid"];
-                    if (string.IsNullOrEmpty(strSessionID) == true)
-                    {
-                        strSessionID = Guid.NewGuid().ToString();
-                        table["sessionid"] = strSessionID;
-                        table["path"] = "/";
-                        WebOperationContext.Current.OutgoingResponse.Headers.Add("Set-Cookie", StringUtil.BuildParameterString(table, ';', '='));   // "sessionid=" + strSessionID + "; path=/"
-                    }
-
-                    // TODO: 需要按照前端 IP 地址对 sessionid 个数进行管理。如果超过一定数目则限制这个 IP 创建新的 sessionid，但不影响到其他 IP 创建新的 sessionid
-
-                    List<RemoteAddress> address_list = GetClientAddress();
-                    try
-                    {
-                        this.sessioninfo = this.app.SessionTable.PrepareSession(this.app,
-                            strSessionID,
-                            address_list,
-                            strApiName == "Logout" ? false : true);
-                        // 2008/8/17
-                        if (this.sessioninfo == null && strApiName == "Logout")
-                        {
-                            // Logout 时发现 session 并不存在
-                            this._ip = "";
-                            this.sessioninfo = null;
-                            OperationContext.Current.InstanceContext.ReleaseServiceInstance();
-                            result.Value = -1;
-                            result.ErrorInfo = "通道先前已经被释放，本次 Logout 操作失败";
-                            result.ErrorCode = ErrorCode.ChannelReleased;
-                            return result;
-                        }
-                    }
-#if NO
-                    catch (OutofSessionException ex)
-                    {
-                        OperationContext.Current.InstanceContext.ReleaseServiceInstance();
-                        result.Value = -1;
-                        result.ErrorInfo = "InitialSession fail: " + ex.Message;
-                        result.ErrorCode = ErrorCode.SystemError;
-                        return result;
-                    }
-#endif
-                    catch (Exception ex)
-                    {
-                        result.Value = -1;
-                        result.ErrorInfo = "dp2Library 初始化通道失败: " + ex.Message;
-                        if (ex is OutofSessionException)
-                        {
-                            RemoteAddress address = RemoteAddress.FindClientAddress(address_list, "");
-
-                            // TODO: 注意防止错误日志文件耗费太多空间
-                            // TODO: 这里适合对现有通道做一些清理。由于 IP 相同并不意味着就是来自同一台电脑，因此需要 MAC 地址、账户名等其他信息辅助判断
-                            this.WriteDebugInfo("*** 前端 '"
-                                + (address == null ? "" : address.ClientIP + "@" + address.Via)
-                                + "' 新分配通道的请求被拒绝:" + ex.Message);
-
-                            result.ErrorCode = ErrorCode.OutofSession;
-                            // OperationContext.Current.InstanceContext.ReleaseServiceInstance();
-
-                            // 为了防止攻击，需要立即切断通道。否则 1000 个通道很快会被耗尽
-                            try
-                            {
-                                OperationContext.Current.Channel.Close(new TimeSpan(0, 0, 1));  // 一秒
-                            }
-                            catch
-                            {
-                                // TimeoutException
-                            }
-                        }
-                        else
-                            result.ErrorCode = ErrorCode.SystemError;
-                        return result;
-                    }
-                }
-                else
                 {
                     // return:
                     //      -2  达到通道配额上限
@@ -515,8 +438,6 @@ namespace dp2.LibraryService
                 Debug.Assert(this.sessioninfo != null, "");
             }
 
-#endif
-
             // 2011/1/27
             if (sessioninfo != null)
             {
@@ -534,7 +455,6 @@ namespace dp2.LibraryService
                     this.sessioninfo.Used++;
             }
 
-#if REMOVED
             if (bPrepareSessionInfo == false && this.sessioninfo == null)
             {
                 // 增量 NullIpTable，以便管理配额
@@ -543,7 +463,6 @@ namespace dp2.LibraryService
                 this._ip = address.ClientIP;
                 this.app.SessionTable.IncNullIpCount(address.ClientIP, 1);
             }
-#endif
 
             if (bCheckHangup == true)
             {

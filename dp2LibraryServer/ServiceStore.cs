@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using dp2.LibraryService;
 using Microsoft.AspNetCore.Http;
 
-namespace TestWebApiServer
+namespace dp2LibraryServer
 {
     public static class ServiceStore
     {

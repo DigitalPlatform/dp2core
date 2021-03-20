@@ -6,16 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Converters;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace TestWebApiServer
+namespace dp2LibraryServer
 {
     public class Startup
     {
@@ -34,7 +31,7 @@ namespace TestWebApiServer
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -47,32 +44,22 @@ namespace TestWebApiServer
                     // https://stackoverflow.com/questions/58476681/asp-net-core-3-0-system-text-json-camel-case-serialization
                     x.JsonSerializerOptions.PropertyNamingPolicy = null;
                     x.JsonSerializerOptions.WriteIndented = true;
-                    // x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    x.JsonSerializerOptions.Converters.Add(new Controllers.dp2libraryController.ByteArrayConverter());
                 });
-
-
-
+            
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TestWebApiServer", Version = "v1" });
-
-                // c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, @"MyApi.xml"));
-                // c.UseInlineDefinitionsForEnums();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "dp2LibraryServer", Version = "v1" });
 
                 // version < 3.0 like this: c.OperationFilter<ExamplesOperationFilter>(); 
                 // version 3.0 like this: c.AddSwaggerExamples(services.BuildServiceProvider());
                 // version > 4.0 like this:
                 c.ExampleFilters();
-                c.SchemaFilter<EnumSchemaFilter>();
+                // c.SchemaFilter<EnumSchemaFilter>();
 
             });
 
-
-
-            // https://stackoverflow.com/questions/36452468/swagger-ui-web-api-documentation-present-enums-as-strings
-            // services.AddSwaggerGenNewtonsoftSupport(); // explicit opt-in - needs to be placed after AddSwaggerGen()
-
-            services.AddSwaggerExamplesFromAssemblyOf<Controllers.LoginResponseExamples>();
+            services.AddSwaggerExamplesFromAssemblyOf<Controllers.dp2libraryController.LoginResponseExamples>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,20 +69,12 @@ namespace TestWebApiServer
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                /*
-                // Enable middleware to serve generated Swagger as a JSON endpoint.
-                app.UseSwagger(c =>
-                {
-                    c.SerializeAsV2 = true;
-                });
-                */
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TestWebApiServer v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dp2LibraryServer v1"));
             }
-
 
             app.UseRouting();
 
-            // app.UseAuthorization();
+            app.UseAuthorization();
 
             // session support
             app.UseSession();

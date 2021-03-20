@@ -957,12 +957,15 @@ namespace dp2Kernel
 
         void handle_Idle(object sender, ChannelIdleEventArgs e)
         {
+            // TODO: HttpContext
+            /*
             CommunicationState state = OperationContext.Current.Channel.State;
             if (state == CommunicationState.Closed
                 || state == CommunicationState.Closing)
                 e.Continue = false;
             else
                 e.Continue = true;
+            */
         }
 
         // 当前用户修改自己的密码

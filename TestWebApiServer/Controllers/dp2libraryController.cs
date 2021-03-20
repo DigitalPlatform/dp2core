@@ -30,7 +30,7 @@ namespace TestWebApiServer.Controllers
         [HttpGet]
         public LoginResponse Login(
             [FromBody] LoginRequest request
-    /*
+/*
 [FromForm] string strUserName,
 [FromForm] string strPassword,
 [FromForm] string strParameters*//*,
@@ -45,35 +45,37 @@ out string strLibraryCode*/)
             */
 
             // 获得实例名
-            var instance = (string)HttpContext.Request.RouteValues["instance"];
+            // var instance = (string)HttpContext.Request.RouteValues["instance"];
 
-            var service = ServiceStore.GetService(instance, HttpContext.Session.Id);
-            /*
-            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
-            SessionInfo info = (SessionInfo)HttpContext.Session.Get<SessionInfo>("session");
-            if (info == null)
+            using (var service = ServiceStore.GetService(HttpContext))
             {
-                info = new SessionInfo
+                /*
+                // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/app-state?view=aspnetcore-5.0
+                SessionInfo info = (SessionInfo)HttpContext.Session.Get<SessionInfo>("session");
+                if (info == null)
                 {
-                    UserName = strUserName,
-                    Password = strPassword
+                    info = new SessionInfo
+                    {
+                        UserName = strUserName,
+                        Password = strPassword
+                    };
+                    HttpContext.Session.Set<SessionInfo>("session", info);
+                }
+                */
+                var result = service.Login(request.strUserName,
+                    request.strPassword,
+                    request.strParameters,
+                    out string strOutputUserName,
+                    out string strRights,
+                    out string strLibraryCode);
+                return new LoginResponse
+                {
+                    LoginResult = result,
+                    strOutputUserName = strOutputUserName,
+                    strRights = strRights,
+                    strLibraryCode = strLibraryCode
                 };
-                HttpContext.Session.Set<SessionInfo>("session", info);
             }
-            */
-            var result = service.Login(request.strUserName,
-                request.strPassword,
-                request.strParameters,
-                out string strOutputUserName,
-                out string strRights,
-                out string strLibraryCode);
-            return new LoginResponse
-            {
-                LoginResult = result,
-                strOutputUserName = strOutputUserName,
-                strRights = strRights,
-                strLibraryCode = strLibraryCode
-            };
 
             /*
             return new LoginResponse
@@ -89,6 +91,23 @@ out string strLibraryCode*/)
                 strLibraryCode = "libraryCode"
             };
             */
+        }
+
+        [HttpPost]
+        [HttpGet]
+        public LogoutResponse Logout()
+        {
+            /*
+            // 获得实例名
+            var instance = (string)HttpContext.Request.RouteValues["instance"];
+
+            var remoteIpAddress = HttpContext.Connection.RemoteIpAddress;
+            */
+            using (var service = ServiceStore.GetService(HttpContext))
+            {
+                var result = service.Logout();
+                return new LogoutResponse { LogoutResult = result };
+            }
         }
 
         // [Route("/Enum")]
@@ -138,6 +157,12 @@ out string strLibraryCode*/)
         /// </summary>
         /// <example></example>
         public string strLibraryCode { get; set; }
+    }
+
+
+    public class LogoutResponse
+    {
+        public LibraryServerResult LogoutResult { get; set; }
     }
 
     public class LoginResponseExamples : IExamplesProvider<LoginResponse>
