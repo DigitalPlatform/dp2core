@@ -11820,7 +11820,7 @@ out strError);
             return 0;
         }
 
-#region 实用功能
+        #region 实用功能
 
         // 通过册条码号得知从属的种记录路径
         // parameters:
@@ -12335,7 +12335,7 @@ out strError);
             return 1;
         }
 
-#endregion
+        #endregion
 
         // 包装版本
         // 检查路径中的库名，是不是实体库名
@@ -12412,7 +12412,7 @@ out strError);
             return 0;
         }
 
-#region APIs
+        #region APIs
 
 
 
@@ -12980,7 +12980,7 @@ strLibraryCode);    // 读者所在的馆代码
             return -1;
         }
 
-#endregion
+        #endregion
 
         // 展开权限字符串为原始权限定义形态
         public static string ExpandRightString(string strOriginRight)
@@ -15584,9 +15584,9 @@ strLibraryCode);    // 读者所在的馆代码
     // API函数结果
     public class LibraryServerResult
     {
-        public long Value = 0;
-        public string ErrorInfo = "";
-        public ErrorCode ErrorCode = ErrorCode.NoError;
+        public long Value { get; set; }
+        public string ErrorInfo { get; set; }
+        public ErrorCode ErrorCode { get; set; }    // = ErrorCode.NoError;
 
         public LibraryServerResult Clone()
         {
@@ -15710,7 +15710,7 @@ strLibraryCode);    // 读者所在的馆代码
         private bool readerDomChanged = false;
         public bool ReaderDomChanged { get => readerDomChanged; set => readerDomChanged = value; }
 
-#region 手机短信验证码
+        #region 手机短信验证码
 
         // 竖线间隔的手机号码列表
         // return:
@@ -15843,7 +15843,7 @@ strLibraryCode);    // 读者所在的馆代码
             return true;
         }
 
-#endregion
+        #endregion
 
         public Account()
         {

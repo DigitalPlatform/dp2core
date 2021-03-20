@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 namespace TestWebApiServer.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/{instance}")]
     public class dp2libraryController : ControllerBase
     {
         private readonly ILogger<dp2libraryController> _logger;
@@ -23,14 +23,16 @@ namespace TestWebApiServer.Controllers
             _logger = logger;
         }
 
-        [Route("{instance}/Login")]
+        [Route("Login")]
         [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(LoginResponseExamples))]
         [HttpPost]
         [HttpGet]
         public LoginResponse Login(
-    string strUserName,
-    string strPassword,
-    string strParameters/*,
+            [FromBody] LoginRequest request
+            /*
+    [FromForm] string strUserName,
+    [FromForm] string strPassword,
+    [FromForm] string strParameters*//*,
     out string strOutputUserName,
     out string strRights,
     out string strLibraryCode*/)
@@ -41,7 +43,6 @@ namespace TestWebApiServer.Controllers
             strLibraryCode = "";
             */
 
-#if NO
             // 获得实例名
             var instance = (string)HttpContext.Request.RouteValues["instance"];
 
@@ -59,7 +60,9 @@ namespace TestWebApiServer.Controllers
                 HttpContext.Session.Set<SessionInfo>("session", info);
             }
             */
-            var result = service.Login(strUserName, strPassword, strParameters,
+            var result = service.Login(request.strUserName,
+                request.strPassword, 
+                request.strParameters,
                 out string strOutputUserName,
                 out string strRights,
                 out string strLibraryCode);
@@ -70,7 +73,8 @@ namespace TestWebApiServer.Controllers
                 strRights = strRights,
                 strLibraryCode = strLibraryCode
             };
-#endif
+
+            /*
             return new LoginResponse
             {
                 LoginResult = new LibraryServerResult
@@ -83,6 +87,7 @@ namespace TestWebApiServer.Controllers
                 strRights = "rights",
                 strLibraryCode = "libraryCode"
             };
+            */
         }
 
         [Route("/Enum")]
@@ -92,7 +97,27 @@ namespace TestWebApiServer.Controllers
         {
             return ErrorCode.NoError;
         }
+
+        [Route("/Result")]
+        [HttpPost]
+        [HttpGet]
+        public LibraryServerResult Result()
+        {
+            return new LibraryServerResult
+            {
+                Value = -1,
+                ErrorInfo = "error",
+                ErrorCode = ErrorCode.AccessDenied
+            };
+        }
     }
+
+public class LoginRequest
+{
+    public string strUserName { get; set; }
+    public string strPassword { get; set; }
+    public string strParameters { get; set; }
+}
 
     public class LoginResponse
     {

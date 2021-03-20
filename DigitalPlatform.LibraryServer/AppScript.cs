@@ -437,7 +437,7 @@ namespace DigitalPlatform.LibraryServer
 
                 string strBinDir = System.Reflection.Assembly.GetExecutingAssembly().Location;   //  Environment.CurrentDirectory;
 
-                string path = Path.Combine(strBinDir/*Directory.GetCurrentDirectory()*/, fileName);
+                string path = Path.Combine(/*strBinDir*/Directory.GetCurrentDirectory(), fileName);
                 EmitResult compilationResult = compilation.Emit(path);
 
                 List<string> errors = new List<string>();

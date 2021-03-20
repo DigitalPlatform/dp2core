@@ -44,8 +44,11 @@ namespace TestWebApiServer
                 // https://stackoverflow.com/questions/36452468/swagger-ui-web-api-documentation-present-enums-as-strings
                 .AddJsonOptions(x =>
                 {
+                    // 禁止返回的属性名使用 camel 形态
+                    // https://stackoverflow.com/questions/58476681/asp-net-core-3-0-system-text-json-camel-case-serialization
+                    x.JsonSerializerOptions.PropertyNamingPolicy = null;
                     x.JsonSerializerOptions.WriteIndented = true;
-                    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    // x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
 
             services.AddSwaggerGen(c =>
