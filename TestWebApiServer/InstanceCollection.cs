@@ -38,6 +38,8 @@ namespace TestWebApiServer
 
         public static Instance FindInstance(string instance)
         {
+            if (string.IsNullOrEmpty(instance))
+                return _instances[0];
             return _instances.Find(o => o.Name == instance);
         }
     }

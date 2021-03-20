@@ -13,7 +13,8 @@ using Swashbuckle.AspNetCore.Filters;
 namespace TestWebApiServer.Controllers
 {
     [ApiController]
-    [Route("[controller]/{instance}")]
+    [Route("[controller]/{instance}/[action]")]
+    [Route("[controller]/[action]")]
     public class dp2libraryController : ControllerBase
     {
         private readonly ILogger<dp2libraryController> _logger;
@@ -23,19 +24,19 @@ namespace TestWebApiServer.Controllers
             _logger = logger;
         }
 
-        [Route("Login")]
+        // [Route("[action]")]
         [SwaggerResponseExample((int)HttpStatusCode.OK, typeof(LoginResponseExamples))]
         [HttpPost]
         [HttpGet]
         public LoginResponse Login(
             [FromBody] LoginRequest request
-            /*
-    [FromForm] string strUserName,
-    [FromForm] string strPassword,
-    [FromForm] string strParameters*//*,
-    out string strOutputUserName,
-    out string strRights,
-    out string strLibraryCode*/)
+    /*
+[FromForm] string strUserName,
+[FromForm] string strPassword,
+[FromForm] string strParameters*//*,
+out string strOutputUserName,
+out string strRights,
+out string strLibraryCode*/)
         {
             /*
             strOutputUserName = "";
@@ -61,7 +62,7 @@ namespace TestWebApiServer.Controllers
             }
             */
             var result = service.Login(request.strUserName,
-                request.strPassword, 
+                request.strPassword,
                 request.strParameters,
                 out string strOutputUserName,
                 out string strRights,
@@ -90,7 +91,7 @@ namespace TestWebApiServer.Controllers
             */
         }
 
-        [Route("/Enum")]
+        // [Route("/Enum")]
         [HttpPost]
         [HttpGet]
         public ErrorCode Enum()
@@ -98,7 +99,7 @@ namespace TestWebApiServer.Controllers
             return ErrorCode.NoError;
         }
 
-        [Route("/Result")]
+        // [Route("/Result")]
         [HttpPost]
         [HttpGet]
         public LibraryServerResult Result()
@@ -112,12 +113,12 @@ namespace TestWebApiServer.Controllers
         }
     }
 
-public class LoginRequest
-{
-    public string strUserName { get; set; }
-    public string strPassword { get; set; }
-    public string strParameters { get; set; }
-}
+    public class LoginRequest
+    {
+        public string strUserName { get; set; }
+        public string strPassword { get; set; }
+        public string strParameters { get; set; }
+    }
 
     public class LoginResponse
     {
