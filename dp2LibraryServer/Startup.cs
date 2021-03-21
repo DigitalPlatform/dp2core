@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+ï»¿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +40,7 @@ namespace dp2LibraryServer
                 // https://stackoverflow.com/questions/36452468/swagger-ui-web-api-documentation-present-enums-as-strings
                 .AddJsonOptions(x =>
                 {
-                    // ½ûÖ¹·µ»ØµÄÊôĞÔÃûÊ¹ÓÃ camel ĞÎÌ¬
+                    // ç¦æ­¢è¿”å›çš„å±æ€§åä½¿ç”¨ camel å½¢æ€
                     // https://stackoverflow.com/questions/58476681/asp-net-core-3-0-system-text-json-camel-case-serialization
                     x.JsonSerializerOptions.PropertyNamingPolicy = null;
                     x.JsonSerializerOptions.WriteIndented = true;
@@ -53,7 +53,7 @@ namespace dp2LibraryServer
                 c.SwaggerDoc("v3", new OpenApiInfo
                 {
                     Title = "dp2LibraryServer API V3",
-                    Description = "dp2 Í¼Êé¹İ¼¯³ÉÏµÍ³Ó¦ÓÃ·şÎñÆ÷ API",
+                    Description = "dp2 å›¾ä¹¦é¦†é›†æˆç³»ç»Ÿåº”ç”¨æœåŠ¡å™¨ API",
                     Version = "v3",
                     License = new OpenApiLicense
                     {
@@ -71,7 +71,7 @@ namespace dp2LibraryServer
                 c.SwaggerDoc("v4", new OpenApiInfo
                 {
                     Title = "dp2LibraryServer API V4",
-                    Description = "dp2 Í¼Êé¹İ¼¯³ÉÏµÍ³Ó¦ÓÃ·şÎñÆ÷ API",
+                    Description = "dp2 å›¾ä¹¦é¦†é›†æˆç³»ç»Ÿåº”ç”¨æœåŠ¡å™¨ API",
                     Version = "v4",
                     License = new OpenApiLicense
                     {
