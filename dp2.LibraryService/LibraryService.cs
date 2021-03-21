@@ -14758,7 +14758,6 @@ out strError);
             }
         }
 
-#if REMOVED
         // TODO: questions 要限制尺寸
         // parameters:
         //		strAuthor	著者字符串
@@ -14834,9 +14833,6 @@ out strError);
             }
         }
 
-#endif
-
-#if REMOVED
         // parameters:
         //      strType 类型。如果为空或者 pinyin，表示希望获得拼音。如果为 sjhm，表示希望获得四角号码
         // return:
@@ -14898,9 +14894,6 @@ out strError);
             }
         }
 
-#endif
-
-#if REMOVED
         // return:
         //      -2  strID验证失败
         //      -1  出错
@@ -14941,9 +14934,6 @@ true, true);
             }
         }
 
-#endif
-
-#if REMOVED
         // 分词
         // return:
         //      -2  strID验证失败
@@ -14983,8 +14973,6 @@ true);
                 return result;
             }
         }
-
-#endif
 
         // 在线统计
         public LibraryServerResult OnlineStatis(

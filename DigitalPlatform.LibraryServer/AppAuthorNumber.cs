@@ -12,6 +12,9 @@ using System.IO;
 
 using DigitalPlatform.Text;
 using DigitalPlatform.Xml;
+using JiebaNet.Segmenter;
+using dp2.KernelService;
+using DigitalPlatform.rms;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -26,7 +29,6 @@ namespace DigitalPlatform.LibraryServer
         public string GcatDbName { get; set; }
         public string WordDbName { get; set; }
 
-#if REMOVED
         static string[] hanzi_number = new string[] { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二" };
         static string[] luoma_number_upper = new string[] { "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ", "Ⅺ", "Ⅻ" };
         static string[] luoma_number_lower = new string[] { "ⅰ", "ⅱ", "ⅲ", "ⅳ", "ⅴ", "ⅵ", "ⅶ", "ⅷ", "ⅸ", "ⅹ" };
@@ -163,7 +165,7 @@ namespace DigitalPlatform.LibraryServer
                     "default",
                     1000,
                     "zh",
-                    null,	// stop,
+                    default,	// stop,
                     out List<string> aPath,
                     out strError);
                 if (lRet == -1)
@@ -2284,7 +2286,7 @@ out string strError)
                     "default",
                     1000,
                     "zh",
-                    null,	// stop,
+                    default,	// stop,
                     out List<string> aPath,
                     out strError);
                 if (lRet == -1)
@@ -2516,6 +2518,8 @@ out string strError)
             return strResult;
         }
 
+#if REMOVED
+
         // 可能会抛出异常
         static void Match(List<string> tokens,
             string strOriginText,
@@ -2576,6 +2580,16 @@ out string strError)
                 out results);
             return results;
         }
+
+#endif
+
+        public static List<string> SplitText(string strText)
+        {
+            var segmenter = new JiebaSegmenter();
+            // 默认为精确模式
+            return new List<string>(segmenter.Cut(strText));
+        }
+
 
         #endregion
 
@@ -2646,8 +2660,5 @@ out string strError)
             // 大在前
             return -1 * (int)(c1 - c2);
         }
-#endif
     }
-
-
 }

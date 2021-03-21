@@ -841,7 +841,6 @@ namespace dp2.LibraryService
         out ResInfoItem[] items,
         out ErrorCodeValue kernel_errorcode);
 
-        /*
         [OperationContract]
         LibraryServerResult GetAuthorNumber(
     string strAuthor,
@@ -851,21 +850,16 @@ namespace dp2.LibraryService
     ref List<Question> questions,
     out string strNumber,
     out string strDebugInfo);
-        */
 
-        /*
         [OperationContract]
         LibraryServerResult GetPinyin(
             string strType,
             string strText,
             out string strPinyinXml);
-        */
 
-        /*
         [OperationContract]
         LibraryServerResult SetPinyin(
 string strPinyinXml);
-        */
 
         // 在线统计
         [OperationContract]

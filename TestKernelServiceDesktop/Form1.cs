@@ -18,6 +18,7 @@ using Microsoft.CodeAnalysis.Emit;
 using System.Runtime.Loader;
 using DigitalPlatform.Text;
 using System.Net.Http;
+using JiebaNet.Segmenter;
 
 namespace TestKernelServiceDesktop
 {
@@ -147,6 +148,15 @@ namespace RoslynCore
             TestWebApiServerClient client = new TestWebApiServerClient(httpClient);
             var res = await client.LoginAsync("supervisor", "test", "parameters", "instance1");     //consume a webApi get action
             MessageBox.Show(this, res.ToString());
+        }
+
+        private void button_test_splitWord_Click(object sender, EventArgs e)
+        {
+            var segmenter = new JiebaSegmenter();
+
+            var segments = segmenter.Cut("我来到北京清华大学");  // 默认为精确模式
+            var result = string.Join("/ ", segments);
+            MessageBox.Show(this, result);
         }
     }
 }

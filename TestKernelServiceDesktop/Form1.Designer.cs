@@ -42,11 +42,14 @@ namespace TestKernelServiceDesktop
             this.button_test_compile = new System.Windows.Forms.Button();
             this.tabPage_restClient = new System.Windows.Forms.TabPage();
             this.button_test_callTestServer = new System.Windows.Forms.Button();
+            this.tabPage_splitWord = new System.Windows.Forms.TabPage();
+            this.button_test_splitWord = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage_test.SuspendLayout();
             this.tabPage_compile.SuspendLayout();
             this.tabPage_restClient.SuspendLayout();
+            this.tabPage_splitWord.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -89,6 +92,7 @@ namespace TestKernelServiceDesktop
             this.tabControl1.Controls.Add(this.tabPage_test);
             this.tabControl1.Controls.Add(this.tabPage_compile);
             this.tabControl1.Controls.Add(this.tabPage_restClient);
+            this.tabControl1.Controls.Add(this.tabPage_splitWord);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 49);
             this.tabControl1.Name = "tabControl1";
@@ -181,6 +185,26 @@ namespace TestKernelServiceDesktop
             this.button_test_callTestServer.UseVisualStyleBackColor = true;
             this.button_test_callTestServer.Click += new System.EventHandler(this.button_test_callTestServer_Click);
             // 
+            // tabPage_splitWord
+            // 
+            this.tabPage_splitWord.Controls.Add(this.button_test_splitWord);
+            this.tabPage_splitWord.Location = new System.Drawing.Point(4, 37);
+            this.tabPage_splitWord.Name = "tabPage_splitWord";
+            this.tabPage_splitWord.Size = new System.Drawing.Size(792, 323);
+            this.tabPage_splitWord.TabIndex = 3;
+            this.tabPage_splitWord.Text = "Split word";
+            this.tabPage_splitWord.UseVisualStyleBackColor = true;
+            // 
+            // button_test_splitWord
+            // 
+            this.button_test_splitWord.Location = new System.Drawing.Point(19, 22);
+            this.button_test_splitWord.Name = "button_test_splitWord";
+            this.button_test_splitWord.Size = new System.Drawing.Size(294, 43);
+            this.button_test_splitWord.TabIndex = 0;
+            this.button_test_splitWord.Text = "Split Word";
+            this.button_test_splitWord.UseVisualStyleBackColor = true;
+            this.button_test_splitWord.Click += new System.EventHandler(this.button_test_splitWord_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 28F);
@@ -202,6 +226,7 @@ namespace TestKernelServiceDesktop
             this.tabPage_test.ResumeLayout(false);
             this.tabPage_compile.ResumeLayout(false);
             this.tabPage_restClient.ResumeLayout(false);
+            this.tabPage_splitWord.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -222,6 +247,8 @@ namespace TestKernelServiceDesktop
         private System.Windows.Forms.Button button_test_compile;
         private System.Windows.Forms.TabPage tabPage_restClient;
         private System.Windows.Forms.Button button_test_callTestServer;
+        private System.Windows.Forms.TabPage tabPage_splitWord;
+        private System.Windows.Forms.Button button_test_splitWord;
     }
 }
 
