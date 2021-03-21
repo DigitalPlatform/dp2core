@@ -1077,7 +1077,7 @@ out byte[] item_timestamp);
             DomUtil.SetElementText(itemdom.DocumentElement, "returningDate", info.ReturningDate);
             DomUtil.DeleteElement(itemdom.DocumentElement, "overflow");
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

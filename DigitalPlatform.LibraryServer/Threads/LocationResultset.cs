@@ -153,12 +153,12 @@ namespace DigitalPlatform.LibraryServer
             string strError = "";
 
             // 临时的SessionInfo对象
-            SessionInfo session = new SessionInfo(this);
+            SessionInfo sessioninfo = new SessionInfo(this);
             try
             {
                 this._app_down.Token.ThrowIfCancellationRequested();
 
-                RmsChannel channel = session.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                     return false;
 
@@ -188,8 +188,8 @@ namespace DigitalPlatform.LibraryServer
             }
             finally
             {
-                session.CloseSession();
-                session = null;
+                sessioninfo.CloseSession();
+                sessioninfo = null;
             }
         }
 
@@ -226,7 +226,9 @@ namespace DigitalPlatform.LibraryServer
                 this._app_down.Token.ThrowIfCancellationRequested();
 
                 // RmsChannel channel = session.Channels.GetChannel(this.WsUrl);
-                RmsChannel channel = _slowChannelList.GetChannel(session.Channels, this.WsUrl);
+                RmsChannel channel = _slowChannelList.GetChannel(session.Channels,
+                    null,   // 中途没法感知前端中断
+                    this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel null error";
@@ -820,7 +822,9 @@ out strQueryXml,
                 this._app_down.Token.ThrowIfCancellationRequested();
 
                 // RmsChannel channel = session.Channels.GetChannel(this.WsUrl);
-                RmsChannel channel = _slowChannelList.GetChannel(session.Channels, this.WsUrl);
+                RmsChannel channel = _slowChannelList.GetChannel(session.Channels, 
+                    null,   // 中途没法感知前端中断
+                    this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel null error";

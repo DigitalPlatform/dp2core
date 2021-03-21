@@ -57,7 +57,7 @@ namespace DigitalPlatform.LibraryServer
             if (String.IsNullOrEmpty(strValueAttrName) == true)
                 strValueAttrName = "v";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -117,7 +117,7 @@ namespace DigitalPlatform.LibraryServer
             }
 
 #if NO
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -187,7 +187,7 @@ namespace DigitalPlatform.LibraryServer
                 strValueAttrName = "v";
 
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

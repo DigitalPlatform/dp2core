@@ -318,11 +318,12 @@ namespace dp2.LibraryService
                     EntityInfo[] issueinfos,
                     out EntityInfo[] errorinfos);
 
+        // 用 GetItemInfo() 替代
         [OperationContract]
         LibraryServerResult GetIssueInfo(
                     string strRefID,
-            // string strBiblioRecPath,
-            string strItemXml,
+                    // string strBiblioRecPath,
+                    string strItemXml,
                     string strResultType,
                     out string strResult,
                     out string strIssueRecPath,
@@ -380,11 +381,12 @@ namespace dp2.LibraryService
                    EntityInfo[] orderinfos,
                    out EntityInfo[] errorinfos);
 
+        // 用 GetItemInfo() 替代
         [OperationContract]
         LibraryServerResult GetOrderInfo(
                     string strRefID,
-            // string strBiblioRecPath,
-            string strItemXml,
+                    // string strBiblioRecPath,
+                    string strItemXml,
                     string strResultType,
                     out string strResult,
                     out string strOrderRecPath,
@@ -718,11 +720,12 @@ namespace dp2.LibraryService
                     EntityInfo[] commentinfos,
                     out EntityInfo[] errorinfos);
 
+        // 用 GetItemInfo() 替代
         [OperationContract]
         LibraryServerResult GetCommentInfo(
                     string strRefID,
-            // string strBiblioRecPath,
-            string strItemXml,
+                    // string strBiblioRecPath,
+                    string strItemXml,
                     string strResultType,
                     out string strResult,
                     out string strCommentRecPath,

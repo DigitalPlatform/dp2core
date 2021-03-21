@@ -1757,7 +1757,7 @@ namespace DigitalPlatform.LibraryServer
                 return result;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -2447,7 +2447,7 @@ namespace DigitalPlatform.LibraryServer
 
             List<string> errors = new List<string>();
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -2730,7 +2730,7 @@ out strError);
                 goto ERROR1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

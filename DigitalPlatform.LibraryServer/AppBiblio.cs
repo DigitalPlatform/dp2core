@@ -126,7 +126,7 @@ namespace DigitalPlatform.LibraryServer
             strError = "";
             result_strings = new List<string>();
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "channel == null";
@@ -290,7 +290,7 @@ namespace DigitalPlatform.LibraryServer
                 commands.Add(strBiblioRecPath);
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "channel == null";
@@ -684,7 +684,7 @@ namespace DigitalPlatform.LibraryServer
             string strError = "";
             int nRet = 0;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -1000,7 +1000,7 @@ namespace DigitalPlatform.LibraryServer
                     }
 
 #if NO
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                    RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -1559,7 +1559,7 @@ namespace DigitalPlatform.LibraryServer
             strError = "";
             strResultXml = "";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -1623,7 +1623,7 @@ namespace DigitalPlatform.LibraryServer
             sessioninfo.Account = account;
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -3901,7 +3901,7 @@ nsmgr);
                 }
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -4000,7 +4000,7 @@ nsmgr);
 
             // 获得书目记录
 #if NO
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "channel == null";
@@ -4204,7 +4204,7 @@ nsmgr);
                 }
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -5001,7 +5001,7 @@ out strError);
                 }
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "channel == null";
@@ -5903,7 +5903,7 @@ out strError);
                 string strDetectStyle = "check_borrow_info";
                 long lHitCount = 0;
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "channel == null";
@@ -6694,7 +6694,7 @@ out strError);
             // TODO: 需要额外的检查，看看所保存的数据MARC格式是不是这个数据库要求的格式？
 
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "channel == null";
@@ -7149,7 +7149,7 @@ out strError);
 
             int nRet = 0;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -7977,7 +7977,7 @@ out strError);
                 return -1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "GetChannel() return null";
@@ -8087,7 +8087,7 @@ out strError);
                 string strStyle = "return_record_xml";
                 long lHitCount = 0;
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "channel == null";

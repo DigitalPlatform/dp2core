@@ -43,7 +43,7 @@ namespace DigitalPlatform.LibraryServer
 
             LibraryServerResult result = new LibraryServerResult();
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

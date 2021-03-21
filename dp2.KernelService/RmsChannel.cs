@@ -15,6 +15,7 @@ using DigitalPlatform.IO;
 using DigitalPlatform.rms;
 using DigitalPlatform.Text;
 using DigitalPlatform.Xml;
+using Microsoft.AspNetCore.Http;
 
 namespace dp2.KernelService
 {
@@ -72,19 +73,28 @@ namespace dp2.KernelService
                 this.AskAccountInfo(sender, e);
         }
 
+        // 传递参数
+        public HttpContext HttpContext { get; set; }
+
         // 获得一个Channel对象
         // 如果集合中已经存在这个对象，则直接返回；否则创建一个新对象
-        public RmsChannel GetChannel(string strUrl)
+        public RmsChannel GetChannel(string strUrl,
+            HttpContext context)
         {
             string strRegularUrl = strUrl.ToUpper();
 
             RmsChannel channel = (RmsChannel)this[strRegularUrl];
 
             if (channel != null)
+            {
+                channel.HttpContext = context;
                 return channel;
+            }
 
             // 创建
-            channel = new RmsChannel(_app, new KernelSessionInfo(_app));
+            channel = new RmsChannel(_app, 
+                context,
+                new KernelSessionInfo(_app));
             channel.Url = strUrl;
             channel.Container = this;
 
@@ -94,12 +104,15 @@ namespace dp2.KernelService
 
         // TPPD: 需要把这些临时对象管理起来，在必要的时候进行Close()
         // 创建一个临时Channel对象
-        public RmsChannel CreateTempChannel(string strUrl)
+        public RmsChannel CreateTempChannel(string strUrl,
+            HttpContext context)
         {
             string strRegularUrl = strUrl.ToUpper();
 
             // 创建
-            RmsChannel channel = new RmsChannel(_app, new KernelSessionInfo(_app));
+            RmsChannel channel = new RmsChannel(_app,
+                context,
+                new KernelSessionInfo(_app));
             channel.Url = strUrl;
             channel.Container = this;
 
@@ -264,12 +277,16 @@ namespace dp2.KernelService
         public CookieContainer Cookies = new System.Net.CookieContainer();
         */
 
-        public RmsChannel(KernelApplication app, KernelSessionInfo sessioninfo) : base(app, sessioninfo)
+        public RmsChannel(KernelApplication app, 
+            HttpContext context,
+            KernelSessionInfo sessioninfo) 
+            : base(app, sessioninfo)
         {
             /*
             this.app = app;
             this.sessioninfo = sessioninfo;
             */
+            this.HttpContext = context;
         }
 
         public new void Dispose()

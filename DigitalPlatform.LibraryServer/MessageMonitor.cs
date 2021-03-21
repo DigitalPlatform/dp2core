@@ -298,7 +298,7 @@ namespace DigitalPlatform.LibraryServer
 
             AppendResultText("开始新一轮循环");
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
 
             string strMessageDbName = this.App.MessageDbName;
 
@@ -593,7 +593,7 @@ namespace DigitalPlatform.LibraryServer
 
             if (bDelete == true)
             {
-                RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+                RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
 
                 byte[] output_timestamp = null;
                 lRet = channel.DoDeleteRes(

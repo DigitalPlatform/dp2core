@@ -360,7 +360,7 @@ namespace DigitalPlatform.LibraryServer
                 // 加入书目摘要
                 string strSummary = "";
                 string strBiblioRecPath = "";
-                RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+                RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
                 if (channel == null)
                 {
                     strError = "channel == null";
@@ -512,7 +512,7 @@ namespace DigitalPlatform.LibraryServer
 
             }
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
             if (channel == null)
             {
                 strError = "channel == null";

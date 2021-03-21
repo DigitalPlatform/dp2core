@@ -66,7 +66,7 @@ namespace DigitalPlatform.LibraryServer
                 return result;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -262,7 +262,7 @@ namespace DigitalPlatform.LibraryServer
                 string strOutputPath = "";
 
 #if NO
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";

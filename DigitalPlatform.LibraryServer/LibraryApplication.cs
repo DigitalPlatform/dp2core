@@ -1997,7 +1997,8 @@ namespace DigitalPlatform.LibraryServer
         {
             strError = "";
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             string strVersion = "";
             long lRet = channel.GetVersion(out strVersion,
                 out strError);
@@ -2657,7 +2658,8 @@ namespace DigitalPlatform.LibraryServer
                 return;
             }
 
-            RmsChannel channel = e.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = e.Channels.GetChannel(this.WsUrl,
+                e.Channels.HttpContext);
             if (channel == null)
             {
                 e.Exist = false;
@@ -9924,7 +9926,7 @@ out strError);
             SessionInfo sessioninfo = new SessionInfo(this);
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -10623,7 +10625,7 @@ out strError);
             bool bTempPassword = false;
             string strToken = "";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -11024,7 +11026,7 @@ out strError);
 
             XmlDocument readerdom = sessioninfo.Account.PatronDom;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -11179,7 +11181,7 @@ out strError);
 
             XmlDocument readerdom = sessioninfo.Account.PatronDom;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -11351,7 +11353,7 @@ out strError);
                     goto ERROR1;
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -11455,7 +11457,7 @@ out strError);
                     goto ERROR1;
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -11849,7 +11851,7 @@ out strError);
 
             int nResultCount = 0;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -11959,7 +11961,7 @@ out strError);
                     }
 
 #if NO
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                    RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                     if (channel == null)
                     {
                         strError = "get channel error";
@@ -12117,7 +12119,7 @@ out strError);
             string strMetaData = "";
             // string strTempOutputPath = "";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -12269,7 +12271,7 @@ out strError);
             string strMetaData = "";
             // string strTempOutputPath = "";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -12527,7 +12529,7 @@ out strError);
 
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -12708,7 +12710,7 @@ strLibraryCode);    // 读者所在的馆代码
             DomUtil.SetElementText(domOperLog.DocumentElement, "operation",
                 "changeReaderPassword");
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -12869,7 +12871,7 @@ strLibraryCode);    // 读者所在的馆代码
             DomUtil.SetElementText(domOperLog.DocumentElement, "operation",
                 "changeReaderTempPassword");
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -13038,7 +13040,7 @@ strLibraryCode);    // 读者所在的馆代码
                 string strBiblioRecPath = "";
 
                 // 2012/3/28
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     return "get channel error";
@@ -13985,7 +13987,7 @@ strLibraryCode);    // 读者所在的馆代码
             strLocalPath = "";
             int nRet = 0;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -15311,7 +15313,7 @@ strLibraryCode);    // 读者所在的馆代码
             strError = "";
             strRights = "";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

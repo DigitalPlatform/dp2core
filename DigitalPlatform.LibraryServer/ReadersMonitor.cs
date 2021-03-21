@@ -192,7 +192,7 @@ namespace DigitalPlatform.LibraryServer
             else
                 bodytypes = StringUtil.SplitList(strBodyTypesDef);
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
 
             int nTotalRecCount = 0;
             foreach (DigitalPlatform.LibraryServer.LibraryApplication.ReaderDbCfg cfg in this.App.ReaderDbs)
@@ -433,7 +433,7 @@ namespace DigitalPlatform.LibraryServer
             // long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
             // int nRedoCount = 0;
 
             //REDO:
@@ -1218,7 +1218,7 @@ namespace DigitalPlatform.LibraryServer
         {
             string strError = "";
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
             if (channel == null)
                 return null;
             string strItemXml = "";

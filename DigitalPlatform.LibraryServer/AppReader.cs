@@ -893,7 +893,7 @@ namespace DigitalPlatform.LibraryServer
                 strLockBarcode = strOldBarcode;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -1231,7 +1231,7 @@ namespace DigitalPlatform.LibraryServer
                 }
 
 #if NO
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -2681,7 +2681,7 @@ root, strLibraryCode);
             long lRet = 0;
 
 #if NO
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -3032,7 +3032,7 @@ root, strLibraryCode);
             DomUtil.SetAttr(nodeInfoItem, "name", "当前还可借");
             DomUtil.SetAttr(nodeInfoItem, "value", nFreeBorrowCount.ToString());
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -3438,7 +3438,7 @@ root, strLibraryCode);
                 return -1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -3920,7 +3920,7 @@ out strError);
                 // 后面还要判断
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -5089,7 +5089,7 @@ out strError);
                 strError = "strTargetRecPath参数所给出的目标记录路径 '" + strTargetRecPath + "' 并不是一个读者库记录路径";
                 goto ERROR1;
             }
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "channel == null";
@@ -5400,7 +5400,7 @@ out strError);
             strError = "";
             int nRet = 0;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -5500,7 +5500,7 @@ out strError);
                     readerdom2 = null;
 
 #if NO
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -5783,7 +5783,7 @@ out strError);
                 }
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

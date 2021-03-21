@@ -13,6 +13,7 @@ using DigitalPlatform.IO;
 using DigitalPlatform.Text;
 using System.Runtime.Serialization;
 using dp2.KernelService;
+using Microsoft.AspNetCore.Http;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -71,6 +72,14 @@ namespace DigitalPlatform.LibraryServer
 
         public LibraryApplication App = null;
         public RmsChannelCollection Channels = null;    // new RmsChannelCollection();
+
+        public HttpContext HttpContext { get; set; }
+
+        public RmsChannel GetChannel(string url)
+        {
+            Debug.Assert(HttpContext != null);
+            return Channels.GetChannel(url, HttpContext);
+        }
 
         private string m_strTempDir = "";	// 临时文件目录 2008/3/31
 

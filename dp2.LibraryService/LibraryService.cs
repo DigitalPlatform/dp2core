@@ -322,6 +322,10 @@ namespace dp2.LibraryService
                 this.sessioninfo = this.app.SessionTable.PrepareSession(this.app,
     HttpContext.Session.Id,    // OperationContext.Current.SessionId,
     address_list);
+
+                // 2021/3/21
+                this.sessioninfo.HttpContext = HttpContext;
+                this.sessioninfo.Channels.HttpContext = HttpContext;
             }
             catch (OutofSessionException ex)
             {
@@ -334,17 +338,17 @@ namespace dp2.LibraryService
                     + "' 新分配通道的请求被拒绝:" + ex.Message);
                 // OperationContext.Current.InstanceContext.ReleaseServiceInstance();
 
-                /*
                 // 为了防止攻击，需要立即切断通道。否则 1000 个通道很快会被耗尽
                 try
                 {
-                    OperationContext.Current.Channel.Close(new TimeSpan(0, 0, 1));  // 一秒
+                    HttpContext?.Abort();
+
+                    // OperationContext.Current.Channel.Close(new TimeSpan(0, 0, 1));  // 一秒
                 }
                 catch
                 {
                     // TimeoutException
                 }
-                */
 
                 strError = "InitialSession() 出现异常: " + ex.Message;
                 return -2;
@@ -1523,7 +1527,7 @@ namespace dp2.LibraryService
                     }
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -2326,7 +2330,7 @@ namespace dp2.LibraryService
                     strQueryXml = "<group>" + strQueryXml + "</group>";
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -2530,7 +2534,7 @@ namespace dp2.LibraryService
 
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -2747,7 +2751,7 @@ namespace dp2.LibraryService
                     + "</word><match>" + strMatchStyle + "</match><relation>=</relation><dataType>string</dataType><maxCount>" + lMaxCount.ToString() + "</maxCount></item><lang>" + strLang + "</lang></target>";
 
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -2880,7 +2884,7 @@ namespace dp2.LibraryService
                     }
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -2996,7 +3000,7 @@ namespace dp2.LibraryService
 
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -3109,7 +3113,7 @@ namespace dp2.LibraryService
                     }
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -3203,7 +3207,7 @@ namespace dp2.LibraryService
 
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -3694,7 +3698,7 @@ namespace dp2.LibraryService
                     strQueryXml = $"<group>{strQueryXml}<operator value='{strOperator}'/>{strLocationQueryXml}</group>";    // !!!
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -4068,7 +4072,7 @@ namespace dp2.LibraryService
                 else
                 {
                     // 从数据库中获取
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -4562,7 +4566,7 @@ namespace dp2.LibraryService
                     return result;
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -4732,7 +4736,7 @@ namespace dp2.LibraryService
                 if (StringUtil.HasHead(strBarcode, "@barcode-list:") == true
                     && strResultType == "get-path-list")
                 {
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -4766,7 +4770,7 @@ namespace dp2.LibraryService
                         strError = "@refid-list 功能只能针对 item 类型的库";
                         goto ERROR1;
                     }
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -4803,7 +4807,7 @@ namespace dp2.LibraryService
                         goto ERROR1;
                     }
 
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -4894,7 +4898,7 @@ namespace dp2.LibraryService
                         // byte[] timestamp = null;
                         string strTempOutputPath = "";
 
-                        RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                        RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                         if (channel == null)
                         {
                             strError = "get channel error";
@@ -5203,7 +5207,7 @@ namespace dp2.LibraryService
                         goto END1;
                     }
 
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -5334,7 +5338,7 @@ namespace dp2.LibraryService
                 List<string> aPath = null;
                 string strError = "";
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -5425,7 +5429,7 @@ namespace dp2.LibraryService
             if (result.Value == -1)
                 return result;
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -5884,7 +5888,7 @@ namespace dp2.LibraryService
                 return -1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -6380,7 +6384,7 @@ namespace dp2.LibraryService
                 if (StringUtil.HasHead(strRefID, "@item-refid-list:") == true
                     && strResultType == "get-path-list")
                 {
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -6477,7 +6481,7 @@ namespace dp2.LibraryService
                         string strMetaData = "";
                         string strTempOutputPath = "";
 
-                        RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                        RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                         if (channel == null)
                         {
                             strError = "get channel error";
@@ -6716,7 +6720,7 @@ namespace dp2.LibraryService
                         goto DOISSUE;
                     }
 
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -6909,7 +6913,7 @@ namespace dp2.LibraryService
                 if (nRet == -1)
                     goto ERROR1;
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -7086,7 +7090,7 @@ namespace dp2.LibraryService
                     strQueryXml = "<group>" + strQueryXml + "</group>";
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -7412,7 +7416,7 @@ namespace dp2.LibraryService
                 if (StringUtil.HasHead(strRefID, "@item-refid-list:") == true
                     && strResultType == "get-path-list")
                 {
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -7509,7 +7513,7 @@ namespace dp2.LibraryService
                     string strMetaData = "";
                     string strTempOutputPath = "";
 
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "get channel error";
@@ -7724,7 +7728,7 @@ namespace dp2.LibraryService
                         goto DOORDER;
                     }
 
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -7915,7 +7919,7 @@ namespace dp2.LibraryService
                 if (nRet == -1)
                     goto ERROR1;
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -8158,7 +8162,7 @@ namespace dp2.LibraryService
                     strQueryXml = "<group>" + strQueryXml + "</group>";
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -9261,7 +9265,7 @@ Stack:
                 //      1   成功
                 int nRet = app.ManageDatabase(
                     sessioninfo,
-                    sessioninfo.Channels,
+                    // sessioninfo.Channels,
                     sessioninfo.LibraryCodeList,
                     strAction,
                     strDatabaseName,
@@ -11175,7 +11179,7 @@ strLibraryCodeList);
                     }
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -11844,7 +11848,7 @@ strLibraryCodeList);
 
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -12074,7 +12078,7 @@ strLibraryCodeList);
 
             try
             {
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     result.Value = -1;
@@ -12350,7 +12354,7 @@ Stack:
                         goto ERROR1;
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -12827,7 +12831,7 @@ Stack:
                 }
                 else
                 {
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         result.Value = -1;
@@ -13299,7 +13303,7 @@ Stack:
                         string strMetaData = "";
                         string strTempOutputPath = "";
 
-                        RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                        RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                         if (channel == null)
                         {
                             strError = "get channel error";
@@ -13541,7 +13545,7 @@ out strError);
                         goto DO_COMMENT;
                     }
 
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                     if (channel == null)
                     {
                         strError = "channel == null";
@@ -13732,7 +13736,7 @@ out strError);
                 if (nRet == -1)
                     goto ERROR1;
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -13978,7 +13982,7 @@ out strError);
                     strQueryXml = "<group>" + strQueryXml + "</group>";
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";

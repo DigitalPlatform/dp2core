@@ -2,26 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using DigitalPlatform.LibraryServer;
-using DigitalPlatform.rms;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Filters;
 
+using DigitalPlatform.LibraryServer;
+using DigitalPlatform.rms;
+
 namespace dp2LibraryServer.Controllers
 {
-    [ApiController]
-    [Route("[controller]/{instance}/[action]")]
-    [Route("[controller]/[action]")]
-    public class dp2libraryController : ControllerBase
-    {
-        private readonly ILogger<dp2libraryController> _logger;
 
-        public dp2libraryController(ILogger<dp2libraryController> logger)
+    [ApiController]
+    [ApiVersion("4.0")]
+    [ApiExplorerSettings(GroupName = "v4")]
+    //[Route("dp2library/v{version:apiVersion}/{instance}/[action]")]
+    //[Route("dp2library/v{version:apiVersion}/[action]")]
+    [Route("dp2library/v4/{instance}/[action]")]
+    [Route("dp2library/v4/[action]")]
+    public class v4Controller : ControllerBase
+    {
+        private readonly ILogger<v3Controller> _logger;
+
+        public v4Controller(ILogger<v3Controller> logger)
         {
             _logger = logger;
         }
@@ -97,7 +101,6 @@ namespace dp2LibraryServer.Controllers
             }
         }
 
-
         #region Login()
 
         public class LoginRequest
@@ -148,7 +151,6 @@ namespace dp2LibraryServer.Controllers
 
         #endregion
 
-
         [HttpPost]
         [HttpGet]
         public LogoutResponse Logout()
@@ -159,30 +161,6 @@ namespace dp2LibraryServer.Controllers
                 return new LogoutResponse { LogoutResult = result };
             }
         }
-
-#if REMOVED
-        // [Route("/Enum")]
-        [HttpPost]
-        [HttpGet]
-        public ErrorCode Enum()
-        {
-            return ErrorCode.NoError;
-        }
-
-        // [Route("/Result")]
-        [HttpPost]
-        [HttpGet]
-        public LibraryServerResult Result()
-        {
-            return new LibraryServerResult
-            {
-                Value = -1,
-                ErrorInfo = "error",
-                ErrorCode = ErrorCode.AccessDenied
-            };
-        }
-#endif
-
 
         #region Logout()
 
@@ -331,28 +309,6 @@ namespace dp2LibraryServer.Controllers
         #endregion
 
         // 获得读者记录
-        [HttpGet]
-        public GetReaderInfoResponse GetReaderInfo(
-    string strBarcode,
-    string strResultTypeList)
-        {
-            using (var service = ServiceStore.GetService(HttpContext))
-            {
-                var result = service.GetReaderInfo(strBarcode,
-                    strResultTypeList,
-                    out string[] results,
-                    out string strRecPath,
-                    out byte[] baTimestamp);
-                return new GetReaderInfoResponse
-                {
-                    GetReaderInfoResult = result,
-                    results = results,
-                    strRecPath = strRecPath,
-                    baTimestamp = baTimestamp
-                };
-            }
-        }
-
         [HttpPost]
         public GetReaderInfoResponse GetReaderInfo(
             [FromBody] GetReaderInfoRequest request)
@@ -375,6 +331,28 @@ namespace dp2LibraryServer.Controllers
             }
         }
 
+        [HttpGet]
+        public GetReaderInfoResponse GetReaderInfo(
+string strBarcode,
+string strResultTypeList)
+        {
+            using (var service = ServiceStore.GetService(HttpContext))
+            {
+                var result = service.GetReaderInfo(strBarcode,
+                    strResultTypeList,
+                    out string[] results,
+                    out string strRecPath,
+                    out byte[] baTimestamp);
+                return new GetReaderInfoResponse
+                {
+                    GetReaderInfoResult = result,
+                    results = results,
+                    strRecPath = strRecPath,
+                    baTimestamp = baTimestamp
+                };
+            }
+        }
+
         #region GetReaderInfo()
 
         public class GetReaderInfoResponse
@@ -383,47 +361,8 @@ namespace dp2LibraryServer.Controllers
             public string[] results { get; set; }
             public string strRecPath { get; set; }
 
-            [JsonConverter(typeof(ByteArrayConverter))]
+            // 注: 这里会用到 base64 string 输出 JSON
             public byte[] baTimestamp { get; set; }
-        }
-
-        public class ByteArrayConverter : JsonConverter<byte[]>
-        {
-            public override bool CanConvert(Type typeToConvert) =>
-    typeof(byte[]).IsAssignableFrom(typeToConvert);
-
-            public override byte[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            {
-                // return reader.GetBytesFromBase64();
-
-                // https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-converters-how-to?pivots=dotnet-5-0
-                if (reader.TokenType != JsonTokenType.StartArray)
-                {
-                    throw new JsonException();
-                }
-                reader.Read();
-
-                var elements = new List<byte>();
-
-                while (reader.TokenType != JsonTokenType.EndArray)
-                {
-                    elements.Add(JsonSerializer.Deserialize<byte>(ref reader, options));
-                    reader.Read();
-                }
-
-                return elements.ToArray();
-            }
-
-            public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOptions options)
-            {
-                writer.WriteStartArray();
-                foreach (var b in value)
-                {
-                    writer.WriteNumberValue((int)b);
-                }
-                writer.WriteEndArray();
-                // writer.WriteBase64StringValue(value);
-            }
         }
 
         public class GetReaderInfoRequest
@@ -433,19 +372,6 @@ namespace dp2LibraryServer.Controllers
         }
 
         #endregion
-
-        // 测试验证 byte []
-        [HttpPost]
-        public int[] TestByteArray([FromBody] TestByteArrayRequest request)
-        {
-            return request.Data;
-        }
-
-        public class TestByteArrayRequest
-        {
-            // 注： Request 中 byte [] 要写为 int []
-            public int[] Data { get; set; }
-        }
 
         [HttpPost]
         public SetReaderInfoResponse SetReaderInfo(
@@ -516,7 +442,10 @@ namespace dp2LibraryServer.Controllers
             public string strExistingXml { get; set; }
             public string strSavedXml { get; set; }
             public string strSavedRecPath { get; set; }
+
+            // 注: 这里会用到 base64 string 输出 JSON
             public byte[] baNewTimestamp { get; set; }
+
             public ErrorCodeValue kernel_errorcode { get; set; }
         }
 
@@ -526,11 +455,12 @@ namespace dp2LibraryServer.Controllers
             public string strRecPath { get; set; }
             public string strNewXml { get; set; }
             public string strOldXml { get; set; }
+
+            // 注: 这里会用到 base64 string 输出 JSON
             public byte[] baOldTimestamp { get; set; }
         }
 
         #endregion
-
 
         // 移动读者记录
         [HttpPost]
@@ -590,7 +520,6 @@ namespace dp2LibraryServer.Controllers
         }
 
         #endregion
-
     }
 
 }

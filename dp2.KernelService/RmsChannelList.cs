@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using DigitalPlatform.Core;
+using Microsoft.AspNetCore.Http;
 
 namespace dp2.KernelService
 {
@@ -40,12 +41,14 @@ namespace dp2.KernelService
         //      style    风格。如果为 GUI，表示会自动添加 Idle 事件，并在其中执行 Application.DoEvents
         public RmsChannel GetChannel(
             RmsChannelCollection channels,
+            HttpContext context,
             string strServerUrl)
         {
             if (_disabled)
                 return null;
 
-            RmsChannel channel = channels.GetChannel(strServerUrl);
+            // TODO: 没法中途中断
+            RmsChannel channel = channels.GetChannel(strServerUrl, context);
             this.Add(channel);
             // TODO: 检查数组是否溢出
             return channel;

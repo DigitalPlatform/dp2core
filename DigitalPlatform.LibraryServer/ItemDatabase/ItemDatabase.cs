@@ -722,7 +722,7 @@ namespace DigitalPlatform.LibraryServer
                 }
 
                 /*
-                RmsChannel channel = sessioninfo.Channels.GetChannel(this.App.WsUrl);
+                RmsChannel channel = sessioninfo.GetChannel(this.App.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -1666,7 +1666,7 @@ out strError);
                 goto ERROR1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.App.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -2599,7 +2599,7 @@ out strError);
                 return result;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.App.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -3622,7 +3622,7 @@ out strError);
                 string strMetaData = "";
                 string strTempOutputPath = "";
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "get channel error";
@@ -3761,7 +3761,7 @@ out strError);
                     goto DOORDER;
                 }
 
-                RmsChannel channel = sessioninfo.Channels.GetChannel(app.WsUrl);
+                RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(app.WsUrl);
                 if (channel == null)
                 {
                     strError = "channel == null";

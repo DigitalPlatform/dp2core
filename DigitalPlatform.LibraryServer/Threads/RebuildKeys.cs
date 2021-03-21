@@ -809,7 +809,7 @@ out string strError)
         {
             strError = "";
 
-            RmsChannel channel = RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = RmsChannels.GetChannel(this.App.WsUrl, null);
             if (channel == null)
             {
                 strError = "get channel error";

@@ -1750,7 +1750,7 @@ namespace DigitalPlatform.LibraryServer
             /*
              * 检索出全部挂失状态的读者记录
              * */
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.App.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

@@ -825,7 +825,8 @@ namespace DigitalPlatform.LibraryServer
             root_dir_results = null;
             db_dir_results = null;
 
-            RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+            RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                Channels.HttpContext);
 
             // 列出所有数据库
             root_dir_results = null;

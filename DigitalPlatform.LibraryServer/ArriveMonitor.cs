@@ -303,7 +303,8 @@ namespace DigitalPlatform.LibraryServer
 
             this.AppendResultText("开始新一轮循环\r\n");
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl,
+                null);
 
             this._calendarTable.Clear();
 
@@ -557,7 +558,7 @@ namespace DigitalPlatform.LibraryServer
                 return -1;
             }
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -715,7 +716,7 @@ namespace DigitalPlatform.LibraryServer
             if (nRet == -1)
                 return -1;
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -926,7 +927,7 @@ namespace DigitalPlatform.LibraryServer
                 return -1;
             }
 
-            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+            RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
             if (channel == null)
             {
                 // text-level: 内部错误

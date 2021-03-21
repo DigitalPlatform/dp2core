@@ -13,6 +13,7 @@ using DigitalPlatform.IO;
 using DigitalPlatform.Xml;
 using DigitalPlatform.Text;
 using DigitalPlatform.ResultSet;
+using Microsoft.AspNetCore.Http;
 
 namespace dp2Kernel
 {
@@ -23,6 +24,8 @@ namespace dp2Kernel
         // KernelService 对象使用前应由调主准备好 sessioninfo
         internal KernelSessionInfo sessioninfo = null;
         // HostInfo hostinfo = null;
+
+        internal HttpContext HttpContext = null;
 
         User user = null;
 
@@ -379,7 +382,7 @@ namespace dp2Kernel
             return user;
         }
 
-#endregion
+        #endregion
 
         // 2012/1/5
         // 获得版本号
@@ -953,11 +956,18 @@ namespace dp2Kernel
         {
             // 要保持通道继续可用,就不要做任何动作了
             // OperationContext.Current.Channel.Abort();
+
+            // 2021/3/21
+            HttpContext?.Abort();
         }
 
         void handle_Idle(object sender, ChannelIdleEventArgs e)
         {
-            // TODO: HttpContext
+            if (HttpContext != null && HttpContext.RequestAborted.IsCancellationRequested)
+                e.Continue = false;
+            else
+                e.Continue = true;
+
             /*
             CommunicationState state = OperationContext.Current.Channel.State;
             if (state == CommunicationState.Closed

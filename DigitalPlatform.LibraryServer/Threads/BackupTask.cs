@@ -195,7 +195,7 @@ namespace DigitalPlatform.LibraryServer
 
                 this.AppendResultText("*********\r\n");
 
-                RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl);
+                RmsChannel channel = this.RmsChannels.GetChannel(this.App.WsUrl, null);
 
                 if (strDbNameList == "continue")
                 {

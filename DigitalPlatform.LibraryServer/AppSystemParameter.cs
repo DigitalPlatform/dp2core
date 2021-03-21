@@ -300,7 +300,7 @@ namespace DigitalPlatform.LibraryServer
                 {
                     string[] filenames = strName.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries); // RemoveEmptyEntries 2013/12/12
                     // TODO: 
-                    RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+                    RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
                     if (channel == null)
                     {
                         strError = "get channel error";

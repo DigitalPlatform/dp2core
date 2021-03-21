@@ -66,7 +66,8 @@ namespace DigitalPlatform.LibraryServer
 
             // bool bMissing = false;  // 是否缺失快照信息?
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -1223,7 +1224,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -2565,7 +2567,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -3530,7 +3533,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -3917,7 +3921,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -4303,7 +4308,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -4712,7 +4718,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -4869,7 +4876,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -5330,7 +5338,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -5939,7 +5948,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -6320,7 +6330,8 @@ out strError);
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -6968,7 +6979,8 @@ API: Hire()
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -7180,7 +7192,8 @@ API: Foregift()
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -7390,7 +7403,8 @@ API: Settlement()
             long lRet = 0;
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -7635,7 +7649,8 @@ API: Settlement()
             long lRet = 0;
             // int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -7794,7 +7809,8 @@ domLog.DocumentElement,
             long lRet = 0;
             // int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -8140,7 +8156,8 @@ out string strError)
             if (level == RecoverLevel.Robust)
                 level = RecoverLevel.Logic;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";

@@ -379,6 +379,7 @@ namespace DigitalPlatform.Message
 
         // 发送消息
         // parameters:
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
         //      bVerifyRecipient    是否验证收件人地址
         // return:
         //      -1  出错
@@ -460,7 +461,8 @@ namespace DigitalPlatform.Message
                 DomUtil.SetElementText(dom.DocumentElement,
                     "mime", strMime);
 
-                RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+                RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                    Channels.HttpContext);
 
                 byte[] timestamp = null;
                 byte[] output_timestamp = null;
@@ -524,6 +526,7 @@ namespace DigitalPlatform.Message
 
         // 保存消息到"草稿"箱
         // parameters:
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
         //      strOldRecordID  原来在草稿箱中的记录id。如果有此id，用覆盖方式写入，否则用追加方式写入
         public int SaveMessage(
             RmsChannelCollection Channels,
@@ -566,7 +569,8 @@ namespace DigitalPlatform.Message
             DomUtil.SetElementText(dom.DocumentElement,
     "mime", strMime);
 
-            RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+            RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                Channels.HttpContext);
 
             // byte[] timestamp = null;
             // byte[] output_timestamp = null;
@@ -615,6 +619,7 @@ namespace DigitalPlatform.Message
 
         // 一次性获得许多消息
         // parameters:
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
         //      message_ids 消息ID的数组。如果字符串中包含'/'，则是路径，否则就是id
         public int GetMessage(
     RmsChannelCollection Channels,
@@ -627,7 +632,8 @@ namespace DigitalPlatform.Message
             strError = "";
             messages = new List<MessageData>();
 
-            RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+            RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -672,6 +678,7 @@ namespace DigitalPlatform.Message
         // 根据消息记录id获得消息详细内容
         // 本函数还将检查消息是否属于strUserID指明的用户
         // parameters:
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
         //      strUserID   如果==null，表示不检查消息属于何用户
         public int GetMessage(
             RmsChannelCollection Channels,
@@ -686,7 +693,8 @@ namespace DigitalPlatform.Message
 
             int nRet = 0;
 
-            RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+            RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -830,13 +838,16 @@ namespace DigitalPlatform.Message
 
 
         // 获得未读消息数
+        // parameters:
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
         public int GetUntouchedMessageCount(
             RmsChannelCollection Channels,
             string strUserID,
             string strBoxType,
             out string strError)
         {
-            RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+            RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -877,6 +888,7 @@ namespace DigitalPlatform.Message
 
         // 检索获得消息, 或者从结果集中获得消息
         // parameters:
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
         //      strStyle    search / untouched / touched
         //                  有search表示进行检索和获取，没有search就表示不检索而获取先前检索的结果集。
         //                  untoched和touched应当和search联用。否则只能获取先前的结果数
@@ -911,7 +923,8 @@ namespace DigitalPlatform.Message
                 strBoxType = MessageCenter.INBOX;
             }
 
-            RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+            RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -1146,6 +1159,8 @@ namespace DigitalPlatform.Message
         }
 
         // 删除一条消息
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
+        //      Channels    调用前要求 Channels.HttpContext 设置好值
         public int DeleteMessage(
             bool bMoveToRecycleBin,
             RmsChannelCollection Channels,
@@ -1153,7 +1168,8 @@ namespace DigitalPlatform.Message
             byte [] timestamp,
             out string strError)
         {
-            RmsChannel channel = Channels.GetChannel(this.ServerUrl);
+            RmsChannel channel = Channels.GetChannel(this.ServerUrl,
+                Channels.HttpContext);
 
             string strPath = this.MessageDbName + "/" + strID;
 

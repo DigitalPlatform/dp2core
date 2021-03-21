@@ -192,7 +192,7 @@ namespace DigitalPlatform.LibraryServer
                     + StringUtil.GetXmlStringSimple(strTargetList)       // 2007/9/14
                     + "'>" + strQueryXml + "</target>";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -268,7 +268,7 @@ namespace DigitalPlatform.LibraryServer
                 strError = "馆藏地点名 " + strArrangeGroupName.Substring(1) + " 没有找到对应的排架体系名";
                 goto ERROR1;
             }
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 result.Value = -1;
@@ -417,7 +417,7 @@ namespace DigitalPlatform.LibraryServer
                 goto ERROR1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -558,7 +558,7 @@ namespace DigitalPlatform.LibraryServer
                 goto END1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -598,7 +598,7 @@ namespace DigitalPlatform.LibraryServer
             long lRet = 0;
 
 #if NO
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";

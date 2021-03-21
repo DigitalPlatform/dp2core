@@ -34,7 +34,7 @@ namespace DigitalPlatform.LibraryServer
         //      1   成功
         public int ManageDatabase(
             SessionInfo sessioninfo,
-            RmsChannelCollection Channels,
+            // RmsChannelCollection Channels,
             string strLibraryCodeList,
             string strAction,
             string strDatabaseNames,
@@ -50,7 +50,8 @@ namespace DigitalPlatform.LibraryServer
             if (strAction == "getinfo")
             {
                 return GetDatabaseInfo(
-                    Channels,
+                    sessioninfo,
+                    // Channels,
                     strLibraryCodeList,
                     strDatabaseNames,
                     strStyle,
@@ -63,7 +64,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 return CreateDatabase(
                     sessioninfo,
-                    Channels,
+                    // Channels,
                     strLibraryCodeList,
                     // strDatabaseNames,
                     strDatabaseInfo,
@@ -78,7 +79,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 return CreateDatabase(
                     sessioninfo,
-                    Channels,
+                    // Channels,
                     strLibraryCodeList,
                     // strDatabaseNames,
                     strDatabaseInfo,
@@ -93,7 +94,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 return DeleteDatabase(
                     sessioninfo,
-                    Channels,
+                    // Channels,
                     strLibraryCodeList,
                     strDatabaseNames,
                     strStyle,
@@ -105,7 +106,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 return InitializeDatabase(
                     sessioninfo,
-                    Channels,
+                    // Channels,
                     strLibraryCodeList,
                     strDatabaseNames,
                     strStyle,
@@ -118,7 +119,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 return RefreshDatabaseDefs(
                     sessioninfo,
-                    Channels,
+                    // Channels,
                     strLibraryCodeList,
                     strDatabaseNames,
                     strDatabaseInfo,
@@ -132,7 +133,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 return ChangeDatabase(
                     sessioninfo,
-                    Channels,
+                    // Channels,
                     strLibraryCodeList,
                     strDatabaseNames,
                     strDatabaseInfo,
@@ -398,7 +399,7 @@ namespace DigitalPlatform.LibraryServer
         //      1   成功
         int ChangeDatabase(
             SessionInfo sessioninfo,
-            RmsChannelCollection Channels,
+            // RmsChannelCollection Channels,
             string strLibraryCodeList,
             string strDatabaseNames,
             string strDatabaseInfo,
@@ -436,7 +437,7 @@ namespace DigitalPlatform.LibraryServer
 
             List<XmlElement> database_nodes = new List<XmlElement>(); // 已经创建的数据库的定义节点
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
 
             for (int i = 0; i < names.Length; i++)
             {
@@ -1838,13 +1839,13 @@ out strError);
             if (bDbNameChanged == true)
             {
                 nRet = InitialKdbs(
-                    Channels,
+                    sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
                 // 重新初始化虚拟库定义
                 this.vdbs = null;
-                nRet = this.InitialVdbs(Channels,
+                nRet = this.InitialVdbs(sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
@@ -1862,7 +1863,7 @@ out strError);
                 {
                     string strError1 = "";
                     nRet = InitialKdbs(
-                        Channels,
+                        sessioninfo.Channels,
                         out strError1);
                     if (nRet == -1)
                         strError += "; 在收尾的时候进行 InitialKdbs() 调用又出错：" + strError1;
@@ -1872,7 +1873,7 @@ out strError);
                     string strError1 = "";
                     // 重新初始化虚拟库定义
                     this.vdbs = null;
-                    nRet = this.InitialVdbs(Channels,
+                    nRet = this.InitialVdbs(sessioninfo.Channels,
                         out strError1);
                     if (nRet == -1)
                         strError += "; 在收尾的时候进行 InitialVdbs() 调用又出错：" + strError1;
@@ -3087,7 +3088,7 @@ out strError);
         //      1   成功
         int DeleteDatabase(
             SessionInfo sessioninfo,
-            RmsChannelCollection Channels,
+            // RmsChannelCollection Channels,
             string strLibraryCodeList,
             string strDatabaseNames,
             string strStyle,
@@ -3103,7 +3104,7 @@ out strError);
 
             bool bDbNameChanged = false;
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
 
             string[] names = strDatabaseNames.Split(new char[] { ',' });
             for (int i = 0; i < names.Length; i++)
@@ -3904,13 +3905,13 @@ out strError);
             if (bDbNameChanged == true)
             {
                 nRet = InitialKdbs(
-                    Channels,
+                    sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
                 // 重新初始化虚拟库定义
                 this.vdbs = null;
-                nRet = this.InitialVdbs(Channels,
+                nRet = this.InitialVdbs(sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
@@ -3962,7 +3963,7 @@ out strError);
         //      1   成功
         int RefreshDatabaseDefs(
             SessionInfo sessioninfo,
-            RmsChannelCollection Channels,
+            // RmsChannelCollection Channels,
             string strLibraryCodeList,
             string strDatabaseNames,
             string strDatabaseInfo,
@@ -4015,7 +4016,7 @@ out strError);
             List<string> other_dbnames = new List<string>();    // 其他类型的数据库名集合
             List<string> other_types = new List<string>();  // 和 other_dbnames 锁定对应的数据库类型集合
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
 
             string[] names = strDatabaseNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < names.Length; i++)
@@ -4801,13 +4802,13 @@ out strError);
             if (keyschanged_dbnames.Count > 0)
             {
                 nRet = InitialKdbs(
-                    Channels,
+                    sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
                 // 重新初始化虚拟库定义
                 this.vdbs = null;
-                nRet = this.InitialVdbs(Channels,
+                nRet = this.InitialVdbs(sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
@@ -4888,7 +4889,7 @@ out strError);
         //      1   成功
         int InitializeDatabase(
             SessionInfo sessioninfo,
-            RmsChannelCollection Channels,
+            // RmsChannelCollection Channels,
             string strLibraryCodeList,
             string strDatabaseNames,
             string strStyle,
@@ -4908,7 +4909,7 @@ out strError);
 
             bool bDbNameChanged = false;    // 初始化后，检索途径名等都可能被改变
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
 
             string[] names = strDatabaseNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < names.Length; i++)
@@ -5573,7 +5574,7 @@ out strError);
             if (bDbNameChanged == true)
             {
                 nRet = InitialKdbs(
-                    Channels,
+                    sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
@@ -6674,7 +6675,7 @@ out strError);
         //      1   成功
         int CreateDatabase(
             SessionInfo sessioninfo,
-            RmsChannelCollection Channels,
+            // RmsChannelCollection Channels,
             string strLibraryCodeList,
             string strDatabaseInfo,
             bool bRecreate,
@@ -6705,7 +6706,7 @@ out strError);
                 return -1;
             }
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
 
             XmlNodeList nodes = request_dom.DocumentElement.SelectNodes("database");
             // for (int i = 0; i < nodes.Count; i++)
@@ -8126,13 +8127,13 @@ out strError);
             if (bDbChanged == true)
             {
                 nRet = InitialKdbs(
-                    Channels,
+                    sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
                 // 重新初始化虚拟库定义
                 this.vdbs = null;
-                nRet = this.InitialVdbs(Channels,
+                nRet = this.InitialVdbs(sessioninfo.Channels,
                     out strError);
                 if (nRet == -1)
                     return -1;
@@ -9036,7 +9037,8 @@ out strError);
         //      0   没有找到
         //      1   成功
         int GetDatabaseInfo(
-            RmsChannelCollection Channels,
+            SessionInfo sessioninfo,
+            // RmsChannelCollection Channels,
             string strLibraryCodeList,
             string strDatabaseNames,
             string strStyle,
@@ -9049,7 +9051,7 @@ out strError);
             if (String.IsNullOrEmpty(strDatabaseNames) == true)
                 strDatabaseNames = "#biblio,#reader,#authority,#arrived,#amerce,#invoice,#util,#message,#pinyin,#gcat,#word,#_accessLog,#_hitcount,#_chargingOper,#_biblioSummary";  // 注: #util 相当于 #zhongcihao,#publisher,#dictionary,#inventory
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
 
             // 用于构造返回结果字符串的DOM
             XmlDocument dom = new XmlDocument();
@@ -9938,7 +9940,8 @@ out strError);
 
             string strTempError = "";
 
-            RmsChannel channel = Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = Channels.GetChannel(this.WsUrl,
+                Channels.HttpContext);
             if (channel == null)
             {
                 strError = "GetChannel error";

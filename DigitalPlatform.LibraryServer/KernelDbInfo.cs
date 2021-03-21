@@ -28,7 +28,8 @@ namespace DigitalPlatform.LibraryServer
 
             ResInfoItem[] root_dir_results = null;
 
-            RmsChannel channel = Channels.GetChannel(strServerUrl);
+            RmsChannel channel = Channels.GetChannel(strServerUrl,
+                Channels.HttpContext);
 
             // 列出所有数据库
             root_dir_results = null;

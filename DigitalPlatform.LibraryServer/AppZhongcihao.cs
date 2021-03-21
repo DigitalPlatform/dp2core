@@ -164,7 +164,7 @@ namespace DigitalPlatform.LibraryServer
                 goto ERROR1;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -236,7 +236,7 @@ namespace DigitalPlatform.LibraryServer
 
             LibraryServerResult result = new LibraryServerResult();
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -275,7 +275,7 @@ namespace DigitalPlatform.LibraryServer
             long lRet = 0;
 
 #if NO
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -511,7 +511,7 @@ namespace DigitalPlatform.LibraryServer
                 strZhongcihaoGroupName = strTemp;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 result.Value = -1;
@@ -697,7 +697,7 @@ for (int i = 0; i < nodes.Count; i++)
                 strZhongcihaoGroupName = strTemp;
             }
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 result.Value = -1;
@@ -992,7 +992,7 @@ for (int i = 0; i < nodes.Count; i++)
             if (nodes.Count > 0)
                 strQueryXml = "<group>" + strQueryXml + "</group>";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
@@ -1092,7 +1092,7 @@ for (int i = 0; i < nodes.Count; i++)
             if (nodes.Count > 0)
                 strQueryXml = "<group>" + strQueryXml + "</group>";
 
-            RmsChannel channel = sessioninfo.Channels.GetChannel(this.WsUrl);
+            RmsChannel channel = /*-- 2021/3/21 --*/sessioninfo.GetChannel(this.WsUrl);
             if (channel == null)
             {
                 strError = "get channel error";
