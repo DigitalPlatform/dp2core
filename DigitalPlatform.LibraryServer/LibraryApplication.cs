@@ -16208,13 +16208,13 @@ strLibraryCode);    // 读者所在的馆代码
     public class CalenderInfo
     {
         [DataMember]
-        public string Name = "";    // 日历名。可以是全局的，例如“基本日历”，也可以是两段式“海淀分馆/基本日历”。分馆用户只能修改属于自己分馆的日历，但可以看到全部日历
+        public string Name { get; set; }    // 日历名。可以是全局的，例如“基本日历”，也可以是两段式“海淀分馆/基本日历”。分馆用户只能修改属于自己分馆的日历，但可以看到全部日历
         [DataMember]
-        public string Range = "";
+        public string Range { get; set; }
         [DataMember]
-        public string Content = "";
+        public string Content { get; set; }
         [DataMember]
-        public string Comment = "";
+        public string Comment { get; set; }
     }
 
     // 日历对象。用于确定哪些日子是工作日
@@ -16378,9 +16378,9 @@ strLibraryCode);    // 读者所在的馆代码
     public class BiblioDbFromInfo
     {
         [DataMember]
-        public string Caption = ""; // 字面标签
+        public string Caption { get; set; } // 字面标签
         [DataMember]
-        public string Style = "";   // 角色
+        public string Style { get; set; }   // 角色
     }
 
     // API ListFile()所使用的结构
@@ -16388,18 +16388,18 @@ strLibraryCode);    // 读者所在的馆代码
     public class FileItemInfo
     {
         [DataMember]
-        public string Name = ""; // 文件(或目录)名
+        public string Name { get; set; } // 文件(或目录)名
         [DataMember]
-        public string CreateTime = "";   // 创建时间。本地时间 "u" 字符串
+        public string CreateTime { get; set; }   // 创建时间。本地时间 "u" 字符串
 
         // 2017/4/8
         [DataMember]
-        public string LastWriteTime = "";   // 本地时间 "u" 字符串
+        public string LastWriteTime { get; set; }   // 本地时间 "u" 字符串
         [DataMember]
-        public string LastAccessTime = "";   // 本地时间 "u" 字符串
+        public string LastAccessTime { get; set; }   // 本地时间 "u" 字符串
 
         [DataMember]
-        public long Size = 0;   // 尺寸。-1 表示这是目录对象
+        public long Size { get; set; }   // 尺寸。-1 表示这是目录对象
     }
 
     public class RemoteAddress

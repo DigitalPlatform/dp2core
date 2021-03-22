@@ -21,8 +21,8 @@ namespace dp2LibraryServer.Controllers
     [ApiExplorerSettings(GroupName = "v3")]
     //[Route("dp2library/[controller]/{instance}/[action]")]
     //[Route("dp2library/[controller]/[action]")]
-    [Route("dp2library/v3/{instance}/[action]")]
-    [Route("dp2library/v3/[action]")]
+    [Route("dp2library/v3/{instance}/rest/[action]")]
+    [Route("dp2library/v3/rest/[action]")]
     public class v3Controller : ControllerBase
     {
         private readonly ILogger<v3Controller> _logger;
@@ -1417,7 +1417,7 @@ out Record[] searchresults);
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SetIssues(
-                 request. strBiblioRecPath,
+                 request.strBiblioRecPath,
                 request.issueinfos,
                 out EntityInfo[] errorinfos);
             return new SetIssuesResponse
@@ -1449,7 +1449,7 @@ out Record[] searchresults);
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SearchIssue(
-                request. strIssueDbName,
+                request.strIssueDbName,
             request.strQueryWord,
             request.nPerMax,
             request.strFrom,
@@ -1492,7 +1492,7 @@ out Record[] searchresults);
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.GetEntities(
-                request. strBiblioRecPath,
+                request.strBiblioRecPath,
            request.lStart,
            request.lCount,
            request.strStyle,
@@ -1674,7 +1674,7 @@ out Record[] searchresults);
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SetClock(
-                request. strTime);
+                request.strTime);
             return new SetClockResponse
             {
                 SetClockResult = result,
@@ -1713,6 +1713,845 @@ out Record[] searchresults);
             public string strTime { get; set; }
         }
 
+        // 重设密码
+        [HttpPost]
+        public ResetPasswordResponse ResetPassword([FromBody] ResetPasswordRquest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ResetPassword(
+                request.strParameters,
+    request.strMessageTemplate,
+    out string strMessage);
+            return new ResetPasswordResponse
+            {
+                ResetPasswordResult = result,
+            };
+        }
+
+        #region ResetPassword()
+
+        public class ResetPasswordResponse
+        {
+            public LibraryServerResult ResetPasswordResult { get; set; }
+            public string strMessage { get; set; }
+        }
+
+        public class ResetPasswordRquest
+        {
+            public string strParameters { get; set; }
+            public string strMessageTemplate { get; set; }
+        }
+
+        #endregion
+
+        // 获得值列表
+        [HttpPost]
+        public GetValueTableResponse GetValueTable(
+            [FromBody] GetValueTableRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetValueTable(
+                request.strTableName,
+            request.strDbName,
+            out string[] values);
+            return new GetValueTableResponse
+            {
+                GetValueTableResult = result,
+                values = values,
+            };
+        }
+
+        #region GetValueTable()
+
+        public class GetValueTableResponse
+        {
+            public LibraryServerResult GetValueTableResult { get; set; }
+            public string[] values { get; set; }
+        }
+
+        public class GetValueTableRequest
+        {
+            public string strTableName { get; set; }
+            public string strDbName { get; set; }
+        }
+
+        #endregion
+
+        // 获得操作日志(集合版本)
+        [HttpPost]
+        public GetOperLogsResponse GetOperLogs(
+            [FromBody] GetOperLogsRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetOperLogs(
+                request.strFileName,
+    request.lIndex,
+    request.lHint,
+    request.nCount,
+    request.strStyle,
+    request.strFilter,
+    out OperLogInfo[] records);
+            return new GetOperLogsResponse
+            {
+                GetOperLogsResult = result,
+                records = records,
+            };
+        }
+
+        #region GetOperLogs()
+
+        public class GetOperLogsResponse
+        {
+            public LibraryServerResult GetOperLogsResult { get; set; }
+            public OperLogInfo[] records { get; set; }
+        }
+
+        public class GetOperLogsRequest
+        {
+            public string strFileName { get; set; }
+            public long lIndex { get; set; }
+            public long lHint { get; set; }
+            public int nCount { get; set; }
+            public string strStyle { get; set; }
+            public string strFilter { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetOperLogResponse GetOperLog(
+            [FromBody] GetOperLogRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetOperLog(
+                request.strFileName,
+            request.lIndex,
+            request.lHint,
+            request.strStyle,
+            request.strFilter,
+            out string strXml,
+            out long lHintNext,
+            request.lAttachmentFragmentStart,
+            request.nAttachmentFragmentLength,
+            out byte[] attachment_data,
+            out long lAttachmentTotalLength);
+            return new GetOperLogResponse
+            {
+                GetOperLogResult = result,
+                strXml = strXml,
+                lHintNext = lHintNext,
+                attachment_data = attachment_data,
+                lAttachmentTotalLength = lAttachmentTotalLength,
+            };
+        }
+
+        #region GetOperLog()
+
+        public class GetOperLogResponse
+        {
+            public LibraryServerResult GetOperLogResult { get; set; }
+
+            public string strXml { get; set; }
+            public long lHintNext { get; set; }
+            public byte[] attachment_data { get; set; }
+            public long lAttachmentTotalLength { get; set; }
+        }
+
+        public class GetOperLogRequest
+        {
+            public string strFileName { get; set; }
+            public long lIndex { get; set; }
+            public long lHint { get; set; }
+            public string strStyle { get; set; }
+            public string strFilter { get; set; }
+            public long lAttachmentFragmentStart { get; set; }
+            public int nAttachmentFragmentLength { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetCalendarResponse GetCalendar(
+           [FromBody] GetCalendarRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetCalendar(
+                request.strAction,
+           request.strName,
+           request.nStart,
+           request.nCount,
+           out CalenderInfo[] contents);
+            return new GetCalendarResponse
+            {
+                GetCalendarResult = result,
+                contents = contents,
+            };
+        }
+
+        #region GetCalendar()
+
+        public class GetCalendarResponse
+        {
+            public LibraryServerResult GetCalendarResult { get; set; }
+            public CalenderInfo[] contents { get; set; }
+        }
+
+        public class GetCalendarRequest
+        {
+            public string strAction { get; set; }
+            public string strName { get; set; }
+            public int nStart { get; set; }
+            public int nCount { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetCalendarResponse SetCalendar(
+            [FromBody] SetCalendarRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetCalendar(
+                request.strAction,
+            request.info);
+            return new SetCalendarResponse
+            {
+                SetCalendarResult = result,
+            };
+        }
+
+        #region SetCalendar()
+
+        public class SetCalendarResponse
+        {
+            public LibraryServerResult SetCalendarResult { get; set; }
+        }
+
+        public class SetCalendarRequest
+        {
+            public string strAction { get; set; }
+            public CalenderInfo info { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public BatchTaskResponse BatchTask(
+           [FromBody] BatchTaskRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.BatchTask(
+                request.strName,
+           request.strAction,
+           request.info,
+           out BatchTaskInfo resultInfo);
+            return new BatchTaskResponse
+            {
+                BatchTaskResult = result,
+                resultInfo = resultInfo,
+            };
+        }
+
+        #region BatchTask()
+
+        public class BatchTaskResponse
+        {
+            public LibraryServerResult BatchTaskResult { get; set; }
+            public BatchTaskInfo resultInfo { get; set; }
+        }
+
+        public class BatchTaskRequest
+        {
+            public string strName { get; set; }
+            public string strAction { get; set; }
+            public BatchTaskInfo info { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ManageDatabaseResponse ManageDatabase(
+            [FromBody] ManageDatabaseRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ManageDatabase(
+                request.strAction,
+               request.strDatabaseName,
+    request.strDatabaseInfo,
+    request.strStyle,
+    out string strOutputInfo);
+            return new ManageDatabaseResponse
+            {
+                ManageDatabaseResult = result,
+                strOutputInfo = strOutputInfo,
+            };
+        }
+
+        #region ManageDatabase()
+
+        public class ManageDatabaseResponse
+        {
+            public LibraryServerResult ManageDatabaseResult { get; set; }
+            public string strOutputInfo { get; set; }
+        }
+
+        public class ManageDatabaseRequest
+        {
+            public string strAction { get; set; }
+            public string strDatabaseName { get; set; }
+            public string strDatabaseInfo { get; set; }
+            public string strStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetUserResponse GetUser(
+            [FromBody] GetUserRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetUser(
+                request.strAction,
+            request.strName,
+            request.nStart,
+            request.nCount,
+            out UserInfo[] contents);
+            return new GetUserResponse
+            {
+                GetUserResult = result,
+                contents = contents,
+            };
+        }
+
+        #region GetUser()
+
+        public class GetUserResponse
+        {
+            public LibraryServerResult GetUserResult { get; set; }
+            public UserInfo[] contents { get; set; }
+        }
+
+        public class GetUserRequest
+        {
+            public string strAction { get; set; }
+            public string strName { get; set; }
+            public int nStart { get; set; }
+            public int nCount { get; set; }
+        }
+
+        #endregion
+
+        [HttpPatch]
+        public SetUserResponse SetUser(
+           [FromBody] SetUserRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetUser(
+                request.strAction,
+           request.info);
+            return new SetUserResponse
+            {
+                SetUserResult = result,
+            };
+        }
+
+        #region SetUser()
+
+        public class SetUserResponse
+        {
+            public LibraryServerResult SetUserResult { get; set; }
+        }
+
+        public class SetUserRequest
+        {
+            public string strAction { get; set; }
+            public UserInfo info { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetChannelInfoResponse GetChannelInfo(
+            [FromBody] GetChannelInfoRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetChannelInfo(
+                request.strQuery,
+            request.strStyle,
+            request.nStart,
+            request.nCount,
+            out ChannelInfo[] contents);
+            return new GetChannelInfoResponse
+            {
+                GetChannelInfoResult = result,
+                contents = contents,
+            };
+        }
+
+        #region GetChannelInfo()
+
+        public class GetChannelInfoResponse
+        {
+            public LibraryServerResult GetChannelInfoResult { get; set; }
+            public ChannelInfo[] contents { get; set; }
+        }
+
+        public class GetChannelInfoRequest
+        {
+            public string strQuery { get; set; }
+            public string strStyle { get; set; }
+            public int nStart { get; set; }
+            public int nCount { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ManageChannelResponse ManageChannel(
+            [FromBody] ManageChannelRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ManageChannel(
+                request.strAction,
+request.strStyle,
+request.requests,
+out ChannelInfo[] results);
+            return new ManageChannelResponse
+            {
+                ManageChannelResult = result,
+                results = results,
+            };
+        }
+
+        #region ManageChannel()
+
+        public class ManageChannelResponse
+        {
+            public LibraryServerResult ManageChannelResult { get; set; }
+            public ChannelInfo[] results { get; set; }
+        }
+
+        public class ManageChannelRequest
+        {
+            public string strAction { get; set; }
+            public string strStyle { get; set; }
+            public ChannelInfo[] requests { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ChangeUserPasswordResponse ChangeUserPassword(
+            [FromBody] ChangeUserPasswordRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ChangeUserPassword(
+                request.strUserName,
+            request.strOldPassword,
+            request.strNewPassword);
+            return new ChangeUserPasswordResponse
+            {
+                ChangeUserPasswordResult = result,
+            };
+        }
+
+        #region ChangeUserPassword()
+
+        public class ChangeUserPasswordResponse
+        {
+            public LibraryServerResult ChangeUserPasswordResult { get; set; }
+        }
+
+        public class ChangeUserPasswordRequest
+        {
+            public string strUserName { get; set; }
+            public string strOldPassword { get; set; }
+            public string strNewPassword { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public VerifyBarcodeResponse VerifyBarcode(
+            [FromBody] VerifyBarcodeRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.VerifyBarcode(
+                request.strAction,
+request.strLibraryCode,
+request.strBarcode,
+    out string strOutputBarcode);
+            return new VerifyBarcodeResponse
+            {
+                VerifyBarcodeResult = result,
+                strOutputBarcode = strOutputBarcode,
+            };
+        }
+
+        #region VerifyBarcode()
+
+        public class VerifyBarcodeResponse
+        {
+            public LibraryServerResult VerifyBarcodeResult { get; set; }
+            public string strOutputBarcode { get; set; }
+        }
+
+        public class VerifyBarcodeRequest
+        {
+            public string strAction { get; set; }
+            public string strLibraryCode { get; set; }
+            public string strBarcode { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetSystemParameterResponse GetSystemParameter(
+            [FromBody] GetSystemParameterRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetSystemParameter(
+                request.strCategory,
+            request.strName,
+            out string strValue);
+            return new GetSystemParameterResponse
+            {
+                GetSystemParameterResult = result,
+                strValue = strValue,
+            };
+        }
+
+        #region GetSystemParameter()
+
+        public class GetSystemParameterResponse
+        {
+            public LibraryServerResult GetSystemParameterResult { get; set; }
+            public string strValue { get; set; }
+        }
+
+        public class GetSystemParameterRequest
+        {
+            public string strCategory { get; set; }
+            public string strName { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetSystemParameterResponse SetSystemParameter(
+            [FromBody] SetSystemParameterRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetSystemParameter(
+                request.strCategory,
+            request.strName,
+            request.strValue);
+            return new SetSystemParameterResponse
+            {
+                SetSystemParameterResult = result,
+            };
+        }
+
+        #region SetSystemParameter()
+
+        public class SetSystemParameterResponse
+        {
+            public LibraryServerResult SetSystemParameterResult { get; set; }
+        }
+
+        public class SetSystemParameterRequest
+        {
+            public string strCategory { get; set; }
+            public string strName { get; set; }
+            public string strValue { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public UrgentRecoverResponse UrgentRecover(
+           [FromBody] UrgentRecoverRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.UrgentRecover(
+                request.strXML);
+            return new UrgentRecoverResponse
+            {
+                UrgentRecoverResult = result,
+            };
+        }
+
+        #region UrgentRecover()
+
+        public class UrgentRecoverResponse
+        {
+            public LibraryServerResult UrgentRecoverResult { get; set; }
+        }
+
+        public class UrgentRecoverRequest
+        {
+            public string strXML { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public RepairBorrowInfoResponse RepairBorrowInfo(
+           [FromBody] RepairBorrowInfoRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.RepairBorrowInfo(
+                request.strAction,
+           request.strReaderBarcode,
+           request.strItemBarcode,
+           request.strConfirmItemRecPath,
+           request.nStart,
+           request.nCount,
+           out int nProcessedBorrowItems,
+           out int nTotalBorrowItems,
+           out string strOutputReaderBarcode,
+           out string[] aDupPath);
+            return new RepairBorrowInfoResponse
+            {
+                RepairBorrowInfoResult = result,
+                nProcessedBorrowItems = nProcessedBorrowItems,
+                nTotalBorrowItems = nTotalBorrowItems,
+                strOutputReaderBarcode = strOutputReaderBarcode,
+                aDupPath = aDupPath,
+            };
+        }
+
+        #region RepairBorrowInfo()
+
+        public class RepairBorrowInfoResponse
+        {
+            public LibraryServerResult RepairBorrowInfoResult { get; set; }
+
+            public int nProcessedBorrowItems { get; set; }
+            public int nTotalBorrowItems { get; set; }
+            public string strOutputReaderBarcode { get; set; }
+            public string[] aDupPath { get; set; }
+        }
+
+        public class RepairBorrowInfoRequest
+        {
+            public string strAction { get; set; }
+            public string strReaderBarcode { get; set; }
+            public string strItemBarcode { get; set; }
+            public string strConfirmItemRecPath { get; set; }
+            public int nStart { get; set; }
+            public int nCount { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public PassGateResponse PassGate(
+            [FromBody] PassGateRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.PassGate(
+                request.strReaderBarcode,
+            request.strGateName,
+            request.strResultTypeList,
+            out string[] results);
+            return new PassGateResponse
+            {
+                PassGateResult = result,
+                results = results,
+            };
+        }
+
+        #region PassGate()
+
+        public class PassGateResponse
+        {
+            public LibraryServerResult PassGateResult { get; set; }
+            public string[] results { get; set; }
+        }
+
+        public class PassGateRequest
+        {
+            public string strReaderBarcode { get; set; }
+            public string strGateName { get; set; }
+            public string strResultTypeList { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ForegiftResponse Foregift(
+                    [FromBody] ForegiftRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.Foregift(
+                request.strAction,
+                    request.strReaderBarcode,
+                    out string strOutputReaderXml,
+                    out string strOutputID);
+            return new ForegiftResponse
+            {
+                ForegiftResult = result,
+                strOutputReaderXml = strOutputReaderXml,
+                strOutputID = strOutputID,
+            };
+        }
+
+        #region Foregift()
+
+        public class ForegiftResponse
+        {
+            public LibraryServerResult ForegiftResult { get; set; }
+            public string strOutputReaderXml { get; set; }
+            public string strOutputID { get; set; }
+        }
+
+        public class ForegiftRequest
+        {
+            public string strAction { get; set; }
+            public string strReaderBarcode { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public HireResponse Hire(
+            [FromBody] HireRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.Hire(
+                request.strAction,
+                    request.strReaderBarcode,
+                    out string strOutputReaderXml,
+                    out string strOutputID);
+            return new HireResponse
+            {
+                HireResult = result,
+                strOutputReaderXml = strOutputReaderXml,
+                strOutputID = strOutputID,
+            };
+        }
+
+        #region Hire()
+
+        public class HireResponse
+        {
+            public LibraryServerResult HireResult { get; set; }
+            public string strOutputReaderXml { get; set; }
+            public string strOutputID { get; set; }
+        }
+
+        public class HireRequest
+        {
+            public string strAction { get; set; }
+            public string strReaderBarcode { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SettlementResponse Settlement(
+            [FromBody] SettlementRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.Settlement(
+                request.strAction,
+            request.ids);
+            return new SettlementResponse
+            {
+                SettlementResult = result,
+            };
+        }
+
+        #region Settlement()
+
+        public class SettlementResponse
+        {
+            public LibraryServerResult SettlementResult { get; set; }
+        }
+
+        public class SettlementRequest
+        {
+            public string strAction { get; set; }
+            public string[] ids { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SearchOneClassCallNumberResponse SearchOneClassCallNumber(
+            [FromBody] SearchOneClassCallNumberRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SearchOneClassCallNumber(
+                request. strArrangeGroupName,
+            request.strClass,
+            request.strResultSetName,
+            out string strQueryXml);
+            return new SearchOneClassCallNumberResponse
+            {
+                SearchOneClassCallNumberResult = result,
+                strQueryXml= strQueryXml,
+            };
+        }
+
+        #region SearchOneClassCallNumber()
+
+        public class SearchOneClassCallNumberResponse
+        {
+            public LibraryServerResult SearchOneClassCallNumberResult { get; set; }
+            public string strQueryXml { get; set; }
+        }
+
+        public class SearchOneClassCallNumberRequest
+        {
+            public string strArrangeGroupName { get; set; }
+            public string strClass { get; set; }
+            public string strResultSetName { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetCallNumberSearchResultResponse GetCallNumberSearchResult(
+            [FromBody] GetCallNumberSearchResultRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetCallNumberSearchResult(
+                request. strArrangeGroupName,
+            request.strResultSetName,
+            request.lStart,
+            request.lCount,
+            request.strBrowseInfoStyle,
+            request.strLang,
+            out CallNumberSearchResult[] searchresults);
+            return new GetCallNumberSearchResultResponse
+            {
+                GetCallNumberSearchResultResult = result,
+                searchresults = searchresults,
+            };
+        }
+
+        #region GetCallNumberSearchResult()
+
+        public class GetCallNumberSearchResultResponse
+        {
+            public LibraryServerResult GetCallNumberSearchResultResult { get; set; }
+
+            public CallNumberSearchResult[] searchresults { get; set; }
+        }
+
+        public class GetCallNumberSearchResultRequest
+        {
+            public string strArrangeGroupName { get; set; }
+            public string strResultSetName { get; set; }
+            public long lStart { get; set; }
+            public long lCount { get; set; }
+            public string strBrowseInfoStyle { get; set; }
+            public string strLang { get; set; }
+        }
+
+        #endregion
 
         #region 实用函数
 

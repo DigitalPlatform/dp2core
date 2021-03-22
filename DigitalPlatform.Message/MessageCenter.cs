@@ -1277,31 +1277,31 @@ namespace DigitalPlatform.Message
     public class MessageData
     {
         [DataMember]
-        public string strUserName = ""; // 消息所从属的用户ID
+        public string strUserName { get; set; } // 消息所从属的用户ID
         [DataMember]
-        public string strBoxType = "";
+        public string strBoxType { get; set; }
 
         [DataMember]
-        public string strSender = "";   // 发送者
+        public string strSender { get; set; }   // 发送者
         [DataMember]
-        public string strRecipient = "";    // 接收者
+        public string strRecipient { get; set; }    // 接收者
         [DataMember]
-        public string strSubject = "";  // 主题
+        public string strSubject { get; set; }  // 主题
         [DataMember]
-        public string strMime = ""; // 媒体类型
+        public string strMime { get; set; } // 媒体类型
         [DataMember]
-        public string strBody = "";
+        public string strBody { get; set; }
         [DataMember]
-        public string strCreateTime = "";   // 邮件创建(收到)时间
+        public string strCreateTime { get; set; }   // 邮件创建(收到)时间
         [DataMember]
-        public string strSize = "";     // 尺寸
+        public string strSize { get; set; }     // 尺寸
         [DataMember]
-        public bool Touched = false;    // 是否阅读过
+        public bool Touched { get; set; }    // 是否阅读过
         [DataMember]
-        public string strRecordID = ""; // 记录ID。用于唯一定位一条消息
+        public string strRecordID { get; set; } // 记录ID。用于唯一定位一条消息
 
         [DataMember]
-        public byte[] TimeStamp = null;
+        public byte[] TimeStamp { get; set; }
 
         public MessageData()
         {

@@ -493,15 +493,15 @@ out strError);
     {
         // 启动、停止一般参数
         [DataMember]
-        public string Param = "";   // 格式一般为XML
+        public string Param { get; set; }   // 格式一般为XML
 
         // 专门参数
         [DataMember]
-        public string BreakPoint = ""; // 断点  格式为 序号@文件名
+        public string BreakPoint { get; set; } // 断点  格式为 序号@文件名
         [DataMember]
-        public string Start = ""; // 起点  格式为 序号@文件名
+        public string Start { get; set; } // 起点  格式为 序号@文件名
         [DataMember]
-        public string Count = ""; // 个数 纯数字
+        public string Count { get; set; } // 个数 纯数字
 
         // 207/8/19
         [DataMember]
@@ -550,31 +550,31 @@ out strError);
     {
         // 名字
         [DataMember]
-        public string Name = "";
+        public string Name { get; set; }
 
         // 状态
         [DataMember]
-        public string State = "";
+        public string State { get; set; }
 
         // 当前进度
         [DataMember]
-        public string ProgressText = "";
+        public string ProgressText { get; set; }
 
         // 输出结果
         [DataMember]
-        public int MaxResultBytes = 0;
+        public int MaxResultBytes { get; set; }
         [DataMember]
-        public byte[] ResultText = null;
+        public byte[] ResultText { get; set; }
         [DataMember]
-        public long ResultOffset = 0;   // 本次获得到ResultText达的末尾点
+        public long ResultOffset { get; set; }   // 本次获得到ResultText达的末尾点
         [DataMember]
-        public long ResultTotalLength = 0;  // 整个结果文件的长度
+        public long ResultTotalLength { get; set; }  // 整个结果文件的长度
 
         [DataMember]
-        public BatchTaskStartInfo StartInfo = null;
+        public BatchTaskStartInfo StartInfo { get; set; }
 
         [DataMember]
-        public long ResultVersion = 0;  // 信息文件版本
+        public long ResultVersion { get; set; }  // 信息文件版本
 
         public string Dump()
         {

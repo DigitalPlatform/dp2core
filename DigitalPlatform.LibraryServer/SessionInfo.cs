@@ -2100,30 +2100,30 @@ SetStartEventArgs e);
     public class ChannelInfo
     {
         [DataMember]
-        public string SessionID = "";    // Session id， Session 唯一的标识
+        public string SessionID { get; set; }    // Session id， Session 唯一的标识
 
         [DataMember]
-        public string UserName = "";    // 用户名
+        public string UserName { get; set; }    // 用户名
 
         [DataMember]
-        public string ClientIP = "";    // 前端 IP
+        public string ClientIP { get; set; }   // 前端 IP
 
         [DataMember]
-        public string Via = "";  // 经由什么协议
+        public string Via { get; set; }  // 经由什么协议
 
         [DataMember]
-        public long Count = 0;    // 此项数目
+        public long Count { get; set; }    // 此项数目
 
         [DataMember]
-        public string LibraryCode = ""; // 图书馆代码
+        public string LibraryCode { get; set; } // 图书馆代码
 
         [DataMember]
-        public string Location = "";    // 前端地点注释
+        public string Location { get; set; }   // 前端地点注释
 
         [DataMember]
-        public long CallCount = 0;    // 通道迄今被调用的次数
+        public long CallCount { get; set; }    // 通道迄今被调用的次数
 
         [DataMember]
-        public string Lang = "";  // 语言代码
+        public string Lang { get; set; } // 语言代码
     }
 }

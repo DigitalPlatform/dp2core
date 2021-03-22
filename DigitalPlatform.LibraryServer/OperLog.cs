@@ -3939,13 +3939,20 @@ out strTargetLibraryCode);
     public class OperLogInfo
     {
         [DataMember]
-        public long Index = -1; // 日志记录序号
+        public long Index { get; set; } // 日志记录序号
         [DataMember]
-        public long HintNext = -1; // 下一记录暗示
+        public long HintNext { get; set; } // 下一记录暗示
 
         [DataMember]
-        public string Xml = ""; // 日志记录XML
+        public string Xml { get; set; } // 日志记录XML
         [DataMember]
-        public long AttachmentLength = 0;   // 附件尺寸
+        public long AttachmentLength { get; set; }   // 附件尺寸
+
+        // 2021/3/22
+        public OperLogInfo()
+        {
+            Index = -1;
+            HintNext = -1;
+        }
     }
 }

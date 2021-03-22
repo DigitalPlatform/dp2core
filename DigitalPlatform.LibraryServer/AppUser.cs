@@ -1431,28 +1431,28 @@ namespace DigitalPlatform.LibraryServer
     public class UserInfo
     {
         [DataMember]
-        public string UserName = "";    // 用户名
+        public string UserName { get; set; }    // 用户名
 
         [DataMember]
-        public bool SetPassword = false;    // 是否设置密码
+        public bool SetPassword { get; set; }    // 是否设置密码
         [DataMember]
-        public string Password = "";    // 密码
+        public string Password { get; set; }    // 密码
 
         [DataMember]
-        public string Rights = "";  // 权限值
+        public string Rights { get; set; }  // 权限值
         [DataMember]
-        public string Type = "";    // 账户类型
+        public string Type { get; set; }    // 账户类型
 
         [DataMember]
-        public string LibraryCode = ""; // 图书馆代码 2007/12/15 
+        public string LibraryCode { get; set; } // 图书馆代码 2007/12/15 
 
         [DataMember]
-        public string Access = "";  // 关于存取权限的定义 2008/2/28 
+        public string Access { get; set; }  // 关于存取权限的定义 2008/2/28 
 
         [DataMember]
-        public string Comment = "";  // 注释 2012/10/8
+        public string Comment { get; set; }  // 注释 2012/10/8
 
         [DataMember]
-        public string Binding = ""; // 绑定 2016/6/15
+        public string Binding { get; set; } // 绑定 2016/6/15
     }
 }

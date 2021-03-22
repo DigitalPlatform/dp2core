@@ -16419,7 +16419,10 @@ start_time_1,
 
             // 2012/3/28
             if (string.IsNullOrEmpty(strNo) == false)
-                Int64.TryParse(strNo, out return_info.BorrowCount);
+            {
+                Int64.TryParse(strNo, out long value);
+                return_info.BorrowCount = value;
+            }
 #if NO
             try
             {
@@ -22846,11 +22849,11 @@ start_time_1,
     public class AmerceItem
     {
         [DataMember]
-        public string ID = "";  // 识别id
+        public string ID { get; set; }  // 识别id
         [DataMember]
-        public string NewPrice = "";    // 变更的价格
+        public string NewPrice { get; set; }    // 变更的价格
         [DataMember]
-        public string NewComment = ""; // 注释
+        public string NewComment { get; set; } // 注释
     }
 
 #if REMOVED
@@ -22887,51 +22890,51 @@ start_time_1,
     {
         // 应还日期/时间
         [DataMember]
-        public string LatestReturnTime = "";    // RFC1123格式，GMT时间
+        public string LatestReturnTime { get; set; }   // RFC1123格式，GMT时间
 
         // 借书期限。例如“20day”
         [DataMember]
-        public string Period = "";
+        public string Period { get; set; }
 
         // 2016/6/7
         // 禁止还书期限。例如“20day”
         [DataMember]
-        public string DenyPeriod = "";
+        public string DenyPeriod { get; set; }
 
 
         // 当前为续借的第几次？0表示初次借阅
         [DataMember]
-        public long BorrowCount = 0;
+        public long BorrowCount { get; set; }
 
         // 借书操作者
         [DataMember]
-        public string BorrowOperator = "";
+        public string BorrowOperator { get; set; }
 
         // 2018/5/12
         // 实际用到的册条码号
         // 可能是 @refID:xxxx 形态
         [DataMember]
-        public string ItemBarcode = "";
+        public string ItemBarcode { get; set; }
 
 
         // 2019/11/3
         // 溢出原因
         [DataMember]
-        public string[] Overflows = null;
+        public string[] Overflows { get; set; }
 
         // 2020/8/26
         // 借书事务编号
         [DataMember]
-        public string BorrowID = "";
+        public string BorrowID { get; set; }
 
         /*
         // 2008/5/9
         // 所借的册的图书类型
-        public string BookType = "";
+        public string BookType  { get; set; }
 
         // 2008/5/9
         // 所借的册的馆藏地点
-        public string Location = "";
+        public string Location  { get; set; }
          * */
     }
 
@@ -22941,45 +22944,45 @@ start_time_1,
     {
         // 借阅日期/时间
         [DataMember]
-        public string BorrowTime = "";    // RFC1123格式，GMT时间
+        public string BorrowTime { get; set; }  // RFC1123格式，GMT时间
 
         // 应还日期/时间
         [DataMember]
-        public string LatestReturnTime = "";    // RFC1123格式，GMT时间
+        public string LatestReturnTime { get; set; }    // RFC1123格式，GMT时间
 
         // 原借书期限。例如“20day”
         [DataMember]
-        public string Period = "";
+        public string Period { get; set; }
 
         // 当前为续借的第几次？0表示初次借阅
         [DataMember]
-        public long BorrowCount = 0;
+        public long BorrowCount { get; set; }
 
         // 违约金描述字符串。XML格式
         [DataMember]
-        public string OverdueString = "";
+        public string OverdueString { get; set; }
 
         // 借书操作者
         [DataMember]
-        public string BorrowOperator = "";
+        public string BorrowOperator { get; set; }
 
         // 还书操作者
         [DataMember]
-        public string ReturnOperator = "";
+        public string ReturnOperator { get; set; }
 
         // 2008/5/9
         /// <summary>
         /// 所还的册的图书类型
         /// </summary>
         [DataMember]
-        public string BookType = "";
+        public string BookType { get; set; }
 
         // 2008/5/9
         /// <summary>
         /// 所还的册的馆藏地点
         /// </summary>
         [DataMember]
-        public string Location = "";
+        public string Location { get; set; }
 
         // 2017/5/22
         /// <summary>
@@ -22993,12 +22996,12 @@ start_time_1,
         // 实际用到的册条码号
         // 可能是 @refID:xxxx 形态
         [DataMember]
-        public string ItemBarcode = "";
+        public string ItemBarcode { get; set; }
 
         // 2020/8/26
         // 本次还书所针对的借书事务 ID
         [DataMember]
-        public string BorrowID = "";
+        public string BorrowID { get; set; }
     }
 
 }

@@ -7147,18 +7147,25 @@ dp2LibraryXE 版本: dp2LibraryXE, Version=1.1.5939.41661, Culture=neutral, Publ
         #endregion
 
         [DataMember]
-        public int Type;	// 类型：0 库 / 1 途径 / 4 cfgs / 5 file
+        public int Type { get; set; }	// 类型：0 库 / 1 途径 / 4 cfgs / 5 file
         [DataMember]
-        public string Name;	// 库名或途径名
+        public string Name { get; set; }	// 库名或途径名
         [DataMember]
-        public bool HasChildren = true;  //是否有儿子
+        public bool HasChildren { get; set; }  //是否有儿子
         [DataMember]
-        public int Style = 0;   // 0x01:帐户库  // 原名Style
+        public int Style { get; set; }   // 0x01:帐户库  // 原名Style
 
         [DataMember]
-        public string TypeString = "";  // 新增
+        public string TypeString { get; set; }  // 新增
         [DataMember]
-        public string[] Names;    // 新增 所有语言下的名字。每个元素的格式 语言代码:内容
+        public string[] Names { get; set; }    // 新增 所有语言下的名字。每个元素的格式 语言代码:内容
+
+        // 2021/3/22
+        public ResInfoItem()
+        {
+            HasChildren = true;
+        }
+    
     }
 
     /// <summary>

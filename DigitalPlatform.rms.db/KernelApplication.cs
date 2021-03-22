@@ -692,11 +692,11 @@ namespace DigitalPlatform.rms
     public class KeyFrom
     {
         [DataMember]
-        public string Logic = "";
+        public string Logic { get; set; }
         [DataMember]
-        public string Key = "";
+        public string Key { get; set; }
         [DataMember]
-        public string From = "";
+        public string From { get; set; }
     }
 
     // 设计意图：记录对象，API用来传信息的类
@@ -705,14 +705,14 @@ namespace DigitalPlatform.rms
     public class Record
     {
         [DataMember]
-        public string Path = "";      // 带库名的全路径 原来叫ID 2010/5/17 changed
+        public string Path { get; set; }      // 带库名的全路径 原来叫ID 2010/5/17 changed
         [DataMember]
-        public KeyFrom[] Keys = null;     // 检索命中的key+from字符串数组 
+        public KeyFrom[] Keys { get; set; }     // 检索命中的key+from字符串数组 
         [DataMember]
-        public string[] Cols = null;
+        public string[] Cols { get; set; }
 
         [DataMember]
-        public RecordBody RecordBody = null;    // 记录体。2012/1/5
+        public RecordBody RecordBody { get; set; }    // 记录体。2012/1/5
     }
 
     // 2012/1/5
@@ -720,35 +720,47 @@ namespace DigitalPlatform.rms
     public class RecordBody
     {
         [DataMember]
-        public string Path = "";      // [in] 希望写入的记录路径 [out]实际写入的路径 2012/11/11
+        public string Path { get; set; }      // [in] 希望写入的记录路径 [out]实际写入的路径 2012/11/11
         [DataMember]
-        public string Xml = "";
+        public string Xml { get; set; }
         [DataMember]
-        public byte[] Timestamp = null;
+        public byte[] Timestamp { get; set; }
         [DataMember]
-        public string Metadata = "";
+        public string Metadata { get; set; }
 
         [DataMember]
-        public Result Result = new Result(); // 结果信息
+        public Result Result { get; set; } // 结果信息
+
+        // 2021/3/22
+        public RecordBody()
+        {
+            Result = new Result();
+        }
     }
 
     [DataContract(Namespace = "http://dp2003.com/dp2kernel/")]
     public class RichRecord
     {
         [DataMember]
-        public string Path = "";
+        public string Path { get; set; }
         [DataMember]
-        public string[] Cols = null;
+        public string[] Cols { get; set; }
 
         [DataMember]
-        public string Xml = "";
+        public string Xml { get; set; }
         [DataMember]
-        public byte[] baTimestamp = null;
+        public byte[] baTimestamp { get; set; }
         [DataMember]
-        public string strMetadata = "";
+        public string strMetadata { get; set; }
 
         [DataMember]
-        public Result Result = new Result(); // 结果信息
+        public Result Result { get; set; } // 结果信息
+
+        // 2021/3/22
+        public RichRecord()
+        {
+            Result = new Result();
+        }
     }
 
 #if NO
@@ -775,17 +787,18 @@ namespace DigitalPlatform.rms
     public class KeyInfo
     {
         [DataMember]
-        public string ID;
+        public string ID { get; set; }
+
         [DataMember]
-        public string Key;
+        public string Key { get; set; }
         [DataMember]
-        public string KeyNoProcess; //未经处理的检索点
+        public string KeyNoProcess { get; set; } //未经处理的检索点
         [DataMember]
-        public string FromName;  // 来源表名
+        public string FromName { get; set; }  // 来源表名
         [DataMember]
-        public string Num;
+        public string Num { get; set; }
         [DataMember]
-        public string FromValue; // 来源值
+        public string FromValue { get; set; } // 来源值
     }
 
     //结果对象
@@ -793,12 +806,12 @@ namespace DigitalPlatform.rms
     public class Result
     {
         [DataMember]
-        public long Value = 0;	// 命中条数，>=0:正常;<0:出错
+        public long Value { get; set; }  // 命中条数，>=0:正常;<0:出错
 
         [DataMember]
-        public ErrorCodeValue ErrorCode = ErrorCodeValue.NoError;
+        public ErrorCodeValue ErrorCode { get; set; }   // = ErrorCodeValue.NoError;
         [DataMember]
-        public string ErrorString = ""; // "错误信息未初始化...";
+        public string ErrorString { get; set; } // "错误信息未初始化...";
 
         public Result()
         {
@@ -835,16 +848,16 @@ namespace DigitalPlatform.rms
     public enum ErrorCodeValue
     {
         [EnumMember]
-        NoError = 0,	 // 没有错误
+        NoError = 0,     // 没有错误
         [EnumMember]
         CommonError = 1, // 一般性错误   -1
 
         [EnumMember]
-        NotLogin = 2,	// 尚未登录 (Dir/ListTask)
+        NotLogin = 2,   // 尚未登录 (Dir/ListTask)
         [EnumMember]
-        UserNameEmpty = 3,	// 用户名为空 (Login)
+        UserNameEmpty = 3,  // 用户名为空 (Login)
         [EnumMember]
-        UserNameOrPasswordMismatch = 4,	// 用户名或者密码错误 (Login)
+        UserNameOrPasswordMismatch = 4, // 用户名或者密码错误 (Login)
 
         //NoHasList = 5,     //没有列目录权限
         //NoHasRead = 6,     //没有读权限          
@@ -863,7 +876,7 @@ namespace DigitalPlatform.rms
 
         [EnumMember]
         NotFoundDb = 12,  // 没找到数据库 -5
-        //OutOfRange = 13, // 范围越界
+                          //OutOfRange = 13, // 范围越界
         [EnumMember]
         PathError = 14, // 路径不合法  -7
 
@@ -874,13 +887,13 @@ namespace DigitalPlatform.rms
         ExistDbInfo = 16,  //在新建库中，发现已经存在相同的信息 -11
 
         [EnumMember]
-        AlreadyExist = 17,	//已经存在	-8
+        AlreadyExist = 17,  //已经存在	-8
 
         [EnumMember]
-        AlreadyExistOtherType = 18,		// 存在不同类型的项 -9
+        AlreadyExistOtherType = 18,     // 存在不同类型的项 -9
 
         [EnumMember]
-        ApplicationStartError = 19,	//Application启动错误
+        ApplicationStartError = 19, //Application启动错误
 
         [EnumMember]
         NotFoundSubRes = 20,    // 部分下级资源记录不存在

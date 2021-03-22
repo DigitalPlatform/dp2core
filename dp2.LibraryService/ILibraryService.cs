@@ -475,6 +475,7 @@ namespace dp2.LibraryService
                    BatchTaskInfo info,
                    out BatchTaskInfo resultInfo);
 
+        // 废止
         [OperationContract]
         LibraryServerResult ClearAllDbs();
 

@@ -2636,14 +2636,14 @@ out string strError)
     public class Question
     {
         [DataMember]
-        public string Text = "";	// 问题正文
+        public string Text { get; set; }	// 问题正文
 
         // 2018/11/20
         [DataMember]
-        public string Xml = "";     // 用 XML 格式描述的问题正文
+        public string Xml { get; set; }     // 用 XML 格式描述的问题正文
 
         [DataMember]
-        public string Answer = "";	// 问题答案
+        public string Answer { get; set; }	// 问题答案
     }
 
     // 按照拼音条目的使用频率排序

@@ -733,9 +733,9 @@ namespace DigitalPlatform.LibraryServer
     public class DupProjectInfo
     {
         [DataMember]
-        public string Name = "";
+        public string Name { get; set; }
         [DataMember]
-        public string Comment = "";
+        public string Comment { get; set; }
     }
 
     // 查重检索命中结果的一行
@@ -743,13 +743,13 @@ namespace DigitalPlatform.LibraryServer
     public class DupSearchResult
     {
         [DataMember]
-        public string Path = "";    // 记录路径
+        public string Path { get; set; }    // 记录路径
         [DataMember]
-        public int Weight = 0;  // 权值
+        public int Weight { get; set; }  // 权值
         [DataMember]
-        public int Threshold = 0;   // 阈值
+        public int Threshold { get; set; }   // 阈值
         [DataMember]
-        public string[] Cols = null;    // 其余的列。一般为题名、作者，或者书目摘要
+        public string[] Cols { get; set; }    // 其余的列。一般为题名、作者，或者书目摘要
 
         // 2018/11/22
         [DataMember]

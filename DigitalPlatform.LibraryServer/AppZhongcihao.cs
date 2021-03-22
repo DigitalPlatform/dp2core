@@ -1133,11 +1133,11 @@ for (int i = 0; i < nodes.Count; i++)
     public class ZhongcihaoSearchResult
     {
         [DataMember]
-        public string Path = "";    // 记录路径
+        public string Path { get; set; }    // 记录路径
         [DataMember]
-        public string Zhongcihao = "";  // 同类书区分号
+        public string Zhongcihao { get; set; }  // 同类书区分号
         [DataMember]
-        public string[] Cols = null;    // 其余的列。一般为题名、作者，或者书目摘要
+        public string[] Cols { get; set; }    // 其余的列。一般为题名、作者，或者书目摘要
     }
 
     // 数据库的有关种次号的特性
@@ -1145,13 +1145,13 @@ for (int i = 0; i < nodes.Count; i++)
     public class DbZhongcihaoProperty
     {
         [DataMember]
-        public string DbName = "";
+        public string DbName { get; set; }
         [DataMember]
-        public string NumberXPath = ""; // "rightxpath"
+        public string NumberXPath { get; set; } // "rightxpath"
         [DataMember]
-        public string TitleXPath = "";  // "titlexpath"
+        public string TitleXPath { get; set; }  // "titlexpath"
         [DataMember]
-        public string AuthorXPath = ""; // "authorxpath"
+        public string AuthorXPath { get; set; } // "authorxpath"
 
     }
 }

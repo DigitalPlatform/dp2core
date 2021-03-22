@@ -973,9 +973,9 @@ namespace DigitalPlatform.LibraryServer
     public class DateExist
     {
         [DataMember]
-        public string Date = "";
+        public string Date { get; set; }
         [DataMember]
-        public bool Exist = false;
+        public bool Exist { get; set; }
     }
 
     [DataContract(Namespace = "http://dp2003.com/dp2library/")]
@@ -983,22 +983,22 @@ namespace DigitalPlatform.LibraryServer
     {
         // 统计起止日期
         [DataMember]
-        public string StartDate = "";
+        public string StartDate { get; set; }
         [DataMember]
-        public string EndDate = "";
+        public string EndDate { get; set; }
 
         // 实际存在统计信息的起止日期
         [DataMember]
-        public string RealStartDate = "";
+        public string RealStartDate { get; set; }
         [DataMember]
-        public string RealEndDate = "";
+        public string RealEndDate { get; set; }
 
         // 统计起止日期跨越的天数
         [DataMember]
-        public long Days = 0;   // 天数
+        public long Days { get; set; }   // 天数
 
         // 实际存在统计信息的天数
         [DataMember]
-        public long RealDays = 0;
+        public long RealDays { get; set; }
     }
 }

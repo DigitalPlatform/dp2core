@@ -977,18 +977,18 @@ namespace DigitalPlatform.LibraryServer
     public class CallNumberSearchResult
     {
         [DataMember]
-        public string ItemRecPath = "";    // 实体记录路径
+        public string ItemRecPath { get; set; }    // 实体记录路径
         [DataMember]
-        public string CallNumber = "";  // 索取号全部
+        public string CallNumber { get; set; }  // 索取号全部
         [DataMember]
-        public string Location = "";    // 馆藏地点
+        public string Location { get; set; }    // 馆藏地点
         [DataMember]
-        public string Barcode = ""; // 册条码号
-        // public string[] Cols = null;    // 其余的列。一般为题名、作者，或者书目摘要
+        public string Barcode { get; set; } // 册条码号
+        // public string[] Cols { get; set; }    // 其余的列。一般为题名、作者，或者书目摘要
         [DataMember]
-        public string ParentID = "";    // 父(书目)记录ID
+        public string ParentID { get; set; }    // 父(书目)记录ID
         [DataMember]
-        public string ErrorInfo = "";   // 出错信息
+        public string ErrorInfo { get; set; }   // 出错信息
     }
 
 }

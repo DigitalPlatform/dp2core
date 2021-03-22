@@ -6600,32 +6600,32 @@ out strError);
     public class EntityInfo
     {
         [DataMember]
-        public string RefID = "";  // 2008/2/17  前端发出Set...请求时给出的识别id，服务器包含在响应中，便于前端在响应后继续处理
+        public string RefID { get; set; }  // 2008/2/17  前端发出Set...请求时给出的识别id，服务器包含在响应中，便于前端在响应后继续处理
 
         [DataMember]
-        public string OldRecPath = "";  // 原记录路径 2007/6/2 
+        public string OldRecPath { get; set; }  // 原记录路径 2007/6/2 
         [DataMember]
-        public string OldRecord = "";   // 旧记录
+        public string OldRecord { get; set; }   // 旧记录
         [DataMember]
-        public byte[] OldTimestamp = null;  // 旧记录对应的时间戳
+        public byte[] OldTimestamp { get; set; }  // 旧记录对应的时间戳
 
         [DataMember]
-        public string NewRecPath = ""; // 新记录路径
+        public string NewRecPath { get; set; } // 新记录路径
         [DataMember]
-        public string NewRecord = "";   // 新记录
+        public string NewRecord { get; set; }   // 新记录
         [DataMember]
-        public byte[] NewTimestamp = null;  // 新记录对应的时间戳
+        public byte[] NewTimestamp { get; set; }  // 新记录对应的时间戳
 
         [DataMember]
-        public string Action = "";   // 要执行的操作(get时此项无用) 值为new change delete move 4种之一。change要求OldRecPath和NewRecPath一样。move不要求两者一样。把move操作单列出来，主要是为了日志统计的便利。
+        public string Action { get; set; }   // 要执行的操作(get时此项无用) 值为new change delete move 4种之一。change要求OldRecPath和NewRecPath一样。move不要求两者一样。把move操作单列出来，主要是为了日志统计的便利。
 
         [DataMember]
-        public string Style = "";   // 2008/10/6  风格。常用作附加的特性参数。例如: nocheckdup,noeventlog,force
+        public string Style { get; set; }   // 2008/10/6  风格。常用作附加的特性参数。例如: nocheckdup,noeventlog,force
 
         [DataMember]
-        public string ErrorInfo = "";   // 出错信息
+        public string ErrorInfo { get; set; }   // 出错信息
         [DataMember]
-        public ErrorCodeValue ErrorCode = ErrorCodeValue.NoError;   // 出错码（表示属于何种类型的错误）
+        public ErrorCodeValue ErrorCode { get; set; } // = ErrorCodeValue.NoError;   // 出错码（表示属于何种类型的错误）
 
         public EntityInfo(EntityInfo info)
         {
