@@ -13,6 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 using DigitalPlatform.LibraryServer;
 using DigitalPlatform.rms;
+using DigitalPlatform.Message;
 
 namespace dp2LibraryServer.Controllers
 {
@@ -484,7 +485,7 @@ namespace dp2LibraryServer.Controllers
                 {
                     MoveReaderInfoResult = result,
                     strTargetRecPath = strTargetRecPath,
-                    target_timestamp = target_timestamp,
+                    target_timestamp = From(target_timestamp),
                 };
             }
         }
@@ -496,7 +497,7 @@ namespace dp2LibraryServer.Controllers
             public LibraryServerResult MoveReaderInfoResult { get; set; }
 
             public string strTargetRecPath { get; set; }
-            public byte[] target_timestamp { get; set; }
+            public int[] target_timestamp { get; set; }
         }
 
         public class MoveReaderInfoRequest
@@ -745,7 +746,7 @@ out Record[] searchresults);
             return new GetRecordResponse
             {
                 GetRecordResult = result,
-                timestamp = timestamp,
+                timestamp = From(timestamp),
                 strXml = strXml,
             };
         }
@@ -755,7 +756,7 @@ out Record[] searchresults);
         public class GetRecordResponse
         {
             public LibraryServerResult GetRecordResult { get; set; }
-            public byte[] timestamp { get; set; }
+            public int[] timestamp { get; set; }
             public string strXml { get; set; }
         }
 
@@ -889,7 +890,7 @@ out Record[] searchresults);
     request.strBiblioRecPath,
     request.strBiblioType,
     request.strBiblio,
-    request.baTimestamp,
+    From(request.baTimestamp),
     request.strComment,
     request.strStyle,
     out string strOutputBiblioRecPath,
@@ -898,7 +899,7 @@ out Record[] searchresults);
             {
                 SetBiblioInfoResult = result,
                 strOutputBiblioRecPath = strOutputBiblioRecPath,
-                baOutputTimestamp = baOutputTimestamp,
+                baOutputTimestamp = From(baOutputTimestamp),
             };
         }
 
@@ -908,7 +909,7 @@ out Record[] searchresults);
         {
             public LibraryServerResult SetBiblioInfoResult { get; set; }
             public string strOutputBiblioRecPath { get; set; }
-            public byte[] baOutputTimestamp { get; set; }
+            public int[] baOutputTimestamp { get; set; }
         }
 
         public class SetBiblioInfoRequest
@@ -917,7 +918,7 @@ out Record[] searchresults);
             public string strBiblioRecPath { get; set; }
             public string strBiblioType { get; set; }
             public string strBiblio { get; set; }
-            public byte[] baTimestamp { get; set; }
+            public int[] baTimestamp { get; set; }
             public string strComment { get; set; }
             public string strStyle { get; set; }
         }
@@ -935,7 +936,7 @@ out Record[] searchresults);
     request.strBiblioRecPath,
     request.strBiblioType,
     request.strBiblio,
-    request.baTimestamp,
+    From(request.baTimestamp),
     request.strNewBiblioRecPath,
     request.strNewBiblio,
     request.strMergeStyle,
@@ -947,7 +948,7 @@ out Record[] searchresults);
                 CopyBiblioInfoResult = result,
                 strOutputBiblio = strOutputBiblio,
                 strOutputBiblioRecPath = strOutputBiblioRecPath,
-                baOutputTimestamp = baOutputTimestamp,
+                baOutputTimestamp = From(baOutputTimestamp),
             };
         }
 
@@ -958,7 +959,7 @@ out Record[] searchresults);
             public LibraryServerResult CopyBiblioInfoResult { get; set; }
             public string strOutputBiblio { get; set; }
             public string strOutputBiblioRecPath { get; set; }
-            public byte[] baOutputTimestamp { get; set; }
+            public int[] baOutputTimestamp { get; set; }
         }
 
         public class CopyBiblioInfoRequest
@@ -967,7 +968,7 @@ out Record[] searchresults);
             public string strBiblioRecPath { get; set; }
             public string strBiblioType { get; set; }
             public string strBiblio { get; set; }
-            public byte[] baTimestamp { get; set; }
+            public int[] baTimestamp { get; set; }
             public string strNewBiblioRecPath { get; set; }
             public string strNewBiblio { get; set; }
             public string strMergeStyle { get; set; }
@@ -1024,7 +1025,7 @@ out Record[] searchresults);
             {
                 GetBiblioInfosResult = result,
                 results = results,
-                baTimestamp = baTimestamp,
+                baTimestamp = From(baTimestamp),
             };
         }
 
@@ -1034,7 +1035,7 @@ out Record[] searchresults);
         {
             public LibraryServerResult GetBiblioInfosResult { get; set; }
             public string[] results { get; set; }
-            public byte[] baTimestamp { get; set; }
+            public int[] baTimestamp { get; set; }
         }
 
         public class GetBiblioInfosRequest
@@ -1110,7 +1111,7 @@ out Record[] searchresults);
                 GetItemInfoResult = result,
                 strResult = strResult,
                 strItemRecPath = strItemRecPath,
-                item_timestamp = item_timestamp,
+                item_timestamp = From(item_timestamp),
                 strBiblio = strBiblio,
                 strBiblioRecPath = strBiblioRecPath
             };
@@ -1124,7 +1125,7 @@ out Record[] searchresults);
 
             public string strResult { get; set; }
             public string strItemRecPath { get; set; }
-            public byte[] item_timestamp { get; set; }
+            public int[] item_timestamp { get; set; }
 
             public string strBiblio { get; set; }
             public string strBiblioRecPath { get; set; }
@@ -1840,7 +1841,7 @@ out Record[] searchresults);
                 GetOperLogResult = result,
                 strXml = strXml,
                 lHintNext = lHintNext,
-                attachment_data = attachment_data,
+                attachment_data = From(attachment_data),
                 lAttachmentTotalLength = lAttachmentTotalLength,
             };
         }
@@ -1853,7 +1854,7 @@ out Record[] searchresults);
 
             public string strXml { get; set; }
             public long lHintNext { get; set; }
-            public byte[] attachment_data { get; set; }
+            public int[] attachment_data { get; set; }
             public long lAttachmentTotalLength { get; set; }
         }
 
@@ -2484,14 +2485,14 @@ request.strBarcode,
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SearchOneClassCallNumber(
-                request. strArrangeGroupName,
+                request.strArrangeGroupName,
             request.strClass,
             request.strResultSetName,
             out string strQueryXml);
             return new SearchOneClassCallNumberResponse
             {
                 SearchOneClassCallNumberResult = result,
-                strQueryXml= strQueryXml,
+                strQueryXml = strQueryXml,
             };
         }
 
@@ -2518,7 +2519,7 @@ request.strBarcode,
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.GetCallNumberSearchResult(
-                request. strArrangeGroupName,
+                request.strArrangeGroupName,
             request.strResultSetName,
             request.lStart,
             request.lCount,
@@ -2552,6 +2553,658 @@ request.strBarcode,
         }
 
         #endregion
+
+        [HttpPost]
+        public GetOneClassTailNumberResponse GetOneClassTailNumber(
+           [FromBody] GetOneClassTailNumberRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetOneClassTailNumber(
+                request.strArrangeGroupName,
+           request.strClass,
+           out string strTailNumber);
+            return new GetOneClassTailNumberResponse
+            {
+                GetOneClassTailNumberResult = result,
+                strTailNumber = strTailNumber,
+            };
+        }
+
+        #region GetOneClassTailNumber
+
+        public class GetOneClassTailNumberResponse
+        {
+            public LibraryServerResult GetOneClassTailNumberResult { get; set; }
+            public string strTailNumber { get; set; }
+        }
+
+        public class GetOneClassTailNumberRequest
+        {
+            public string strArrangeGroupName { get; set; }
+            public string strClass { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetOneClassTailNumberResponse SetOneClassTailNumber(
+           [FromBody] SetOneClassTailNumberRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetOneClassTailNumber(
+                request.strAction,
+           request.strArrangeGroupName,
+           request.strClass,
+           request.strTestNumber,
+           out string strOutputNumber);
+            return new SetOneClassTailNumberResponse
+            {
+                SetOneClassTailNumberResult = result,
+                strOutputNumber = strOutputNumber,
+            };
+        }
+
+        #region SetOneClassTailNumber()
+
+        public class SetOneClassTailNumberResponse
+        {
+            public LibraryServerResult SetOneClassTailNumberResult { get; set; }
+            public string strOutputNumber { get; set; }
+        }
+
+        public class SetOneClassTailNumberRequest
+        {
+            public string strAction { get; set; }
+            public string strArrangeGroupName { get; set; }
+            public string strClass { get; set; }
+            public string strTestNumber { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SearchUsedZhongcihaoResponse SearchUsedZhongcihao(
+           [FromBody] SearchUsedZhongcihaoRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SearchUsedZhongcihao(
+                request.strZhongcihaoGroupName,
+           request.strClass,
+           request.strResultSetName,
+           out string strQueryXml);
+            return new SearchUsedZhongcihaoResponse
+            {
+                SearchUsedZhongcihaoResult = result,
+                strQueryXml = strQueryXml,
+            };
+        }
+
+        #region SearchUsedZhongcihao()
+
+        public class SearchUsedZhongcihaoResponse
+        {
+            public LibraryServerResult SearchUsedZhongcihaoResult { get; set; }
+            public string strQueryXml { get; set; }
+        }
+
+        public class SearchUsedZhongcihaoRequest
+        {
+            public string strZhongcihaoGroupName { get; set; }
+            public string strClass { get; set; }
+            public string strResultSetName { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetZhongcihaoSearchResultResponse GetZhongcihaoSearchResult(
+           [FromBody] GetZhongcihaoSearchResultRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetZhongcihaoSearchResult(
+                request.strZhongcihaoGroupName,
+           request.strResultSetName,
+           request.lStart,
+           request.lCount,
+           request.strBrowseInfoStyle,
+           request.strLang,
+           out ZhongcihaoSearchResult[] searchresults);
+            return new GetZhongcihaoSearchResultResponse
+            {
+                GetZhongcihaoSearchResultResult = result,
+                searchresults = searchresults,
+            };
+        }
+
+        #region GetZhongcihaoSearchResult()
+
+        public class GetZhongcihaoSearchResultResponse
+        {
+            public LibraryServerResult GetZhongcihaoSearchResultResult { get; set; }
+            public ZhongcihaoSearchResult[] searchresults { get; set; }
+        }
+
+        public class GetZhongcihaoSearchResultRequest
+        {
+            public string strZhongcihaoGroupName { get; set; }
+            public string strResultSetName { get; set; }
+            public long lStart { get; set; }
+            public long lCount { get; set; }
+            public string strBrowseInfoStyle { get; set; }
+            public string strLang { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetZhongcihaoTailNumberResponse GetZhongcihaoTailNumber(
+            [FromBody] GetZhongcihaoTailNumberRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetZhongcihaoTailNumber(
+                request.strZhongcihaoGroupName,
+            request.strClass,
+            out string strTailNumber);
+            return new GetZhongcihaoTailNumberResponse
+            {
+                GetZhongcihaoTailNumberResult = result,
+                strTailNumber = strTailNumber,
+            };
+        }
+
+        #region GetZhongcihaoTailNumber()
+
+        public class GetZhongcihaoTailNumberResponse
+        {
+            public LibraryServerResult GetZhongcihaoTailNumberResult { get; set; }
+            public string strTailNumber { get; set; }
+        }
+
+        public class GetZhongcihaoTailNumberRequest
+        {
+            public string strZhongcihaoGroupName { get; set; }
+            public string strClass { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetZhongcihaoTailNumberResponse SetZhongcihaoTailNumber(
+           [FromBody] SetZhongcihaoTailNumberRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetZhongcihaoTailNumber(
+                request.strAction,
+           request.strZhongcihaoGroupName,
+           request.strClass,
+           request.strTestNumber,
+           out string strOutputNumber);
+            return new SetZhongcihaoTailNumberResponse
+            {
+                SetZhongcihaoTailNumberResult = result,
+                strOutputNumber = strOutputNumber,
+            };
+        }
+
+        #region SetZhongcihaoTailNumber()
+
+        public class SetZhongcihaoTailNumberResponse
+        {
+            public LibraryServerResult SetZhongcihaoTailNumberResult { get; set; }
+
+            public string strOutputNumber { get; set; }
+        }
+
+        public class SetZhongcihaoTailNumberRequest
+        {
+            public string strAction { get; set; }
+            public string strZhongcihaoGroupName { get; set; }
+            public string strClass { get; set; }
+            public string strTestNumber { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SearchDupResponse SearchDup(
+           [FromBody] SearchDupRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SearchDup(
+                request.strOriginBiblioRecPath,
+           request.strOriginBiblioRecXml,
+           request.strProjectName,
+           request.strStyle,
+           out string strUsedProjectName);
+            return new SearchDupResponse
+            {
+                SearchDupResult = result,
+                strUsedProjectName = strUsedProjectName,
+            };
+        }
+
+        #region SearchDup()
+
+        public class SearchDupResponse
+        {
+            public LibraryServerResult SearchDupResult { get; set; }
+            public string strUsedProjectName { get; set; }
+        }
+
+        public class SearchDupRequest
+        {
+            public string strOriginBiblioRecPath { get; set; }
+            public string strOriginBiblioRecXml { get; set; }
+            public string strProjectName { get; set; }
+            public string strStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPatch]
+        public GetDupSearchResultResponse GetDupSearchResult(
+            [FromBody] GetDupSearchResultRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetDupSearchResult(
+                request.lStart,
+            request.lCount,
+            request.strBrowseInfoStyle,
+            out DupSearchResult[] searchresults);
+            return new GetDupSearchResultResponse
+            {
+                GetDupSearchResultResult = result,
+                searchresults = searchresults,
+            };
+        }
+
+        #region GetDupSearchResult()
+
+        public class GetDupSearchResultResponse
+        {
+            public LibraryServerResult GetDupSearchResultResult { get; set; }
+
+            public DupSearchResult[] searchresults { get; set; }
+        }
+
+        public class GetDupSearchResultRequest
+        {
+            public long lStart { get; set; }
+            public long lCount { get; set; }
+            public string strBrowseInfoStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ListDupProjectInfosResponse ListDupProjectInfos(
+            [FromBody] ListDupProjectInfosRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ListDupProjectInfos(
+                request.strOriginBiblioDbName,
+            out DupProjectInfo[] results);
+            return new ListDupProjectInfosResponse
+            {
+                ListDupProjectInfosResult = result,
+                results = results,
+            };
+        }
+
+        #region ListDupProjectInfos()
+
+        public class ListDupProjectInfosResponse
+        {
+            public LibraryServerResult ListDupProjectInfosResult { get; set; }
+
+            public DupProjectInfo[] results { get; set; }
+        }
+
+        public class ListDupProjectInfosRequest
+        {
+            public string strOriginBiblioDbName { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetUtilInfoResponse GetUtilInfo(
+           [FromBody] GetUtilInfoRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetUtilInfo(
+                request.strAction,
+           request.strDbName,
+           request.strFrom,
+           request.strKey,
+           request.strValueAttrName,
+           out string strValue);
+            return new GetUtilInfoResponse
+            {
+                GetUtilInfoResult = result,
+                strValue = strValue,
+            };
+        }
+
+        #region GetUtilInfo()
+
+        public class GetUtilInfoResponse
+        {
+            public LibraryServerResult GetUtilInfoResult { get; set; }
+
+            public string strValue { get; set; }
+        }
+
+        public class GetUtilInfoRequest
+        {
+            public string strAction { get; set; }
+            public string strDbName { get; set; }
+            public string strFrom { get; set; }
+            public string strKey { get; set; }
+            public string strValueAttrName { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetUtilInfoResponse SetUtilInfo(
+            [FromBody] SetUtilInfoRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetUtilInfo(
+                request.strAction,
+            request.strDbName,
+            request.strFrom,
+            request.strRootElementName,
+            request.strKeyAttrName,
+            request.strValueAttrName,
+            request.strKey,
+            request.strValue);
+            return new SetUtilInfoResponse
+            {
+                SetUtilInfoResult = result,
+            };
+        }
+
+        #region SetUtilInfo()
+
+        public class SetUtilInfoResponse
+        {
+            public LibraryServerResult SetUtilInfoResult { get; set; }
+        }
+
+        public class SetUtilInfoRequest
+        {
+            public string strAction { get; set; }
+            public string strDbName { get; set; }
+            public string strFrom { get; set; }
+            public string strRootElementName { get; set; }
+            public string strKeyAttrName { get; set; }
+            public string strValueAttrName { get; set; }
+            public string strKey { get; set; }
+            public string strValue { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetResResponse GetRes(
+            [FromBody] GetResRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetRes(
+                request.strResPath,
+            request.nStart,
+            request.nLength,
+            request.strStyle,
+            out byte[] baContent,
+            out string strMetadata,
+            out string strOutputResPath,
+            out byte[] baOutputTimestamp);
+            return new GetResResponse
+            {
+                GetResResult = result,
+                baContent = From(baContent),
+                strMetadata = strMetadata,
+                strOutputResPath = strOutputResPath,
+                baOutputTimestamp = From(baOutputTimestamp),
+            };
+        }
+
+        #region GetRes()
+
+        public class GetResResponse
+        {
+            public LibraryServerResult GetResResult { get; set; }
+
+            public int[] baContent { get; set; }
+            public string strMetadata { get; set; }
+            public string strOutputResPath { get; set; }
+            public int[] baOutputTimestamp { get; set; }
+        }
+
+        public class GetResRequest
+        {
+            public string strResPath { get; set; }
+            public long nStart { get; set; }
+            public int nLength { get; set; }
+            public string strStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public WriteResResponse WriteRes(
+           [FromBody] WriteResRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.WriteRes(
+                request.strResPath,
+           request.strRanges,
+           request.lTotalLength,
+           From(request.baContent),
+           request.strMetadata,
+           request.strStyle,
+           From(request.baInputTimestamp),
+           out string strOutputResPath,
+           out byte[] baOutputTimestamp);
+            return new WriteResResponse
+            {
+                WriteResResult = result,
+                strOutputResPath = strOutputResPath,
+                baOutputTimestamp = From(baOutputTimestamp),
+            };
+        }
+
+
+        #region WriteRes()
+
+        public class WriteResResponse
+        {
+            public LibraryServerResult WriteResResult { get; set; }
+
+            public string strOutputResPath { get; set; }
+            public int[] baOutputTimestamp { get; set; }
+        }
+
+        public class WriteResRequest
+        {
+            public string strResPath { get; set; }
+            public string strRanges { get; set; }
+            public long lTotalLength { get; set; }
+            public int[] baContent { get; set; }
+            public string strMetadata { get; set; }
+            public string strStyle { get; set; }
+            public int[] baInputTimestamp { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetCommentsResponse GetComments(
+           [FromBody] GetCommentsRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetComments(
+                request. strBiblioRecPath,
+           request.lStart,
+           request.lCount,
+           request.strStyle,
+           request.strLang,
+           out EntityInfo[] commentinfos);
+            return new GetCommentsResponse
+            {
+                GetCommentsResult = result,
+                commentinfos = commentinfos,
+            };
+        }
+
+        #region GetComments()
+
+        public class GetCommentsResponse
+        {
+            public LibraryServerResult GetCommentsResult { get; set; }
+        
+            public EntityInfo[] commentinfos { get; set; }
+        }
+
+        public class GetCommentsRequest
+        {
+            public string strBiblioRecPath { get; set; }
+            public long lStart { get; set; }
+            public long lCount { get; set; }
+            public string strStyle { get; set; }
+            public string strLang { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetCommentsResponse SetComments(
+            [FromBody] SetCommentsRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetComments(
+                request. strBiblioRecPath,
+            request.commentinfos,
+            out EntityInfo[] errorinfos);
+            return new SetCommentsResponse
+            {
+                SetCommentsResult = result,
+                errorinfos = errorinfos,
+            };
+        }
+
+        #region SetComments()
+
+        public class SetCommentsResponse
+        {
+            public LibraryServerResult SetCommentsResult { get; set; }
+
+            public EntityInfo[] errorinfos { get; set; }
+        }
+
+        public class SetCommentsRequest
+        {
+            public string strBiblioRecPath { get; set; }
+            public EntityInfo[] commentinfos { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SearchCommentResponse SearchComment(
+            [FromBody] SearchCommentRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SearchComment(
+                request. strCommentDbName,
+            request.strQueryWord,
+            request.nPerMax,
+            request.strFrom,
+            request.strMatchStyle,
+            request.strLang,
+            request.strResultSetName,
+            request.strSearchStyle,
+            request.strOutputStyle);
+            return new SearchCommentResponse
+            {
+                SearchCommentResult = result,
+            };
+        }
+
+        #region SearchComment()
+
+        public class SearchCommentResponse
+        {
+            public LibraryServerResult SearchCommentResult { get; set; }
+        }
+
+        public class SearchCommentRequest
+        {
+            public string strCommentDbName { get; set; }
+            public string strQueryWord { get; set; }
+            public int nPerMax { get; set; }
+            public string strFrom { get; set; }
+            public string strMatchStyle { get; set; }
+            public string strLang { get; set; }
+            public string strResultSetName { get; set; }
+            public string strSearchStyle { get; set; }
+            public string strOutputStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetMessageResponse GetMessage(
+            [FromBody] GetMessageRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetMessage(
+                request. message_ids,
+request.messagelevel,
+out List<MessageData> messages);
+            return new GetMessageResponse
+            {
+                GetMessageResult = result,
+                messages = messages,
+            };
+        }
+
+        #region GetMessage()
+
+        public class GetMessageResponse
+        {
+            public LibraryServerResult GetMessageResult { get; set; }
+        
+            public List<MessageData> messages { get; set; }
+        }
+
+        public class GetMessageRequest
+        {
+            public string[] message_ids { get; set; }
+            public MessageLevel messagelevel { get; set; }
+        }
+
+        #endregion
+
+        LibraryServerResult ListMessage(
+string strStyle,
+string strResultsetName,
+string strBoxType,
+MessageLevel messagelevel,
+int nStart,
+int nCount,
+out int nTotalCount,
+out List<MessageData> messages)
+        {
+
+        }
+
+
+
+
+
 
         #region 实用函数
 
