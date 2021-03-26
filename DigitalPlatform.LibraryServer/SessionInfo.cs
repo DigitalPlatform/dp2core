@@ -77,7 +77,7 @@ namespace DigitalPlatform.LibraryServer
 
         public RmsChannel GetChannel(string url)
         {
-            Debug.Assert(HttpContext != null);
+            // Debug.Assert(HttpContext != null);
             return Channels.GetChannel(url, HttpContext);
         }
 

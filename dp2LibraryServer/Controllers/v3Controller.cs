@@ -14,6 +14,7 @@ using Swashbuckle.AspNetCore.Filters;
 using DigitalPlatform.LibraryServer;
 using DigitalPlatform.rms;
 using DigitalPlatform.Message;
+using dp2.LibraryService;
 
 namespace dp2LibraryServer.Controllers
 {
@@ -701,17 +702,18 @@ request.strStyle);
             [FromBody] GetSearchResultRequest request)
         {
             using var service = ServiceStore.GetService(HttpContext);
+            DigitalPlatform.rms.Record[] searchresults = null;
             var result = service.GetSearchResult(
                 request.strResultSetName,
 request.lStart,
 request.lCount,
 request.strBrowseInfoStyle,
 request.strLang,
-out Record[] searchresults);
+out searchresults);
             return new GetSearchResultResponse
             {
                 GetSearchResultResult = result,
-                searchresults = searchresults,
+                searchresults = From(searchresults),
             };
         }
 
@@ -772,23 +774,79 @@ out Record[] searchresults);
             [FromBody] GetBrowseRecordsRequest request)
         {
             using var service = ServiceStore.GetService(HttpContext);
+            DigitalPlatform.rms.Record[] searchresults = null;
             var result = service.GetBrowseRecords(
                 request.paths,
-    request.strBrowseInfoStyle,
-    out Record[] searchresults);
+                request.strBrowseInfoStyle,
+                out searchresults);
             return new GetBrowseRecordsResponse
             {
                 GetBrowseRecordsResult = result,
-                searchresults = searchresults,
+                searchresults = From(searchresults),
             };
         }
+
+        static Record[] From(DigitalPlatform.rms.Record[] searchresults)
+        {
+            if (searchresults == null)
+                return null;
+
+            List<Record> records = new List<Record>();
+            foreach (var result in searchresults)
+            {
+                records.Add(BuildRecord(result));
+            }
+
+            return records.ToArray();
+        }
+
+        static Record BuildRecord(DigitalPlatform.rms.Record record)
+        {
+            if (record == null)
+                return null;
+            return new Record
+            {
+                Path = record.Path,
+                Keys = record.Keys,
+                Cols = record.Cols,
+                RecordBody = new RecordBody
+                {
+                    Path = record.RecordBody?.Path,
+                    Xml = record.RecordBody?.Xml,
+                    Timestamp = From(record.RecordBody?.Timestamp),
+                    Metadata = record.RecordBody?.Metadata,
+                    Result = record.RecordBody?.Result,
+                }
+            };
+        }
+
 
         #region GetBrowseRecords()
 
         public class GetBrowseRecordsResponse
         {
             public LibraryServerResult GetBrowseRecordsResult { get; set; }
+            // 这里的 Record 类是专门为了兼容 API 而新增的接口类
             public Record[] searchresults { get; set; }
+        }
+
+        // 接口类
+        public class Record
+        {
+            public string Path { get; set; }      // 带库名的全路径 原来叫ID 2010/5/17 changed
+            public KeyFrom[] Keys { get; set; }     // 检索命中的key+from字符串数组 
+            public string[] Cols { get; set; }
+            public RecordBody RecordBody { get; set; }    // 记录体。2012/1/5
+        }
+
+        // 接口类
+        public class RecordBody
+        {
+            public string Path { get; set; }      // [in] 希望写入的记录路径 [out]实际写入的路径 2012/11/11
+            public string Xml { get; set; }
+            public int[] Timestamp { get; set; }
+            public string Metadata { get; set; }
+            public Result Result { get; set; } // 结果信息
         }
 
         public class GetBrowseRecordsRequest
@@ -1385,11 +1443,11 @@ out Record[] searchresults);
             request.lCount,
             request.strStyle,
             request.strLang,
-            out EntityInfo[] issueinfos);
+            out DigitalPlatform.LibraryServer.EntityInfo[] issueinfos);
             return new GetIssuesResponse
             {
                 GetIssuesResult = result,
-                issueinfos = issueinfos,
+                issueinfos = From(issueinfos),
             };
         }
 
@@ -1400,6 +1458,86 @@ out Record[] searchresults);
             public LibraryServerResult GetIssuesResult { get; set; }
             public EntityInfo[] issueinfos { get; set; }
         }
+
+        static EntityInfo[] From(DigitalPlatform.LibraryServer.EntityInfo[] entities)
+        {
+            if (entities == null)
+                return null;
+
+            var results = new List<EntityInfo>();
+            foreach(var entity in entities)
+            {
+                results.Add(new EntityInfo(entity));
+            }
+
+            return results.ToArray();
+        }
+
+        static DigitalPlatform.LibraryServer.EntityInfo[] From(EntityInfo[] entities)
+        {
+            if (entities == null)
+                return null;
+            var results = new List<DigitalPlatform.LibraryServer.EntityInfo>();
+            foreach (var entity in entities)
+            {
+                results.Add(entity.ConvertTo());
+            }
+
+            return results.ToArray();
+        }
+
+        public class EntityInfo
+        {
+            public string RefID { get; set; } 
+
+            public string OldRecPath { get; set; }
+            public string OldRecord { get; set; }
+            public int[] OldTimestamp { get; set; }
+
+            public string NewRecPath { get; set; }
+            public string NewRecord { get; set; }
+            public int[] NewTimestamp { get; set; }
+
+            public string Action { get; set; }
+
+            public string Style { get; set; } 
+
+            public string ErrorInfo { get; set; } 
+            public ErrorCodeValue ErrorCode { get; set; }
+
+            public EntityInfo(DigitalPlatform.LibraryServer.EntityInfo info)
+            {
+                this.RefID = info.RefID;
+                this.OldRecPath = info.OldRecPath;
+                this.OldRecord = info.OldRecord;
+                this.OldTimestamp = From(info.OldTimestamp);
+                this.NewRecPath = info.NewRecPath;
+                this.NewRecord = info.NewRecord;
+                this.NewTimestamp = From(info.NewTimestamp);
+                this.Action = info.Action;
+                this.Style = info.Style;
+                this.ErrorInfo = info.ErrorInfo;
+                this.ErrorCode = info.ErrorCode;
+            }
+
+            public DigitalPlatform.LibraryServer.EntityInfo ConvertTo()
+            {
+                DigitalPlatform.LibraryServer.EntityInfo info = new DigitalPlatform.LibraryServer.EntityInfo();
+                info.RefID = this.RefID;
+                info.OldRecPath = this.OldRecPath;
+                info.OldRecord = this.OldRecord;
+                info.OldTimestamp = From(this.OldTimestamp);
+                info.NewRecPath = this.NewRecPath;
+                info.NewRecord = this.NewRecord;
+                info.NewTimestamp = From(this.NewTimestamp);
+                info.Action = this.Action;
+                info.Style = this.Style;
+                info.ErrorInfo = this.ErrorInfo;
+                info.ErrorCode = this.ErrorCode;
+                return info;
+            }
+        }
+
 
         public class GetIssuesRequest
         {
@@ -1418,13 +1556,13 @@ out Record[] searchresults);
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SetIssues(
-                 request.strBiblioRecPath,
-                request.issueinfos,
-                out EntityInfo[] errorinfos);
+                request.strBiblioRecPath,
+                From(request.issueinfos),
+                out DigitalPlatform.LibraryServer.EntityInfo[] errorinfos);
             return new SetIssuesResponse
             {
                 SetIssuesResult = result,
-                errorinfos = errorinfos,
+                errorinfos = From(errorinfos),
             };
         }
 
@@ -1498,11 +1636,11 @@ out Record[] searchresults);
            request.lCount,
            request.strStyle,
            request.strLang,
-           out EntityInfo[] entityinfos);
+           out DigitalPlatform.LibraryServer.EntityInfo[] entityinfos);
             return new GetEntitiesResponse
             {
                 GetEntitiesResult = result,
-                entityinfos = entityinfos,
+                entityinfos = From(entityinfos),
             };
         }
 
@@ -1532,12 +1670,12 @@ out Record[] searchresults);
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SetEntities(
                 request.strBiblioRecPath,
-                request.entityinfos,
-                out EntityInfo[] errorinfos);
+                From(request.entityinfos),
+                out DigitalPlatform.LibraryServer.EntityInfo[] errorinfos);
             return new SetEntitiesResponse
             {
                 SetEntitiesResult = result,
-                errorinfos = errorinfos,
+                errorinfos = From(errorinfos),
             };
         }
 
@@ -1568,11 +1706,11 @@ out Record[] searchresults);
             request.lCount,
             request.strStyle,
             request.strLang,
-            out EntityInfo[] orderinfos);
+            out DigitalPlatform.LibraryServer.EntityInfo[] orderinfos);
             return new GetOrdersResponse
             {
                 GetOrdersResult = result,
-                orderinfos = orderinfos,
+                orderinfos = From(orderinfos),
             };
         }
 
@@ -1602,12 +1740,12 @@ out Record[] searchresults);
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SetOrders(
                 request.strBiblioRecPath,
-                request.orderinfos,
-                out EntityInfo[] errorinfos);
+                From(request.orderinfos),
+                out DigitalPlatform.LibraryServer.EntityInfo[] errorinfos);
             return new SetOrdersResponse
             {
                 SetOrdersResult = result,
-                errorinfos = errorinfos,
+                errorinfos = From(errorinfos),
             };
         }
 
@@ -1777,6 +1915,8 @@ out Record[] searchresults);
         }
 
         #endregion
+
+
 
         // 获得操作日志(集合版本)
         [HttpPost]
@@ -3046,16 +3186,16 @@ request.strBarcode,
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.GetComments(
-                request. strBiblioRecPath,
+                request.strBiblioRecPath,
            request.lStart,
            request.lCount,
            request.strStyle,
            request.strLang,
-           out EntityInfo[] commentinfos);
+           out DigitalPlatform.LibraryServer.EntityInfo[] commentinfos);
             return new GetCommentsResponse
             {
                 GetCommentsResult = result,
-                commentinfos = commentinfos,
+                commentinfos = From(commentinfos),
             };
         }
 
@@ -3064,7 +3204,7 @@ request.strBarcode,
         public class GetCommentsResponse
         {
             public LibraryServerResult GetCommentsResult { get; set; }
-        
+
             public EntityInfo[] commentinfos { get; set; }
         }
 
@@ -3085,13 +3225,13 @@ request.strBarcode,
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SetComments(
-                request. strBiblioRecPath,
-            request.commentinfos,
-            out EntityInfo[] errorinfos);
+                request.strBiblioRecPath,
+                From(request.commentinfos),
+                out DigitalPlatform.LibraryServer.EntityInfo[] errorinfos);
             return new SetCommentsResponse
             {
                 SetCommentsResult = result,
-                errorinfos = errorinfos,
+                errorinfos = From(errorinfos),
             };
         }
 
@@ -3118,7 +3258,7 @@ request.strBarcode,
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.SearchComment(
-                request. strCommentDbName,
+                request.strCommentDbName,
             request.strQueryWord,
             request.nPerMax,
             request.strFrom,
@@ -3155,13 +3295,14 @@ request.strBarcode,
 
         #endregion
 
+
         [HttpPost]
         public GetMessageResponse GetMessage(
             [FromBody] GetMessageRequest request)
         {
             using var service = ServiceStore.GetService(HttpContext);
             var result = service.GetMessage(
-                request. message_ids,
+                request.message_ids,
 request.messagelevel,
 out List<MessageData> messages);
             return new GetMessageResponse
@@ -3176,7 +3317,7 @@ out List<MessageData> messages);
         public class GetMessageResponse
         {
             public LibraryServerResult GetMessageResult { get; set; }
-        
+
             public List<MessageData> messages { get; set; }
         }
 
@@ -3188,22 +3329,535 @@ out List<MessageData> messages);
 
         #endregion
 
-        LibraryServerResult ListMessage(
-string strStyle,
-string strResultsetName,
-string strBoxType,
-MessageLevel messagelevel,
-int nStart,
-int nCount,
-out int nTotalCount,
-out List<MessageData> messages)
+        [HttpPost]
+        public ListMessageResponse ListMessage(
+            [FromBody] ListMessageRequest request)
         {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ListMessage(
+                request.strStyle,
+request.strResultsetName,
+request.strBoxType,
+request.messagelevel,
+request.nStart,
+request.nCount,
+out int nTotalCount,
+out List<MessageData> messages);
+            return new ListMessageResponse
+            {
+                ListMessageResult = result,
+                nTotalCount = nTotalCount,
+                messages = messages,
+            };
+        }
 
+        #region ListMessage()
+
+        public class ListMessageResponse
+        {
+            public LibraryServerResult ListMessageResult { get; set; }
+
+            public int nTotalCount { get; set; }
+            public List<MessageData> messages { get; set; }
+        }
+
+        public class ListMessageRequest
+        {
+            public string strStyle { get; set; }
+            public string strResultsetName { get; set; }
+            public string strBoxType { get; set; }
+            public MessageLevel messagelevel { get; set; }
+            public int nStart { get; set; }
+            public int nCount { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetMessageResponse SetMessage(
+            [FromBody] SetMessageRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetMessage(
+                request.strAction,
+request.strStyle,
+request.messages,
+out List<MessageData> output_messages);
+            return new SetMessageResponse
+            {
+                SetMessageResult = result,
+                output_messages = output_messages,
+            };
+        }
+
+        #region SetMessage()
+
+        public class SetMessageResponse
+        {
+            public LibraryServerResult SetMessageResult { get; set; }
+
+            public List<MessageData> output_messages { get; set; }
+        }
+
+        public class SetMessageRequest
+        {
+            public string strAction { get; set; }
+            public string strStyle { get; set; }
+            public List<MessageData> messages { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetStatisInfoResponse GetStatisInfo(
+            [FromBody] GetStatisInfoRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetStatisInfo(
+                request.strDateRangeString,
+    request.strStyle,
+    out RangeStatisInfo info,
+    out string strXml);
+            return new GetStatisInfoResponse
+            {
+                GetStatisInfoResult = result,
+                info = info,
+                strXml = strXml,
+            };
+        }
+
+        #region GetStatisInfo()
+
+        public class GetStatisInfoResponse
+        {
+            public LibraryServerResult GetStatisInfoResult { get; set; }
+
+            public RangeStatisInfo info { get; set; }
+            public string strXml { get; set; }
+        }
+
+        public class GetStatisInfoRequest
+        {
+            public string strDateRangeString { get; set; }
+            public string strStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ExistStatisInfoResponse ExistStatisInfo(
+            [FromBody] ExistStatisInfoRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ExistStatisInfo(
+                request.strDateRangeString,
+    out List<DateExist> dates);
+            return new ExistStatisInfoResponse
+            {
+                ExistStatisInfoResult = result,
+                dates = dates,
+            };
+        }
+
+        #region ExistStatisInfo()
+
+        public class ExistStatisInfoResponse
+        {
+            public LibraryServerResult ExistStatisInfoResult { get; set; }
+
+            public List<DateExist> dates { get; set; }
+        }
+
+        public class ExistStatisInfoRequest
+        {
+            public string strDateRangeString { get; set; }
+        }
+
+        #endregion
+
+
+        [HttpPost]
+        public GetFileResponse GetFile(
+            [FromBody] GetFileRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetFile(
+                request.strCategory,
+    request.strFileName,
+    request.lStart,
+    request.lLength,
+    request.strStyle,
+    out byte[] baContent,
+    out string strFileTime);
+            return new GetFileResponse
+            {
+                GetFileResult = result,
+                baContent = From(baContent),
+                strFileTime = strFileTime,
+            };
+        }
+
+        #region GetFile()
+
+        public class GetFileResponse
+        {
+            public LibraryServerResult GetFileResult { get; set; }
+
+            public int[] baContent { get; set; }
+            public string strFileTime { get; set; }
+        }
+
+        public class GetFileRequest
+        {
+            public string strCategory { get; set; }
+            public string strFileName { get; set; }
+            public long lStart { get; set; }
+            public long lLength { get; set; }
+            public string strStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public ListFileResponse ListFile(
+            [FromBody] ListFileRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.ListFile(
+                request.strAction,
+    request.strCategory,
+    request.strFileName,
+    request.lStart,
+    request.lLength,
+    out List<FileItemInfo> infos);
+            return new ListFileResponse
+            {
+                ListFileResult = result,
+                infos = infos,
+            };
         }
 
 
+        #region ListFile()
 
+        public class ListFileResponse
+        {
+            public LibraryServerResult ListFileResult { get; set; }
 
+            public List<FileItemInfo> infos { get; set; }
+        }
+
+        public class ListFileRequest
+        {
+            public string strAction { get; set; }
+            public string strCategory { get; set; }
+            public string strFileName { get; set; }
+            public long lStart { get; set; }
+            public long lLength { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public HitCounterResponse HitCounter(
+            [FromBody] HitCounterRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.HitCounter(
+                request.strAction,
+    request.strName,
+    request.strClientAddress,
+    out long Value);
+            return new HitCounterResponse
+            {
+                HitCounterResult = result,
+                Value = Value,
+            };
+        }
+
+        #region HitCounter()
+
+        public class HitCounterResponse
+        {
+            public LibraryServerResult HitCounterResult { get; set; }
+
+            public long Value { get; set; }
+        }
+
+        public class HitCounterRequest
+        {
+            public string strAction { get; set; }
+            public string strName { get; set; }
+            public string strClientAddress { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SearchChargingResponse SearchCharging(
+            [FromBody] SearchChargingRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SearchCharging(
+                request.patronBarcode,
+    request.timeRange,
+    request.actions,
+    request.order,
+    request.start,
+    request.count,
+    out ChargingItemWrapper[] results);
+            return new SearchChargingResponse
+            {
+                SearchChargingResult = result,
+                results = results,
+            };
+        }
+
+        #region SearchCharging()
+
+        public class SearchChargingResponse
+        {
+            public LibraryServerResult SearchChargingResult { get; set; }
+
+            public ChargingItemWrapper[] results { get; set; }
+        }
+
+        public class SearchChargingRequest
+        {
+            public string patronBarcode { get; set; }
+            public string timeRange { get; set; }
+            public string actions { get; set; }
+            public string order { get; set; }
+            public long start { get; set; }
+            public long count { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public BindPatronResponse BindPatron(
+            [FromBody] BindPatronRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.BindPatron(
+                request.strAction,
+request.strQueryWord,
+request.strPassword,
+request.strBindingID,
+request.strStyle,
+request.strResultTypeList,
+out string[] results);
+            return new BindPatronResponse
+            {
+                BindPatronResult = result,
+                results = results,
+            };
+        }
+
+        #region BindPatron()
+
+        public class BindPatronResponse
+        {
+            public LibraryServerResult BindPatronResult { get; set; }
+
+            public string[] results { get; set; }
+        }
+
+        public class BindPatronRequest
+        {
+            public string strAction { get; set; }
+            public string strQueryWord { get; set; }
+            public string strPassword { get; set; }
+            public string strBindingID { get; set; }
+            public string strStyle { get; set; }
+            public string strResultTypeList { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public DirResponse Dir(
+            [FromBody] DirRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.Dir(
+                request.strResPath,
+request.lStart,
+request.lLength,
+request.strLang,
+request.strStyle,
+out ResInfoItem[] items,
+out ErrorCodeValue kernel_errorcode);
+            return new DirResponse
+            {
+                DirResult = result,
+                items = items,
+                kernel_errorcode = kernel_errorcode,
+            };
+        }
+
+        #region Dir()
+
+        public class DirResponse
+        {
+            public LibraryServerResult DirResult { get; set; }
+
+            public ResInfoItem[] items { get; set; }
+            public ErrorCodeValue kernel_errorcode { get; set; }
+        }
+
+        public class DirRequest
+        {
+            public string strResPath { get; set; }
+            public long lStart { get; set; }
+            public long lLength { get; set; }
+            public string strLang { get; set; }
+            public string strStyle { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetAuthorNumberResponse GetAuthorNumber(
+            [FromBody] GetAuthorNumberRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            List<Question> questions = request.questions;
+            var result = service.GetAuthorNumber(
+                request.strAuthor,
+request.bSelectPinyin,
+request.bSelectEntry,
+request.bOutputDebugInfo,
+ref questions,
+out string strNumber,
+out string strDebugInfo);
+            return new GetAuthorNumberResponse
+            {
+                GetAuthorNumberResult = result,
+                questions = questions,
+                strNumber = strNumber,
+                strDebugInfo = strDebugInfo,
+            };
+        }
+
+        #region GetAuthorNumber()
+
+        public class GetAuthorNumberResponse
+        {
+            public LibraryServerResult GetAuthorNumberResult { get; set; }
+
+            public List<Question> questions { get; set; }
+            public string strNumber { get; set; }
+            public string strDebugInfo { get; set; }
+        }
+
+        public class GetAuthorNumberRequest
+        {
+            public string strAuthor { get; set; }
+            public bool bSelectPinyin { get; set; }
+            public bool bSelectEntry { get; set; }
+            public bool bOutputDebugInfo { get; set; }
+            public List<Question> questions { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public GetPinyinResponse GetPinyin(
+            [FromBody] GetPinyinRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.GetPinyin(
+                request.strType,
+    request.strText,
+    out string strPinyinXml);
+            return new GetPinyinResponse
+            {
+                GetPinyinResult = result,
+                strPinyinXml = strPinyinXml,
+            };
+        }
+
+        #region GetPinyin()
+
+        public class GetPinyinResponse
+        {
+            public LibraryServerResult GetPinyinResult { get; set; }
+
+            public string strPinyinXml { get; set; }
+        }
+
+        public class GetPinyinRequest
+        {
+            public string strType { get; set; }
+            public string strText { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public SetPinyinResponse SetPinyin(
+            [FromBody] SetPinyinRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.SetPinyin(
+                request.strPinyinXml);
+            return new SetPinyinResponse
+            {
+                SetPinyinResult = result,
+            };
+        }
+
+        #region SetPinyin()
+
+        public class SetPinyinResponse
+        {
+            public LibraryServerResult SetPinyinResult { get; set; }
+        }
+
+        public class SetPinyinRequest
+        {
+            public string strPinyinXml { get; set; }
+        }
+
+        #endregion
+
+        [HttpPost]
+        public OnlineStatisResponse OnlineStatis(
+            [FromBody] OnlineStatisRequest request)
+        {
+            using var service = ServiceStore.GetService(HttpContext);
+            var result = service.OnlineStatis(
+                request.action,
+request.category,
+request.uid,
+request.style,
+out List<string> results);
+            return new OnlineStatisResponse
+            {
+                OnlineStatisResult = result,
+                results = results,
+            };
+        }
+
+        #region OnlineStatis()
+
+        public class OnlineStatisResponse
+        {
+            public LibraryServerResult OnlineStatisResult { get; set; }
+
+            public List<string> results { get; set; }
+        }
+
+        public class OnlineStatisRequest
+        {
+            public string action { get; set; }
+            public string category { get; set; }
+            public string uid { get; set; }
+            public string style { get; set; }
+        }
+
+        #endregion
 
 
         #region 实用函数

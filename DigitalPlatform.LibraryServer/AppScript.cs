@@ -127,7 +127,7 @@ namespace DigitalPlatform.LibraryServer
 
                 return 1;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 strError = $"初始化扩展消息接口时出现异常: {ex.Message}";
                 return -1;
@@ -214,7 +214,7 @@ namespace DigitalPlatform.LibraryServer
                 return -1;
 
             string[] saAddRef = {
-                "netstandard.dll",
+                // "netstandard.dll",
                 Path.Combine(this.BinDir , "digitalplatform.core.dll"),
                 Path.Combine(this.BinDir , "digitalplatform.LibraryServer.dll"),
             };
@@ -389,7 +389,7 @@ namespace DigitalPlatform.LibraryServer
             strWarning = "";
             assembly = null;
 
-
+            /*
             // 2019/4/5
             if (refs != null
                 && Array.IndexOf(refs, "netstandard.dll") == -1)
@@ -398,8 +398,11 @@ namespace DigitalPlatform.LibraryServer
                 temp.Add("netstandard.dll");
                 refs = temp.ToArray();
             }
+            */
 
-            List<PortableExecutableReference> references = new List<PortableExecutableReference>();
+            // List<PortableExecutableReference> references = new List<PortableExecutableReference>();
+
+            var references = new List<MetadataReference>();
 
             // Detect the file location for the library that defines the object type
             var systemRefLocation = typeof(Object).GetTypeInfo().Assembly.Location;
@@ -408,16 +411,30 @@ namespace DigitalPlatform.LibraryServer
 
             references.Add(systemReference);
 
+            references.AddRange(CollectReferences());
+
+            /*
             references.Add(MetadataReference.CreateFromFile(typeof(XmlDocument).GetTypeInfo().Assembly.Location));
+            */
 
             // https://www.damirscorner.com/blog/posts/20190802-CompilingAndExecutingCodeInACsApp.html
             var dotNetCoreDir = Path.GetDirectoryName(typeof(object).GetTypeInfo().Assembly.Location);
             references.Add(MetadataReference.CreateFromFile(Path.Combine(dotNetCoreDir, "System.Runtime.dll")));
-
             foreach (var path in refs)
             {
+                if (path.ToLower() == "system.windows.forms.dll")
+                    continue;
+                if (path.ToLower().StartsWith("system."))
+                {
+                    AddReference(path.ToLower());
+                    continue;
+                }
+
+                /*
                 if (path.Contains("C:") == false)
                     continue;
+                */
+
                 var reference = MetadataReference.CreateFromFile(path);
                 references.Add(reference);
             }
@@ -425,7 +442,7 @@ namespace DigitalPlatform.LibraryServer
             try
             {
                 var tree = SyntaxFactory.ParseSyntaxTree(strCode);
-                string fileName = "mylib.dll";
+                string fileName = Guid.NewGuid().ToString();    //  "mylib.dll";
 
                 // A single, immutable invocation to the compiler
                 // to produce a library
@@ -437,50 +454,47 @@ namespace DigitalPlatform.LibraryServer
 
                 string strBinDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);   //  Environment.CurrentDirectory;
 
-                string path = Path.Combine(strBinDir/*Directory.GetCurrentDirectory()*/, fileName);
-                EmitResult compilationResult = compilation.Emit(path);
+                // string path = Path.Combine(strBinDir/*Directory.GetCurrentDirectory()*/, fileName);
 
-                List<string> errors = new List<string>();
-                List<string> warnings = new List<string>();
+                using (var stream = new MemoryStream())
+                {
+                    EmitResult compilationResult = compilation.Emit(stream);
 
-                if (compilationResult.Success)
-                {
-                    // Load the assembly
-                    assembly =
-                      AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-                    /*
-                    // Invoke the RoslynCore.Helper.CalculateCircleArea method passing an argument
-                    double radius = 10;
-                    object result =
-                      asm.GetType("RoslynCore.Helper").GetMethod("CalculateCircleArea").
-                      Invoke(null, new object[] { radius });
-                    errors.Add($"Circle area with radius = {radius} is {result}");
-                    */
-                }
-                else
-                {
-                    foreach (Diagnostic codeIssue in compilationResult.Diagnostics)
+                    List<string> errors = new List<string>();
+                    List<string> warnings = new List<string>();
+
+                    if (compilationResult.Success)
                     {
-                        if (codeIssue.Severity == DiagnosticSeverity.Error)
+                        // Load the assembly
+                        // assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        assembly = AssemblyLoadContext.Default.LoadFromStream(stream);
+                    }
+                    else
+                    {
+                        foreach (Diagnostic codeIssue in compilationResult.Diagnostics)
                         {
-                            string issue = $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()},Location: { codeIssue.Location.GetLineSpan()},Severity: { codeIssue.Severity}";
-                            errors.Add(issue);
-                        }
-                        else
-                        {
-                            string issue = $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()},Location: { codeIssue.Location.GetLineSpan()},Severity: { codeIssue.Severity}";
-                            warnings.Add(issue);
+                            if (codeIssue.Severity == DiagnosticSeverity.Error)
+                            {
+                                string issue = $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()},Location: { codeIssue.Location.GetLineSpan()},Severity: { codeIssue.Severity}";
+                                errors.Add(issue);
+                            }
+                            else
+                            {
+                                string issue = $"ID: {codeIssue.Id}, Message: {codeIssue.GetMessage()},Location: { codeIssue.Location.GetLineSpan()},Severity: { codeIssue.Severity}";
+                                warnings.Add(issue);
+                            }
                         }
                     }
-                }
 
-                if (errors.Count > 0)
-                {
-                    strError = StringUtil.MakePathList(errors, "\r\n");
-                    return -1;
-                }
+                    if (errors.Count > 0)
+                    {
+                        strError = StringUtil.MakePathList(errors, "\r\n");
+                        return -1;
+                    }
 
-                strWarning = StringUtil.MakePathList(warnings, "\r\n");
+                    strWarning = StringUtil.MakePathList(warnings, "\r\n");
+                }
             }
             catch (Exception ex)
             {
@@ -515,6 +529,69 @@ namespace DigitalPlatform.LibraryServer
             */
 
             return 0;
+
+            void AddReference(string fileName)
+            {
+                int count = 0;
+                // 先直接尝试文件名原名
+                string path = Path.Combine(dotNetCoreDir, fileName);
+                if (File.Exists(path))
+                {
+                    references.Add(MetadataReference.CreateFromFile(path));
+                    count++;
+                }
+
+                // 再尝试 system.Private.xxx.dll
+                fileName = fileName.Replace("system.", "system.private.");
+                path = Path.Combine(dotNetCoreDir, fileName);
+                if (File.Exists(path))
+                {
+                    references.Add(MetadataReference.CreateFromFile(path));
+                    count++;
+                }
+
+                if (count == 0)
+                    throw new Exception($"DLL '{fileName}' 没有找到");
+            }
+        }
+
+        // https://github.com/dotnet/runtime/issues/18502
+        private static List<MetadataReference> CollectReferences()
+        {
+            // first, collect all assemblies
+            var assemblies = new HashSet<Assembly>();
+
+            Collect(Assembly.Load(new AssemblyName("netstandard")));
+
+            //// add extra assemblies which are not part of netstandard.dll, for example:
+            //Collect(typeof(Uri).Assembly);
+
+            // second, build metadata references for these assemblies
+            var result = new List<MetadataReference>(assemblies.Count);
+            foreach (var assembly in assemblies)
+            {
+                result.Add(MetadataReference.CreateFromFile(assembly.Location));
+            }
+
+            return result;
+
+            // helper local function - add assembly and its referenced assemblies
+            void Collect(Assembly assembly)
+            {
+                if (!assemblies.Add(assembly))
+                {
+                    // already added
+                    return;
+                }
+
+                var referencedAssemblyNames = assembly.GetReferencedAssemblies();
+
+                foreach (var assemblyName in referencedAssemblyNames)
+                {
+                    var loadedAssembly = Assembly.Load(assemblyName);
+                    assemblies.Add(loadedAssembly);
+                }
+            }
         }
 
 #if REMOVED

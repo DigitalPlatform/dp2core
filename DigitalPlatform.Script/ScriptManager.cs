@@ -1563,6 +1563,7 @@ namespace DigitalPlatform.Script
             return 1;
         }
 
+#if REMOVED
         // (对refs中的宏不加以处理)
         // 直接编译到内存
         // parameters:
@@ -1657,6 +1658,8 @@ namespace DigitalPlatform.Script
 
             return 0;
         }
+
+#endif
 
         // 构造出错信息字符串
         public static int getErrorInfo(CompilerErrorCollection errors,

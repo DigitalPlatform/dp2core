@@ -175,13 +175,12 @@ namespace DigitalPlatform.LibraryServer
                                          strBinDir + "\\digitalplatform.core.dll",
                                          strBinDir + "\\digitalplatform.marcdom.dll",
 										 strBinDir + "\\digitalplatform.marckernel.dll",
-										 strBinDir + "\\digitalplatform.rms.client.dll",
+										 // strBinDir + "\\digitalplatform.rms.client.dll",
 										 strBinDir + "\\digitalplatform.libraryserver.dll",
 										 strBinDir + "\\digitalplatform.dll",
 										 strBinDir + "\\digitalplatform.Text.dll",
 										 strBinDir + "\\digitalplatform.IO.dll",
 										 strBinDir + "\\digitalplatform.Xml.dll",
-										 // strBinDir + "\\dp2rms.exe",
 										 };
 
                         string strWarning = "";
@@ -209,6 +208,7 @@ namespace DigitalPlatform.LibraryServer
                         string[] saRef = StringUtil.Append(saRef2, saAddRef1);
                         Assembly assembly1 = null;
 
+                        /*
                         // 创建Script的Assembly
                         // 本函数内对saRef不再进行宏替换
                         nRet = ScriptManager.CreateAssembly_1(strCode,
@@ -217,6 +217,17 @@ namespace DigitalPlatform.LibraryServer
                             out assembly1,
                             out strError1,
                             out strWarning);
+                        */
+                        // 2021/3/26
+                        // result:
+                        //		-1  出错
+                        //		0   成功
+                        nRet = CreateAssembly(strCode,
+                            saRef,
+                            out assembly1,
+                            out strError1,
+                            out strWarning);
+
                         if (nRet == -2)
                             throw new Exception(strError1);
                         if (nRet == -1)
@@ -522,6 +533,7 @@ namespace DigitalPlatform.LibraryServer
 #endif
 
                         Assembly assembly1 = null;
+                        /*
                         // 创建Script的Assembly
                         // 本函数内对saRef不再进行宏替换
                         nRet = ScriptManager.CreateAssembly_1(strCode,
@@ -530,6 +542,17 @@ namespace DigitalPlatform.LibraryServer
                             out assembly1,
                             out strError1,
                             out strWarning);
+                        */
+                        // 2021/3/26
+                        // result:
+                        //		-1  出错
+                        //		0   成功
+                        nRet = CreateAssembly(strCode,
+                            saRef,
+                            out assembly1,
+                            out strError1,
+                            out strWarning);
+
                         if (nRet == -2)
                             throw new Exception(strError1);
                         if (nRet == -1)

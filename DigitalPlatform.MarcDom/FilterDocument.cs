@@ -1583,6 +1583,7 @@ namespace DigitalPlatform.MarcDom
             return results;
         }
 
+#if REMOVED
         // 创建Assembly
         // parameters:
         //	strCode:	脚本代码
@@ -1654,6 +1655,8 @@ namespace DigitalPlatform.MarcDom
 
             return results.CompiledAssembly;
         }
+
+#endif
 
         // 构造出错信息字符串
         public string getErrorInfo(CompilerErrorCollection errors)
