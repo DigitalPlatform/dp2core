@@ -1829,7 +1829,7 @@ namespace DigitalPlatform.LibraryServer
 
                 try
                 {
-                    MessageQueue queue = new MessageQueue(this.OutgoingQueue);
+                    TestMessageQueue queue = new TestMessageQueue(this.OutgoingQueue);
 
                     // 向 MSMQ 消息队列发送消息
                     // return:
@@ -2443,7 +2443,7 @@ namespace DigitalPlatform.LibraryServer
 
                 try
                 {
-                    MessageQueue queue = new MessageQueue(this.OutgoingQueue);
+                    TestMessageQueue queue = new TestMessageQueue(this.OutgoingQueue);
 
                     // 向 MSMQ 消息队列发送消息
                     // return:

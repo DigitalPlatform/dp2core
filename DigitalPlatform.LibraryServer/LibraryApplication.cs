@@ -15413,7 +15413,7 @@ strLibraryCode);    // 读者所在的馆代码
         {
             try
             {
-                using (MessageQueue queue = new MessageQueue(this.OutgoingQueue))
+                using (TestMessageQueue queue = new TestMessageQueue(this.OutgoingQueue))
                 {
                     // 向 MSMQ 消息队列发送消息
                     // return:
@@ -15456,7 +15456,7 @@ strLibraryCode);    // 读者所在的馆代码
 
             try
             {
-                MessageQueue queue = new MessageQueue(this.OutgoingQueue);
+                TestMessageQueue queue = new TestMessageQueue(this.OutgoingQueue);
 
                 XmlDocument dom = new XmlDocument();
                 dom.LoadXml("<root />");

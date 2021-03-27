@@ -34,7 +34,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 try
                 {
-                    _queue = new MessageQueue(this.App.OutgoingQueue);
+                    _queue = new TestMessageQueue(this.App.OutgoingQueue);
                     // _queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
                 }
                 catch (Exception ex)
@@ -208,7 +208,7 @@ namespace DigitalPlatform.LibraryServer
             }
         }
 
-        MessageQueue _queue = null;
+        TestMessageQueue _queue = null;
 
         // return:
         //      -2  MSMQ 错误

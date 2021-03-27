@@ -34,7 +34,7 @@ namespace DigitalPlatform.LibraryServer
             }
         }
 
-        MessageQueue _queue = null;
+        TestMessageQueue _queue = null;
 
         // 一次操作循环
         // TODO: 是否需要对读者记录加锁？
@@ -151,7 +151,7 @@ namespace DigitalPlatform.LibraryServer
             {
                 try
                 {
-                    _queue = new MessageQueue(this.App.OutgoingQueue);
+                    _queue = new TestMessageQueue(this.App.OutgoingQueue);
                 }
                 catch (Exception ex)
                 {
@@ -1031,7 +1031,7 @@ namespace DigitalPlatform.LibraryServer
         //      -2  MSMQ 错误
         //      -1  出错
         //      0   成功
-        public static int SendToQueue(MessageQueue myQueue,
+        public static int SendToQueue(TestMessageQueue myQueue,
             string strRecipient,
             string strMime,
             string strBody,
