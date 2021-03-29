@@ -71,7 +71,7 @@ namespace UnitTestSimpleMessageQueue
             {
                 bytes.Add((byte)i);
             }
-            await queue.Push(new List<byte[]> { bytes.ToArray() });
+            await queue.PushAsync(new List<byte[]> { bytes.ToArray() });
 
             var message = await queue.PullAsync();
 
@@ -163,6 +163,7 @@ namespace UnitTestSimpleMessageQueue
 
             {
                 var message = await queue.PullAsync();
+                Assert.AreEqual(0, queue.Count);
                 Assert.AreEqual(null, message);
             }
 
@@ -208,6 +209,91 @@ namespace UnitTestSimpleMessageQueue
                 Assert.AreEqual(null, message);
             }
 
+        }
+
+
+        // 两个线程，各自创建一个 MessageQueue 对象，同时写入和读取
+        [TestMethod]
+        public async Task Test_batch_write_and_read_4()
+        {
+            string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
+            File.Delete(fileName);
+
+            var task1 = Task.Run(async () =>
+            {
+                using (MessageQueue queue = new MessageQueue(fileName, "mode:Shared"))
+                {
+                    for (int i = 0; i < 100; i++)
+                    {
+                        await queue.PushAsync(new List<string> { i.ToString() });
+                    }
+                }
+            });
+
+
+            var task2 = Task.Run(async () =>
+            {
+                // 第二个线程略迟一点启动。否则会进入死锁状态
+                // await Task.Delay(TimeSpan.FromSeconds(1));
+                using (MessageQueue queue = new MessageQueue(fileName, "mode:Shared"))
+                {
+
+                    for (int i = 0; i < 100;)
+                    {
+                        await Task.Delay(TimeSpan.FromMilliseconds(10));
+                        var message = await queue.PullAsync();
+                        if (message != null)
+                        {
+                            Assert.AreEqual(i.ToString(), message.GetString());
+                            i++;
+                        }
+                    }
+                }
+            });
+
+            await Task.WhenAll(task1, task2);
+
+            {
+                using MessageQueue queue = new MessageQueue(fileName, "mode:ReadOnly");
+                var message = await queue.PullAsync();
+                Assert.AreEqual(null, message);
+            }
+
+        }
+
+
+        [TestMethod]
+        public async Task Test_shared_open_1()
+        {
+            string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
+            File.Delete(fileName);
+
+            MessageQueue queue1 = new MessageQueue(fileName, "mode:Shared");
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    await queue1.PushAsync(new List<string> { i.ToString() });
+                }
+            }
+
+
+            MessageQueue queue2 = new MessageQueue(fileName, "mode:Shared");
+            {
+
+                for (int i = 0; i < 100;)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(10));
+                    var message = await queue2.PullAsync();
+                    if (message != null)
+                    {
+                        Assert.AreEqual(i.ToString(), message.GetString());
+                        i++;
+                    }
+                }
+            }
+
+            queue1.Dispose();
+            queue2.Dispose();
         }
 
     }
