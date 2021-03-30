@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using DigitalPlatform.SimpleMessageQueue;
+using DigitalPlatform.MessageQueue;
 
 namespace UnitTestSimpleMessageQueue
 {
@@ -17,7 +17,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task TestMethod1()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             using MessageQueue queue = new MessageQueue(fileName);
 
@@ -35,7 +35,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task TestMethod2()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             using MessageQueue queue = new MessageQueue(fileName);
 
@@ -61,7 +61,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task TestMethod3()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             using MessageQueue queue = new MessageQueue(fileName);
             queue.ChunkSize = 4096;
@@ -92,7 +92,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task Test_read_empty()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             using MessageQueue queue = new MessageQueue(fileName);
 
@@ -105,7 +105,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task Test_batch_write_and_read_1()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             using MessageQueue queue = new MessageQueue(fileName);
 
@@ -132,7 +132,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task Test_batch_write_and_read_2()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             using MessageQueue queue = new MessageQueue(fileName);
 
@@ -175,7 +175,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task Test_batch_write_and_read_3()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             using MessageQueue queue = new MessageQueue(fileName);
 
@@ -217,7 +217,7 @@ namespace UnitTestSimpleMessageQueue
         public async Task Test_batch_write_and_read_4()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
             var task1 = Task.Run(async () =>
             {
@@ -230,14 +230,12 @@ namespace UnitTestSimpleMessageQueue
                 }
             });
 
-
             var task2 = Task.Run(async () =>
             {
                 // 第二个线程略迟一点启动。否则会进入死锁状态
                 // await Task.Delay(TimeSpan.FromSeconds(1));
                 using (MessageQueue queue = new MessageQueue(fileName, "mode:Shared"))
                 {
-
                     for (int i = 0; i < 100;)
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds(10));
@@ -266,9 +264,9 @@ namespace UnitTestSimpleMessageQueue
         public async Task Test_shared_open_1()
         {
             string fileName = Path.Combine(Environment.CurrentDirectory, "mq.db");
-            File.Delete(fileName);
+            QueueStorage.DeleteDataFiles(fileName);
 
-            MessageQueue queue1 = new MessageQueue(fileName, "mode:Shared");
+            using MessageQueue queue1 = new MessageQueue(fileName, "mode:Shared");
             {
                 for (int i = 0; i < 100; i++)
                 {
@@ -277,7 +275,7 @@ namespace UnitTestSimpleMessageQueue
             }
 
 
-            MessageQueue queue2 = new MessageQueue(fileName, "mode:Shared");
+            using MessageQueue queue2 = new MessageQueue(fileName, "mode:Shared");
             {
 
                 for (int i = 0; i < 100;)
@@ -291,9 +289,6 @@ namespace UnitTestSimpleMessageQueue
                     }
                 }
             }
-
-            queue1.Dispose();
-            queue2.Dispose();
         }
 
     }

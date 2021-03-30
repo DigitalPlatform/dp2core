@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DigitalPlatform.Text;
-using LiteDB;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using Nito.AsyncEx;
 // using Microsoft.VisualStudio.Threading;
 
-namespace DigitalPlatform.SimpleMessageQueue
+namespace DigitalPlatform.MessageQueue
 {
     public class MessageQueue : IDisposable
     {
         string _databaseFileName = null;
-        string _mode = "Shared";
 
-        // LiteDatabase _database = null;
+        static QueueStorageCollection _storageTable = new QueueStorageCollection();
+
+        QueueStorage _storage = null;
 
         // SemaphoreSlim _databaseLimit = new SemaphoreSlim(1);
 
@@ -40,130 +43,41 @@ namespace DigitalPlatform.SimpleMessageQueue
             string style = "")
         {
             _databaseFileName = databaseFileName;
+            /*
             var mode = StringUtil.GetParameterByPrefix(style, "mode");
             if (string.IsNullOrEmpty(mode))
                 mode = "Shared";
 
             this._mode = mode;
-
-            /*
-            var connectionString = $"Filename={databaseFileName};Mode={mode}";
-
-            {
-                _database = new LiteDatabase(connectionString);
-
-                var col = _database.GetCollection<QueueItem>("queue");
-
-                // TODO: Id 字段用创建索引么？
-
-                // https://stackoverflow.com/questions/49211472/do-you-use-ensureindex-only-once-or-for-evey-document-you-insert-into-the-dat
-                col.EnsureIndex(x => x.GroupID);
-            }
             */
+
+            _storage = _storageTable.GetStorage(_databaseFileName);
         }
-
-#if REMOVED
-        // filename --> LiteDatabase
-        static Hashtable _databaseTable = new Hashtable();
-
-        LiteDatabase GetDatabase(bool ensure_index = true)
-        {
-            lock (_databaseTable.SyncRoot)
-            {
-                LiteDatabase database = (LiteDatabase)_databaseTable[this._databaseFileName];
-                if (database != null)
-                {
-                    /*
-                    var ret = database.BeginTrans();
-                    if (ret == false)
-                        throw new Exception("BeginTrans error");
-                    */
-                    return database;
-                }
-
-                var connectionString = $"Filename={_databaseFileName};Mode={_mode}";
-                database = new LiteDatabase(connectionString);
-                if (ensure_index)
-                {
-                    var col = database.GetCollection<QueueItem>("queue");
-                    col.EnsureIndex(x => x.Id);
-                    // https://stackoverflow.com/questions/49211472/do-you-use-ensureindex-only-once-or-for-evey-document-you-insert-into-the-dat
-                    col.EnsureIndex(x => x.GroupID);
-                }
-                _databaseTable[_databaseFileName] = database;
-                /*
-                {
-                    var ret = database.BeginTrans();
-                    if (ret == false)
-                        throw new Exception("BeginTrans error");
-                }
-                */
-                return database;
-            }
-        }
-
-#endif
-
-        LiteDatabase GetDatabase(bool ensure_index = true)
-        {
-            var connectionString = $"Filename={_databaseFileName};Mode={_mode}";
-            var database = new LiteDatabase(connectionString);
-            if (ensure_index)
-            {
-                var col = database.GetCollection<QueueItem>("queue");
-                col.EnsureIndex(x => x.Id);
-                // https://stackoverflow.com/questions/49211472/do-you-use-ensureindex-only-once-or-for-evey-document-you-insert-into-the-dat
-                col.EnsureIndex(x => x.GroupID);
-            }
-            return database;
-        }
-
-        void ReturnDatabase(LiteDatabase database)
-        {
-            database.Dispose();
-        }
-
-        /*
-        void DisposeAllDatabase()
-        {
-            if (_databaseTable != null)
-            {
-                lock (_databaseTable.SyncRoot)
-                {
-                    foreach (var key in _databaseTable.Keys)
-                    {
-                        LiteDatabase database = (LiteDatabase)_databaseTable[key];
-                        database.Dispose();
-                    }
-
-                    _databaseTable.Clear();
-                }
-            }
-        }
-        */
 
         public async Task PushAsync(List<string> texts,
             CancellationToken token = default)
         {
-            lock (_syncRoot)
+            DateTime now = DateTime.Now;
+            foreach (string text in texts)
             {
-                var database = GetDatabase();
-                try
+                var message = new Message
                 {
+                    Content = Encoding.UTF8.GetBytes(text),
+                    CreateTime = now,
+                };
 
-                    var col = database.GetCollection<QueueItem>("queue");
-                    foreach (string text in texts)
-                    {
-                        col.InsertBulk(BuildItem(text));
-                    }
-                }
-                finally
+                using (MemoryStream ms = new MemoryStream())
+                using (BsonDataWriter datawriter = new BsonDataWriter(ms))
                 {
-                    ReturnDatabase(database);
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(datawriter, message);
+
+                    await _storage.AppendAsync(ms.ToArray());
                 }
             }
         }
 
+#if REMOVED
         List<QueueItem> BuildItem(string text)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
@@ -201,27 +115,26 @@ namespace DigitalPlatform.SimpleMessageQueue
 
             return results;
         }
-
+#endif
         public async Task PushAsync(List<byte[]> contents,
             CancellationToken token = default)
         {
-            lock (_syncRoot)
+            DateTime now = DateTime.Now;
+            foreach (var content in contents)
             {
-                var database = GetDatabase();
-                try
+                var message = new Message
                 {
+                    Content = content,
+                    CreateTime = now,
+                };
 
-                    var col = database.GetCollection<QueueItem>("queue");
-                    foreach (var content in contents)
-                    {
-                        col.InsertBulk(BuildItem(content));
-                    }
-
-                    // col.EnsureIndex(x => x.Id);
-                }
-                finally
+                using (MemoryStream ms = new MemoryStream())
+                using (BsonDataWriter datawriter = new BsonDataWriter(ms))
                 {
-                    ReturnDatabase(database);
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(datawriter, message);
+
+                    await _storage.AppendAsync(ms.ToArray());
                 }
             }
         }
@@ -231,93 +144,26 @@ namespace DigitalPlatform.SimpleMessageQueue
             return await GetAsync(true, token).ConfigureAwait(false);
         }
 
-        object _syncRoot = new object();
-
-        public int Count
+        public long Count
         {
             get
             {
-                var database = GetDatabase();
-                try
-                {
-                    lock (database)
-                    {
-                        var col = database.GetCollection<QueueItem>("queue");
-                        return col.Count();
-                    }
-                }
-                finally
-                {
-                    ReturnDatabase(database);
-                }
+                return _storage.GetDataCount();
             }
         }
 
         public async Task<Message> GetAsync(bool remove_items,
             CancellationToken token = default)
         {
-            lock (_syncRoot)
+            var data = await _storage.GetAsync(remove_items);
+            if (data == null)
+                return null;
+
+            using (MemoryStream ms = new MemoryStream(data))
+            using (BsonDataReader reader = new BsonDataReader(ms))
             {
-                var database = GetDatabase();
-                try
-                {
-
-                    var col = database.GetCollection<QueueItem>("queue");
-
-                    List<QueueItem> items = new List<QueueItem>();
-
-                    var first = col.Query()
-                        .OrderBy(x => x.Id)
-                        .FirstOrDefault();
-                    if (first == null)
-                        return null;
-
-                    items.Add(first);
-                    if (string.IsNullOrEmpty(first.GroupID))
-                    {
-                        // 删除涉及到的事项
-                        if (remove_items)
-                        {
-                            foreach (var item in items)
-                            {
-                                col.Delete(item.Id);
-                            }
-                        }
-                        return new Message { Content = first.Content };
-                    }
-                    // 取出所有 GroupID 相同的事项，然后拼接起来
-                    var group_id = first.GroupID;
-                    List<byte> bytes = new List<byte>(first.Content);
-
-                    int id = first.Id;
-                    while (token.IsCancellationRequested == false)
-                    {
-                        var current = col.Query().Where(o => o.Id > id).OrderBy(o => o.Id).FirstOrDefault();
-                        if (current == null)
-                            break;
-                        if (current.GroupID != group_id)
-                            break;
-                        bytes.AddRange(current.Content);
-                        id = current.Id;
-
-                        items.Add(current);
-                    }
-
-                    // 删除涉及到的事项
-                    if (remove_items)
-                    {
-                        foreach (var item in items)
-                        {
-                            col.Delete(item.Id);
-                        }
-                    }
-
-                    return new Message { Content = bytes.ToArray() };
-                }
-                finally
-                {
-                    ReturnDatabase(database);
-                }
+                JsonSerializer serializer = new JsonSerializer();
+                return serializer.Deserialize<Message>(reader);
             }
         }
 
@@ -328,7 +174,8 @@ namespace DigitalPlatform.SimpleMessageQueue
 
         public void Dispose()
         {
-            // DisposeAllDatabase();
+            if (_storage != null)
+                _storageTable.ReturnStorage(_storage);
         }
     }
 
