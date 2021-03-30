@@ -23,6 +23,13 @@ namespace DigitalPlatform.LibraryServer
 
         internal new ReaderWriterLockSlim m_lock = new ReaderWriterLockSlim();
 
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _queue?.Dispose();
+        }
+
         public OperLogThread(LibraryApplication app,
             string strName)
             : base(app, strName)
@@ -34,7 +41,8 @@ namespace DigitalPlatform.LibraryServer
             {
                 try
                 {
-                    _queue = new TestMessageQueue(this.App.OutgoingQueue);
+                    _queue?.Dispose();
+                    _queue = new MessageQueue(this.App.OutgoingQueue);
                     // _queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
                 }
                 catch (Exception ex)
@@ -44,7 +52,10 @@ namespace DigitalPlatform.LibraryServer
                 }
             }
             else
+            {
+                this._queue?.Dispose();
                 this._queue = null;
+            }
         }
 
         public override string DefaultName
@@ -208,7 +219,7 @@ namespace DigitalPlatform.LibraryServer
             }
         }
 
-        TestMessageQueue _queue = null;
+        MessageQueue _queue = null;
 
         // return:
         //      -2  MSMQ 错误

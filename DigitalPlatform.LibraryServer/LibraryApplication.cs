@@ -1159,8 +1159,16 @@ namespace DigitalPlatform.LibraryServer
                     {
                         this.MessageDbName = DomUtil.GetAttr(node, "dbname");
                         this.MessageReserveTimeSpan = DomUtil.GetAttr(node, "reserveTimeSpan");
-                        // 2016/4/10
-                        this.OutgoingQueue = DomUtil.GetAttr(node, "defaultQueue");
+                        // 2021/3/30
+                        var queue_path = DomUtil.GetAttr(node, "defaultQueue");
+                        if (string.IsNullOrEmpty(queue_path) == false)
+                        {
+                            this.OutgoingQueue = Path.GetFullPath(Path.Combine(this.DataDir, queue_path));
+
+                            PathUtil.CreateDirIfNeed(Path.GetDirectoryName(this.OutgoingQueue));
+                        }
+                        else
+                            this.OutgoingQueue = "";
 
                         // 2010/12/31 add
                         if (String.IsNullOrEmpty(this.MessageReserveTimeSpan) == true)
@@ -15413,7 +15421,7 @@ strLibraryCode);    // 读者所在的馆代码
         {
             try
             {
-                using (TestMessageQueue queue = new TestMessageQueue(this.OutgoingQueue))
+                using (MessageQueue queue = new MessageQueue(this.OutgoingQueue))
                 {
                     // 向 MSMQ 消息队列发送消息
                     // return:
@@ -15456,7 +15464,7 @@ strLibraryCode);    // 读者所在的馆代码
 
             try
             {
-                TestMessageQueue queue = new TestMessageQueue(this.OutgoingQueue);
+                using var queue = new MessageQueue(this.OutgoingQueue);
 
                 XmlDocument dom = new XmlDocument();
                 dom.LoadXml("<root />");

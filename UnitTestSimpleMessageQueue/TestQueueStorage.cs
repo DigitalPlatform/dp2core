@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using DigitalPlatform.MessageQueue;
+using DigitalPlatform.Messaging;
 
 namespace UnitTestSimpleMessageQueue
 {

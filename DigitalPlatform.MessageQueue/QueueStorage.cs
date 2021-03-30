@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using Nito.AsyncEx;
 
-namespace DigitalPlatform.MessageQueue
+namespace DigitalPlatform.Messaging
 {
     /// <summary>
     /// 队列的磁盘存储机制
@@ -228,24 +228,41 @@ namespace DigitalPlatform.MessageQueue
             return item;
         }
 
-        // 追加一个数据单元
-        public async Task AppendAsync(byte[] data)
+        // 找到最后一个数据文件
+        FileItem PrepareTailFile(int data_length)
         {
-            using var locker = _lock.WriterLock();
-
             FileItem tailFile = null;
-            // 找到最后一个数据文件
             if (_dataFiles.Count > 0)
             {
                 tailFile = _dataFiles[_dataFiles.Count - 1];
 
                 // 观察这个数据文件的大小。如果追加后会超过极限，则新增一个文件
                 if (tailFile.Stream.Length > 0
-                    && tailFile.Stream.Length + data.Length + 5 > _chunkSize)
+                    && tailFile.Stream.Length + data_length + 5 > _chunkSize)
                     tailFile = NewDataFile();
             }
             else
                 tailFile = NewDataFile();
+
+            return tailFile;
+        }
+
+        // 追加一个数据单元
+        public void Append(byte[] data)
+        {
+            using var locker = _lock.WriterLock();
+
+            var tailFile = PrepareTailFile(data.Length);
+
+            AppendData(tailFile.Stream, data).Wait();
+        }
+
+        // 追加一个数据单元
+        public async Task AppendAsync(byte[] data)
+        {
+            using var locker = _lock.WriterLock();
+
+            var tailFile = PrepareTailFile(data.Length);
 
             await AppendData(tailFile.Stream, data);
         }

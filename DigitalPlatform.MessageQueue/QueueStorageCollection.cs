@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DigitalPlatform.MessageQueue
+namespace DigitalPlatform.Messaging
 {
     /// <summary>
     /// 管理 QueueStorage 的集合。共用 Storage 的机制

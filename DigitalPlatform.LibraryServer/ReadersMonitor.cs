@@ -34,7 +34,15 @@ namespace DigitalPlatform.LibraryServer
             }
         }
 
-        TestMessageQueue _queue = null;
+        MessageQueue _queue = null;
+
+        // 2021/3/30
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _queue?.Dispose();
+        }
 
         // 一次操作循环
         // TODO: 是否需要对读者记录加锁？
@@ -151,7 +159,8 @@ namespace DigitalPlatform.LibraryServer
             {
                 try
                 {
-                    _queue = new TestMessageQueue(this.App.OutgoingQueue);
+                    _queue?.Dispose();
+                    _queue = new MessageQueue(this.App.OutgoingQueue);
                 }
                 catch (Exception ex)
                 {
@@ -160,7 +169,10 @@ namespace DigitalPlatform.LibraryServer
                 }
             }
             else
+            {
+                _queue?.Dispose();
                 this._queue = null;
+            }
 
             List<string> bodytypes = new List<string>();
 
@@ -1031,14 +1043,12 @@ namespace DigitalPlatform.LibraryServer
         //      -2  MSMQ 错误
         //      -1  出错
         //      0   成功
-        public static int SendToQueue(TestMessageQueue myQueue,
+        public static int SendToQueue(MessageQueue myQueue,
             string strRecipient,
             string strMime,
             string strBody,
             out string strError)
         {
-            throw new NotImplementedException();
-#if REMOVED
             strError = "";
 
             if (myQueue == null)
@@ -1056,13 +1066,10 @@ namespace DigitalPlatform.LibraryServer
 
             try
             {
-                System.Messaging.Message myMessage = new System.Messaging.Message();
-                myMessage.Body = dom.DocumentElement.OuterXml;
-                myMessage.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
-                myQueue.Send(myMessage);
+                myQueue.Push(dom.DocumentElement.OuterXml);
                 return 0;
             }
-            catch (System.Messaging.MessageQueueException ex)
+            catch (DigitalPlatform.Messaging.MessageQueueException ex)
             {
                 strError = "发送消息到 MQ 出现异常: " + ExceptionUtil.GetDebugText(ex);
                 return -2;
@@ -1072,7 +1079,6 @@ namespace DigitalPlatform.LibraryServer
                 strError = "发送消息到 MQ 出现异常: " + ExceptionUtil.GetDebugText(ex);
                 return -1;
             }
-#endif
         }
 
         // 2016/12/27

@@ -12,7 +12,7 @@ using Newtonsoft.Json.Bson;
 using Nito.AsyncEx;
 // using Microsoft.VisualStudio.Threading;
 
-namespace DigitalPlatform.MessageQueue
+namespace DigitalPlatform.Messaging
 {
     public class MessageQueue : IDisposable
     {
@@ -52,6 +52,24 @@ namespace DigitalPlatform.MessageQueue
             */
 
             _storage = _storageTable.GetStorage(_databaseFileName);
+        }
+
+        public void Push(string text)
+        {
+            var message = new Message
+            {
+                Content = Encoding.UTF8.GetBytes(text),
+                CreateTime = DateTime.Now,
+            };
+
+            using (MemoryStream ms = new MemoryStream())
+            using (BsonDataWriter datawriter = new BsonDataWriter(ms))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(datawriter, message);
+
+                _storage.Append(ms.ToArray());
+            }
         }
 
         public async Task PushAsync(List<string> texts,
@@ -189,6 +207,19 @@ namespace DigitalPlatform.MessageQueue
             if (Content == null)
                 return null;
             return Encoding.UTF8.GetString(Content);
+        }
+    }
+
+    public class MessageQueueException : Exception
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="error"></param>
+        /// <param name="strText"></param>
+        public MessageQueueException(string strText)
+            : base(strText)
+        {
         }
     }
 }
