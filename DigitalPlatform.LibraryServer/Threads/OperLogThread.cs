@@ -733,32 +733,35 @@ out string strReaderRefID)
         }
 
 
-        // 从 MSMQ 队列获得若干消息
+        // 从消息队列获得若干消息
         // parameters:
-        public List<MessageData> GetMessage(int nMaxCount, TimeSpan timeout)
+        public List<MessageData> GetMessage(int nMaxCount,
+            TimeSpan timeout)
         {
-            throw new NotImplementedException();
-#if REMOVED
             List<MessageData> results = new List<MessageData>();
             if (nMaxCount == 0)
                 return results;
             try
             {
-                MessageEnumerator iterator = _queue.GetMessageEnumerator2();
-                int i = 0;
-                while (iterator.MoveNext(timeout))
+                var start = DateTime.Now;
+                for (int i = 0; i < nMaxCount;)
                 {
-                    System.Messaging.Message message = iterator.Current;
+                    if (DateTime.Now - start > timeout)
+                        break;
+
+                    var message = _queue.GetAsync(false).Result;
+                    if (message == null)
+                    {
+                        Thread.Sleep(500);
+                        continue;
+                    }
 
                     MessageData record = new MessageData();
-                    record.strBody = (string)message.Body;
+                    record.strBody = Encoding.UTF8.GetString(message.Content);
                     record.strMime = "xml";
 
                     results.Add(record);
-                    // iterator.RemoveCurrent();
                     i++;
-                    if (i >= nMaxCount)
-                        break;
                 }
 
                 return results;
@@ -772,31 +775,33 @@ out string strReaderRefID)
                 this.App.WriteErrorLog("GetMessage() 出现异常: " + ExceptionUtil.GetDebugText(ex));
             }
             return results;
-#endif
         }
 
-        // 从 MSMQ 队列中移走若干消息
+        // 从消息队列中移走若干消息
         // parameters:
         public void RemoveMessage(int nCount)
         {
-            throw new NotImplementedException();
-#if REMOVED
             if (nCount == 0)
                 return;
 
             List<MessageData> results = new List<MessageData>();
-            TimeSpan timeout = new TimeSpan(0, 0, 1);
+            TimeSpan timeout = new TimeSpan(0, 0, 2);
 
             try
             {
-                MessageEnumerator iterator = _queue.GetMessageEnumerator2();
-                int i = 0;
-                while (iterator.MoveNext(timeout))
+                var start = DateTime.Now;
+                for (int i = 0; i < nCount;)
                 {
-                    if (i >= nCount)
+                    if (DateTime.Now - start > timeout)
                         break;
 
-                    iterator.RemoveCurrent();
+                    var message = _queue.GetAsync(true).Result;
+                    if (message == null)
+                    {
+                        Thread.Sleep(200);
+                        continue;
+                    }
+
                     i++;
                 }
                 return;
@@ -809,7 +814,6 @@ out string strReaderRefID)
             {
                 this.App.WriteErrorLog("RemoveMessage(" + nCount + ") 出现异常: " + ExceptionUtil.GetDebugText(ex));
             }
-#endif
         }
 
     }
