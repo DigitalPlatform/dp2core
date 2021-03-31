@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 
-using Ionic.Zip;
+// using Ionic.Zip;
 
 using DigitalPlatform.IO;
 // using DigitalPlatform.rms.Client.rmsws_localhost;
 using DigitalPlatform.Core;
-using System.Threading;
 using DigitalPlatform.rms;
 using DigitalPlatform;
+using System.IO.Compression;
 
 namespace dp2.KernelService
 {
@@ -53,6 +54,16 @@ namespace dp2.KernelService
             //    stop.SetMessage("正在展开压缩文件 " + strDbDefFileName);
             try
             {
+                // 2021/3/31
+                using (var zip = ZipFile.OpenRead(strDbDefFileName))
+                {
+                    foreach (var entry in zip.Entries)
+                    {
+                        string filename = Path.Combine(strTempDir, entry.Name);
+                        entry.ExtractToFile(filename, true);
+                    }
+                }
+                /*
                 using (ZipFile zip = ZipFile.Read(strDbDefFileName))
                 {
                     foreach (ZipEntry e in zip)
@@ -61,6 +72,7 @@ namespace dp2.KernelService
                         e.Extract(strTempDir, ExtractExistingFileAction.OverwriteSilently);
                     }
                 }
+                */
             }
             catch (Exception ex)
             {

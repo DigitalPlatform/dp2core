@@ -47,7 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dp2.LibraryService", "dp2.L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dp2LibraryServer", "dp2LibraryServer\dp2LibraryServer.csproj", "{269A043F-87AC-43F1-AEE1-1953A7F17F79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestSimpleMessageQueue", "UnitTestSimpleMessageQueue\UnitTestSimpleMessageQueue.csproj", "{4A4AC672-9A34-4009-B36B-48C5EDA0D045}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestSimpleMessageQueue", "UnitTestSimpleMessageQueue\UnitTestSimpleMessageQueue.csproj", "{4A4AC672-9A34-4009-B36B-48C5EDA0D045}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitestDp2library", "UnitestDp2library\UnitestDp2library.csproj", "{DE9ECBE7-4D66-4B74-90DD-479203C21D40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,10 @@ Global
 		{4A4AC672-9A34-4009-B36B-48C5EDA0D045}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A4AC672-9A34-4009-B36B-48C5EDA0D045}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A4AC672-9A34-4009-B36B-48C5EDA0D045}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE9ECBE7-4D66-4B74-90DD-479203C21D40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE9ECBE7-4D66-4B74-90DD-479203C21D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE9ECBE7-4D66-4B74-90DD-479203C21D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE9ECBE7-4D66-4B74-90DD-479203C21D40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

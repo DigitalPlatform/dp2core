@@ -7,12 +7,12 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Threading;
 
-using Ionic.Zip;
+// using Ionic.Zip;
+using System.IO.Compression;
 
 using DigitalPlatform.Text;
 using DigitalPlatform.IO;
 using DigitalPlatform.Core;
-
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -543,6 +543,29 @@ namespace DigitalPlatform.LibraryServer
                 {
                     try
                     {
+                        // 2021/3/31
+                        string strTargetDir = Path.GetDirectoryName(strFilePath);
+
+                        using (var zip = ZipFile.OpenRead(strFilePath))
+                        {
+                            foreach (var entry in zip.Entries)
+                            {
+                                var strFullPath = Path.Combine(strTargetDir, entry.Name);
+                                entry.ExtractToFile(strFullPath, true);
+
+                                // 修正文件最后修改时间
+                                // if ((entry..Attributes & FileAttributes.Directory) == 0)
+                                {
+                                    if (entry.LastWriteTime.LocalDateTime != File.GetLastWriteTime(strFullPath))
+                                    {
+                                        // 时间有可能不一致，可能是夏令时之类的问题
+                                        File.SetLastWriteTime(strFullPath, entry.LastWriteTime.LocalDateTime);
+                                    }
+                                    Debug.Assert(entry.LastWriteTime.LocalDateTime == File.GetLastWriteTime(strFullPath));
+                                }
+                            }
+                        }
+                        /*
                         ReadOptions option = new ReadOptions();
                         option.Encoding = Encoding.UTF8;
                         _physicalFileCache.ClearItems(strFilePath);
@@ -565,6 +588,7 @@ namespace DigitalPlatform.LibraryServer
                                 }
                             }
                         }
+                        */
 
                         File.Delete(strFilePath);
                     }

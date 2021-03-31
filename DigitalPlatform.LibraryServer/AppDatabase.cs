@@ -6,7 +6,7 @@ using System.Xml;
 using System.IO;
 using System.Diagnostics;
 
-using Ionic.Zip;
+// using Ionic.Zip;
 
 // using DigitalPlatform.rms.Client;
 using DigitalPlatform.Xml;
@@ -15,6 +15,7 @@ using DigitalPlatform.Text;
 using DigitalPlatform.LibraryServer.Common;
 using dp2.KernelService;
 using DigitalPlatform.rms;
+using System.IO.Compression;
 // using DigitalPlatform.rms.Client.rmsws_localhost;
 
 namespace DigitalPlatform.LibraryServer
@@ -1782,7 +1783,7 @@ namespace DigitalPlatform.LibraryServer
                 strError = "数据库名 '" + strName + "' 不属于 dp2library (library.xml)目前管辖的范围...";
                 return 0;
 
-                CONTINUE:
+            CONTINUE:
                 // 及时保存library.xml的变化
                 if (this.Changed == true)
                     this.Flush();
@@ -1852,7 +1853,7 @@ out strError);
             }
 
             return 1;
-            ERROR1:
+        ERROR1:
             // 2015/1/29
             if (this.Changed == true)
                 this.ActivateManagerThread();
@@ -3816,7 +3817,7 @@ out strError);
                 strError = "数据库名 '" + strName + "' 不属于 dp2library 目前管辖的范围...";
                 return 0;
 
-                CONTINUE:
+            CONTINUE:
                 // 及时保存library.xml的变化
                 if (this.Changed == true)
                     this.Flush();
@@ -4837,7 +4838,7 @@ out strError);
             }
 
             return 1;
-            ERROR1:
+        ERROR1:
             if (keyschanged_dbnames.Count > 0)
             {
                 // 增加WebServiceUrl部分
@@ -8140,7 +8141,7 @@ out strError);
             }
 
             return 1;
-            ERROR1:
+        ERROR1:
             List<string> error_deleting_dbnames = new List<string>();
             // 将本次已经创建的数据库在返回前删除掉
             for (int i = 0; i < created_dbnames.Count; i++)
@@ -8587,7 +8588,7 @@ out strError);
             strDbName = strName;
             this.Changed = true;
             return 1;
-            ERROR1:
+        ERROR1:
             return -1;
         }
 
@@ -8780,7 +8781,7 @@ out strError);
                         continue;
 #endif
 
-                    DO_CREATE:
+                DO_CREATE:
                     using (Stream new_stream = new FileStream(strFullPath, FileMode.Open))
                     {
                         new_stream.Seek(0, SeekOrigin.Begin);
@@ -8862,7 +8863,7 @@ out strError);
         // 压缩一个目录到 .zip 文件
         // parameters:
         //      strBase 在 .zip 文件中的文件名要从全路径中去掉的前面部分
-        static int CompressDirectory(
+        public static int CompressDirectory(
             string strDirectory,
             string strBase,
             string strZipFileName,
@@ -8914,6 +8915,32 @@ out strError);
             // string strHead = Path.GetDirectoryName(strDirectory);
             // Console.WriteLine("head=["+strHead+"]");
 
+            // 2021/3/31
+            using (FileStream stream = new FileStream(strZipFileName, FileMode.Create))
+            {
+                using (ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Create))
+                {
+                    foreach (string filename in filenames)
+                    {
+                        string strShortFileName = filename.Substring(strBase.Length + 1);
+                        string directoryPathInArchive = Path.GetDirectoryName(strShortFileName);
+
+                        var entry = archive.CreateEntryFromFile(filename, strShortFileName);
+                        // entry.LastWriteTime = new DateTimeOffset(File.GetLastWriteTime(filename));
+                        /*
+                        ZipArchiveEntry entry = archive.CreateEntry(strShortFileName);
+                        
+                        using (Stream source = File.Open(filename, FileMode.Open))
+                        using (Stream target = entry.Open())
+                        {
+                            source.CopyTo(target);
+                        }
+                        */
+                    }
+                }
+            }
+
+#if REMOVED
             using (ZipFile zip = new ZipFile(strZipFileName, encoding))
             {
                 // http://stackoverflow.com/questions/15337186/dotnetzip-badreadexception-on-extract
@@ -8932,6 +8959,7 @@ out strError);
                 zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
                 zip.Save(strZipFileName);
             }
+#endif
 
             return filenames.Count;
         }
@@ -9715,7 +9743,7 @@ out strError);
 
                 strError = "不存在数据库名 '" + strName + "'";
                 return 0;
-                CONTINUE:
+            CONTINUE:
                 int kkk = 0;
                 kkk++;
             }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-using Ionic.Zip;
+// using Ionic.Zip;
 
 using DigitalPlatform.Text;
 using DigitalPlatform.LibraryServer.Common;
@@ -16,6 +16,7 @@ using DigitalPlatform.LibraryServer.Common;
 using DigitalPlatform.IO;
 using dp2.KernelService;
 using DigitalPlatform.rms;
+using System.IO.Compression;
 
 namespace DigitalPlatform.LibraryServer
 {
@@ -948,6 +949,28 @@ out strError);
             // string strHead = Path.GetDirectoryName(strDirectory);
             // Console.WriteLine("head=["+strHead+"]");
 
+            // 2021/3/31
+            using (FileStream stream = new FileStream(strZipFileName, FileMode.Create))
+            {
+                using (ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Create))
+                {
+                    for (int i = 0; i < filenames.Count; i++)
+                    {
+                        string filename = filenames[i];
+                        string shortfilename = shortfilenames[i];
+                        string directoryPathInArchive = Path.GetDirectoryName(shortfilename);
+
+                        ZipArchiveEntry entry = archive.CreateEntry(shortfilename);
+                        using (Stream source = File.Open(filename, FileMode.Open))
+                        using (Stream target = entry.Open())
+                        {
+                            source.CopyTo(target);
+                        }
+                    }
+                }
+            }
+
+#if REMOVED
             using (ZipFile zip = new ZipFile(strZipFileName, encoding))
             {
                 // http://stackoverflow.com/questions/15337186/dotnetzip-badreadexception-on-extract
@@ -966,6 +989,7 @@ out strError);
                 zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
                 zip.Save(strZipFileName);
             }
+#endif
 
             return filenames.Count;
         }
