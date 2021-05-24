@@ -8,11 +8,12 @@
     <RestoreAdditionalProjectSources>https://azuresdkartifacts.blob.core.windows.net/azure-sdk-tools/index.json</RestoreAdditionalProjectSources>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Core" Version="1.10.0" />
+    <PackageReference Include="Azure.Core" Version="1.13.0" />
     <PackageReference Include="jieba.NET" Version="0.42.2" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.22" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Speech" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dp2.KernelService\dp2.KernelService.csproj" />

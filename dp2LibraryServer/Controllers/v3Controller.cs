@@ -23,8 +23,9 @@ namespace dp2LibraryServer.Controllers
     [ApiExplorerSettings(GroupName = "v3")]
     //[Route("dp2library/[controller]/{instance}/[action]")]
     //[Route("dp2library/[controller]/[action]")]
-    [Route("dp2library/v3/{instance}/rest/[action]")]
+    [Route("[action]")]
     [Route("dp2library/v3/rest/[action]")]
+    [Route("dp2library/v3/{instance}/rest/[action]")]
     public class v3Controller : ControllerBase
     {
         private readonly ILogger<v3Controller> _logger;

@@ -19,6 +19,8 @@ using System.Runtime.Loader;
 using DigitalPlatform.Text;
 using System.Net.Http;
 using JiebaNet.Segmenter;
+using System.Speech.Synthesis;
+using DigitalPlatform;
 
 namespace TestKernelServiceDesktop
 {
@@ -30,6 +32,8 @@ namespace TestKernelServiceDesktop
         public Form1()
         {
             InitializeComponent();
+
+            this.toolStripMenuItem_test_speech.Click += ToolStripMenuItem_test_speech_Click;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -157,6 +161,29 @@ namespace RoslynCore
             var segments = segmenter.Cut("我来到北京清华大学");  // 默认为精确模式
             var result = string.Join("/ ", segments);
             MessageBox.Show(this, result);
+        }
+
+        // https://www.nuget.org/packages/System.Speech
+        static SpeechSynthesizer m_speech = new SpeechSynthesizer();
+
+        // 测试语音
+        private void ToolStripMenuItem_test_speech_Click(object sender, EventArgs e)
+        {
+            this.BeginInvoke((Action)(() =>
+            {
+                bool cancel_before = true;
+                string strText = "测试语音";
+                try
+                {
+                    if (cancel_before)
+                        m_speech.SpeakAsyncCancelAll();
+                    m_speech.SpeakAsync(strText);
+                }
+                catch (System.Runtime.InteropServices.COMException ex)
+                {
+                    // ClientInfo.WriteErrorLog($"FormClientInfo::Speak() 出现异常: {ExceptionUtil.GetDebugText(ex)}");
+                }
+            }));
         }
     }
 }
